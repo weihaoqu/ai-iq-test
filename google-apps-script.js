@@ -77,7 +77,12 @@ function extractDate(isoString) {
 // ─── POST handler ───────────────────────────────────────────────────────
 function doPost(e) {
   try {
-    var data = JSON.parse(e.postData.contents);
+    // Handle both raw JSON body (fetch) and form field fallback
+    var raw = e.postData.contents;
+    if (e.parameter && e.parameter.payload) {
+      raw = e.parameter.payload;
+    }
+    var data = JSON.parse(raw);
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var date = extractDate(data.timestamp);
 

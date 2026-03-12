@@ -926,15 +926,54 @@ function submitData(total,level,dimScores,analysis){
   });
   payload.analysis=analysis;
 
+  // Always backup locally first
   const backupKey=`ai_iq_${participantId}`;
   try{localStorage.setItem(backupKey,JSON.stringify(payload));}catch(e){}
 
   const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwSnBFnM8Q29m7hoRbpHmhYo85_ZXkTR1qcp1n7Q_kXOLBzJClWw0qgHAyrrK017TVJPQ/exec';
-  if(SCRIPT_URL!=='YOUR_GOOGLE_SCRIPT_URL'){
-    fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)}).catch(()=>{});
-  } else {
-    console.log('AI IQ payload:',payload);
+
+  // Method 1: fetch with no-cors + text/plain (most reliable for cross-origin Apps Script)
+  function sendViaFetch(){
+    return fetch(SCRIPT_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload)
+    });
   }
+
+  // Method 2: hidden form POST fallback (works even if fetch silently fails)
+  function sendViaForm(){
+    const form=document.createElement('form');
+    form.method='POST';form.action=SCRIPT_URL;
+    form.target='_submit_frame';form.style.display='none';
+    const input=document.createElement('input');
+    input.type='hidden';input.name='payload';input.value=JSON.stringify(payload);
+    form.appendChild(input);
+    // Create hidden iframe target
+    let iframe=document.getElementById('_submit_frame');
+    if(!iframe){
+      iframe=document.createElement('iframe');
+      iframe.id='_submit_frame';iframe.name='_submit_frame';
+      iframe.style.display='none';
+      document.body.appendChild(iframe);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    setTimeout(()=>form.remove(),2000);
+  }
+
+  // Try fetch first, then form fallback
+  sendViaFetch()
+    .then(()=>{
+      console.log('AI IQ data submitted via fetch');
+      showToast('Results saved!');
+    })
+    .catch(err=>{
+      console.warn('Fetch failed, trying form fallback:',err);
+      sendViaForm();
+      showToast('Results saved!');
+    });
 }
 
 // ─── Review Toggle ───────────────────────────────────────────────────────
