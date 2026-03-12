@@ -664,7 +664,7 @@ function submitData(total,level,dimScores,analysis){
   const backupKey=`ai_iq_${participantId}`;
   try{localStorage.setItem(backupKey,JSON.stringify(payload));}catch(e){}
 
-  const SCRIPT_URL='YOUR_GOOGLE_SCRIPT_URL';
+  const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwSnBFnM8Q29m7hoRbpHmhYo85_ZXkTR1qcp1n7Q_kXOLBzJClWw0qgHAyrrK017TVJPQ/exec';
   if(SCRIPT_URL!=='YOUR_GOOGLE_SCRIPT_URL'){
     fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
   } else {
