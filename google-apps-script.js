@@ -42,7 +42,7 @@ function doPost(e) {
     if (!sheet) {
       sheet = ss.insertSheet('Responses');
       var headers = [
-        'participant_id', 'timestamp', 'date', 'ai_experience',
+        'participant_id', 'participant_name', 'timestamp', 'date', 'ai_experience',
         'total_score', 'level',
         'dim_foundations', 'dim_problemFraming', 'dim_toolSelection',
         'dim_promptEngineering', 'dim_criticalEvaluation', 'dim_ethicsSafety',
@@ -69,6 +69,7 @@ function doPost(e) {
     // Build row
     var row = [
       data.participant_id || '',
+      data.participant_name || '',
       data.timestamp || '',
       date,
       data.ai_experience || '',

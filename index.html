@@ -447,6 +447,10 @@ canvas#radarChart{max-width:340px;max-height:340px}
     </div>
     <div class="card" style="display:flex;flex-direction:column;gap:20px">
       <div class="input-group">
+        <label for="inp-name">Your name (for certificate)</label>
+        <input type="text" id="inp-name" placeholder="Enter your name..." style="padding:14px 18px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Outfit',sans-serif;font-size:1rem;background:var(--bg-elevated);color:var(--text);transition:all .25s;outline:none" onfocus="this.style.borderColor='var(--primary)';this.style.boxShadow='0 0 0 3px rgba(167,139,250,.15)'" onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+      </div>
+      <div class="input-group">
         <label for="inp-background">Your experience with AI tools</label>
         <select id="inp-background">
           <option value="">Select one...</option>
@@ -511,7 +515,21 @@ canvas#radarChart{max-width:340px;max-height:340px}
       <div class="share-level" id="share-level"></div>
       <div class="share-dims" id="share-dims"></div>
     </div>
-    <button class="btn btn-share btn-full" onclick="shareResults()">Share Your AI IQ</button>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" style="flex:1" onclick="downloadReport()">&#128196; Report HTML</button>
+        <button class="btn btn-outline" style="flex:1" onclick="downloadReportPDF()">&#128196; Report PDF</button>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-outline" style="flex:1" onclick="downloadCertificate()">&#127942; Cert HTML</button>
+        <button class="btn btn-outline" style="flex:1" onclick="downloadCertificatePDF()">&#127942; Cert PDF</button>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-share" style="flex:1" onclick="shareViaEmail()">&#9993; Email</button>
+        <button class="btn btn-share" style="flex:1" onclick="shareViaSMS()">&#128172; Text</button>
+        <button class="btn btn-share" style="flex:1" onclick="shareResults()">&#128279; Copy Link</button>
+      </div>
+    </div>
 
     <!-- Review -->
     <div class="card review-section">
@@ -544,10 +562,10 @@ const DIMS = [
 ];
 
 const LEVELS = [
-  {min:45, max:79,  label:'AI Novice',       lvl:1, cls:'iq-level-1'},
-  {min:80, max:114, label:'AI Apprentice',   lvl:2, cls:'iq-level-2'},
-  {min:115,max:149, label:'AI Practitioner', lvl:3, cls:'iq-level-3'},
-  {min:150,max:180, label:'AI Master',       lvl:4, cls:'iq-level-4'}
+  {min:45, max:119, label:'AI Novice',       lvl:1, cls:'iq-level-1'},
+  {min:120,max:139, label:'AI Apprentice',   lvl:2, cls:'iq-level-2'},
+  {min:140,max:159, label:'AI Practitioner', lvl:3, cls:'iq-level-3'},
+  {min:160,max:180, label:'AI Master',       lvl:4, cls:'iq-level-4'}
 ];
 
 // ─── State ──────────────────────────────────────────────────────────────
@@ -555,6 +573,7 @@ let currentQ = 0;
 let answers = [];
 let shuffledChoices = [];
 let participantId = '';
+let participantName = '';
 
 // ─── Shuffle ────────────────────────────────────────────────────────────
 function shuffle(arr){
@@ -577,6 +596,7 @@ function startTest(){
 function beginQuiz(){
   const bg=document.getElementById('inp-background').value;
   if(!bg){showToast('Please select your AI experience');return;}
+  participantName=document.getElementById('inp-name').value.trim()||'Anonymous';
   participantId='AIQ'+Date.now();
   shuffledChoices=QUESTIONS.map(q=>shuffle(q.choices));
   currentQ=0;
@@ -914,6 +934,7 @@ function submitData(total,level,dimScores,analysis){
   const bg=document.getElementById('inp-background').value;
   const payload={
     participant_id:participantId,
+    participant_name:participantName,
     timestamp:new Date().toISOString(),
     ai_experience:bg,
     total_score:total,
@@ -965,6 +986,203 @@ function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ─── Build Report HTML ──────────────────────────────────────────────────
+function buildReportHTML(){
+  const total=answers.reduce((s,a)=>s+a.score,0);
+  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  const dimScores={},dimMax={};
+  DIMS.forEach(d=>{dimScores[d.key]=0;dimMax[d.key]=0;});
+  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);dimMax[q.dim]+=4;});
+  const analysis=generateAnalysis(total,level,dimScores);
+  const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+
+  const dimColors={foundations:'#818cf8',problemFraming:'#f472b6',toolSelection:'#fbbf24',promptEngineering:'#34d399',criticalEvaluation:'#fb7185',ethicsSafety:'#c084fc',humanCollaboration:'#38bdf8',vibeCoding:'#fb923c'};
+
+  const dimBarsHTML=DIMS.map(d=>{
+    const pct=Math.round((dimScores[d.key]/dimMax[d.key])*100);
+    return`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-weight:600;font-size:14px">${d.label}</span><span style="font-family:monospace;color:#888">${dimScores[d.key]}/${dimMax[d.key]} (${pct}%)</span></div><div style="height:10px;background:#1a1a2e;border-radius:5px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${dimColors[d.key]};border-radius:5px"></div></div></div>`;
+  }).join('');
+
+  const reviewHTML=QUESTIONS.map((q,i)=>{
+    const ans=answers[i];
+    const best=q.choices.find(c=>c.score===4);
+    const yours=q.choices.find(c=>c.letter===ans.origLetter);
+    const dim=DIMS.find(d=>d.key===q.dim);
+    const color=dimColors[q.dim]||'#818cf8';
+    const icon=ans.score===4?'&#10004;':ans.score>=3?'&#9679;':'&#10008;';
+    const iconColor=ans.score===4?'#34d399':ans.score>=3?'#fbbf24':'#fb7185';
+    return`<div style="padding:12px 16px;margin-bottom:8px;border-radius:10px;background:#0d1117;border-left:3px solid ${color}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="color:${iconColor};font-size:16px">${icon}</span><span style="font-weight:600;font-size:13px;color:#e8eaf0">Q${i+1}. ${q.q}</span></div><div style="font-size:12px;color:#7c8599;margin-left:24px">Your answer: ${ans.origLetter}. ${yours.text} <span style="color:${iconColor};font-weight:700">(${ans.score}/4)</span></div>${ans.score<4?`<div style="font-size:12px;color:#34d399;margin-left:24px;margin-top:2px">Best: ${best.letter}. ${best.text}</div>`:''}</div>`;
+  }).join('');
+
+  const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#c4b5fd'};
+  const lc=levelColors[level.lvl]||'#c4b5fd';
+
+  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Report - ${participantName}</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#06080f;color:#e8eaf0;min-height:100vh;padding:40px 20px}
+.report{max-width:700px;margin:0 auto}
+.header{text-align:center;padding:40px 0 30px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:30px}
+.score-big{font-size:72px;font-weight:900;background:linear-gradient(135deg,#c4b5fd,#22d3ee,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.level-badge{display:inline-block;padding:6px 20px;border-radius:99px;font-weight:700;margin-top:10px;border:1.5px solid ${lc}40;background:${lc}18;color:${lc}}
+.section{margin-bottom:30px;page-break-inside:avoid}
+.section h2{font-size:18px;font-weight:700;margin-bottom:16px;color:#c4b5fd;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.meta{display:flex;gap:24px;justify-content:center;font-size:13px;color:#7c8599;margin-top:12px;font-family:'Space Mono',monospace}
+.footer{text-align:center;padding:30px 0;border-top:1px solid rgba(255,255,255,.08);margin-top:30px;font-size:12px;color:#4a5568}
+@media print{body{background:#fff;color:#111;padding:20px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.score-big{-webkit-text-fill-color:#7c3aed}
+div[style*="background:#0d1117"]{background:#f5f5f5!important}
+div[style*="background:#1a1a2e"]{background:#e5e5e5!important}
+.level-badge{border-color:#7c3aed!important;color:#7c3aed!important}
+.section h2{color:#7c3aed!important}
+.header{page-break-after:avoid}
+}
+</style></head><body><div class="report">
+<div class="header">
+<div style="font-size:13px;font-weight:600;letter-spacing:2px;color:#7c8599;text-transform:uppercase;margin-bottom:12px">AI IQ Test Report</div>
+<div style="font-size:24px;font-weight:700;margin-bottom:8px">${participantName}</div>
+<div class="score-big">${total}</div>
+<div style="font-size:14px;color:#7c8599;margin-top:4px">out of 180</div>
+<div class="level-badge">${level.label}</div>
+<div class="meta"><span>Date: ${date}</span><span>ID: ${participantId}</span></div>
+</div>
+<div class="section"><h2>Dimension Breakdown</h2>${dimBarsHTML}</div>
+<div class="section"><h2>Personalized Analysis</h2><div style="padding:20px;border-radius:12px;background:#0d1117;border:1px solid rgba(167,139,250,.15);font-size:14px;line-height:1.7">${analysis.html.replace('<h3>Your Analysis</h3>','')}</div></div>
+<div class="section"><h2>All 45 Questions</h2>${reviewHTML}</div>
+<div class="footer">&copy; ${new Date().getFullYear()} LearnAI Team &middot; AI IQ Test &middot; lainow.com</div>
+</div></body></html>`;
+}
+
+function downloadReport(){
+  const html=buildReportHTML();
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`AI-IQ-Report-${participantName.replace(/\s+/g,'-')}.html`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Report downloaded!');
+}
+
+// ─── Build Certificate HTML ─────────────────────────────────────────────
+function buildCertificateHTML(){
+  const total=answers.reduce((s,a)=>s+a.score,0);
+  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const dimScores={},dimMax={};
+  DIMS.forEach(d=>{dimScores[d.key]=0;dimMax[d.key]=0;});
+  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);dimMax[q.dim]+=4;});
+
+  const levelColors={1:['#fb7185','#f43f5e'],2:['#fbbf24','#f59e0b'],3:['#34d399','#10b981'],4:['#c4b5fd','#a78bfa']};
+  const [lc1,lc2]=levelColors[level.lvl]||['#c4b5fd','#a78bfa'];
+
+  const dimColors2=['#818cf8','#f472b6','#fbbf24','#34d399','#fb7185','#c084fc','#38bdf8','#fb923c'];
+  const dimListHTML=DIMS.map((d,i)=>{
+    return`<div style="display:flex;align-items:center;gap:10px;padding:6px 0"><div style="width:10px;height:10px;border-radius:50%;background:${dimColors2[i]}"></div><div style="flex:1;font-size:13px;color:#c0c8dd">${d.label}</div><div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:600;color:${dimColors2[i]}">${dimScores[d.key]}/${dimMax[d.key]}</div></div>`;
+  }).join('');
+
+  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Certificate - ${participantName}</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box}
+body{background:#06080f;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;font-family:'Outfit',sans-serif}
+.cert{width:800px;min-height:560px;background:linear-gradient(135deg,#0d1117 0%,#111827 50%,#0d1117 100%);border-radius:24px;position:relative;overflow:hidden;padding:48px 56px;color:#e8eaf0;border:1.5px solid rgba(167,139,250,.2);box-shadow:0 20px 80px rgba(0,0,0,.5)}
+.cert::before{content:'';position:absolute;inset:12px;border:1px solid rgba(167,139,250,.1);border-radius:16px;pointer-events:none}
+.cert::after{content:'';position:absolute;top:-60%;right:-30%;width:80%;height:160%;background:radial-gradient(ellipse,rgba(124,58,237,.08) 0%,transparent 70%);pointer-events:none}
+.orb1{position:absolute;top:-40px;left:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.12),transparent 70%);pointer-events:none}
+.orb2{position:absolute;bottom:-60px;right:-60px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.08),transparent 70%);pointer-events:none}
+.top-row{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.logo{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:3px;color:#7c8599;text-transform:uppercase}
+.cert-id{font-family:'Space Mono',monospace;font-size:10px;color:#4a5568}
+.main{text-align:center;position:relative;z-index:1;margin:28px 0 24px}
+.cert-title{font-size:13px;font-weight:600;letter-spacing:4px;color:${lc1};text-transform:uppercase;margin-bottom:16px}
+.cert-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:800;line-height:1.2;margin-bottom:20px;background:linear-gradient(135deg,#fff,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.score-row{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:16px}
+.score-num{font-size:64px;font-weight:900;line-height:1;background:linear-gradient(135deg,${lc1},#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.score-meta{text-align:left}
+.score-of{font-size:13px;color:#7c8599}
+.score-level{display:inline-block;padding:4px 16px;border-radius:99px;font-size:13px;font-weight:700;background:${lc1}18;color:${lc1};border:1px solid ${lc1}40;margin-top:4px}
+.bottom{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06)}
+.date-block{font-size:12px;color:#7c8599}
+.date-block .label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#4a5568;margin-bottom:2px}
+.seal{width:60px;height:60px;border-radius:50%;border:2px solid ${lc1}40;display:flex;align-items:center;justify-content:center;background:${lc1}0a}
+.seal-inner{font-size:24px}
+@media print{body{background:#fff;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.cert{box-shadow:none;border-color:#ddd;background:linear-gradient(135deg,#f8f8fc 0%,#f0f0f8 50%,#f8f8fc 100%)!important;color:#111!important}.cert::before{border-color:#ddd}.cert-name{-webkit-text-fill-color:#111!important}.score-num{-webkit-text-fill-color:${lc2}!important}}
+</style></head><body>
+<div class="cert">
+<div class="orb1"></div><div class="orb2"></div>
+<div class="top-row">
+<div class="logo">AI IQ Test</div>
+<div class="cert-id">ID: ${participantId}<br>${date}</div>
+</div>
+<div class="main">
+<div class="cert-title">Certificate of AI Intelligence</div>
+<div class="cert-name">${participantName}</div>
+<div class="score-row">
+<div class="score-num">${total}</div>
+<div class="score-meta"><div class="score-of">out of 180</div><div class="score-level">${level.label}</div></div>
+</div>
+</div>
+<div style="position:relative;z-index:1;max-width:500px;margin:0 auto">${dimListHTML}</div>
+<div class="bottom">
+<div class="date-block"><div class="label">Issued</div>${date}</div>
+<div class="seal"><div class="seal-inner">&#127942;</div></div>
+<div class="date-block" style="text-align:right"><div class="label">Issued by</div>LearnAI Team</div>
+</div>
+</div></body></html>`;
+}
+
+function downloadCertificate(){
+  const html=buildCertificateHTML();
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`AI-IQ-Certificate-${participantName.replace(/\s+/g,'-')}.html`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Certificate downloaded!');
+}
+
+// ─── PDF via Print ──────────────────────────────────────────────────────
+function openAsPDF(htmlContent, title){
+  const win=window.open('','_blank');
+  if(!win){showToast('Please allow popups to download PDF');return;}
+  win.document.write(htmlContent);
+  win.document.close();
+  win.document.title=title;
+  win.onload=function(){
+    setTimeout(()=>{win.print();},500);
+  };
+  showToast('Use "Save as PDF" in the print dialog');
+}
+
+function downloadReportPDF(){
+  const html=buildReportHTML();
+  openAsPDF(html, `AI IQ Report - ${participantName}`);
+}
+
+function downloadCertificatePDF(){
+  const html=buildCertificateHTML();
+  openAsPDF(html, `AI IQ Certificate - ${participantName}`);
+}
+
+// ─── Share via Email ────────────────────────────────────────────────────
+function shareViaEmail(){
+  const total=answers.reduce((s,a)=>s+a.score,0);
+  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  const testUrl=location.href.split('?')[0];
+  const subject=encodeURIComponent(`I scored ${total}/180 on the AI IQ Test!`);
+  const body=encodeURIComponent(`Hey!\n\nI just took the AI IQ Test and scored ${total}/180 — ${level.label} level!\n\nTest your own AI intelligence: ${testUrl}\n\n- ${participantName}`);
+  window.open(`mailto:?subject=${subject}&body=${body}`);
+}
+
+// ─── Share via SMS ──────────────────────────────────────────────────────
+function shareViaSMS(){
+  const total=answers.reduce((s,a)=>s+a.score,0);
+  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  const testUrl=location.href.split('?')[0];
+  const text=encodeURIComponent(`I scored ${total}/180 (${level.label}) on the AI IQ Test! Try it: ${testUrl}`);
+  window.open(`sms:?&body=${text}`);
 }
 
 // ─── Load Questions ─────────────────────────────────────────────────────
