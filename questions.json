@@ -198,13 +198,13 @@
     "id": "e01",
     "dim": "promptEngineering",
     "dimLabel": "Prompt Engineering",
-    "q": "You ask AI to 'write a function that processes the data' and get useless generic code. An experienced AI user would fix this by...",
+    "q": "You ask ChatGPT to convert messy addresses into structured data, but it keeps misplacing city names in the street field and mixing up states and zip codes. Being very specific about field definitions in plain English didn't fix it. An experienced AI user would fix this by...",
     "img": "images/scenarios/e01.svg",
     "choices": [
-      {"letter": "A", "text": "Asking more politely — AI tends to produce better results when you use courteous, encouraging language.", "score": 1},
-      {"letter": "B", "text": "Specifying input format, output format, language, edge cases, and providing a concrete example of expected input→output.", "score": 4},
-      {"letter": "C", "text": "Prepending a system message like 'You are an expert senior developer with 20 years of experience' — role-based prompting unlocks significantly higher-quality code by activating the model's specialized knowledge patterns.", "score": 3},
-      {"letter": "D", "text": "Switching to a more powerful and expensive AI model — the current one isn't capable enough for coding tasks.", "score": 2}
+      {"letter": "A", "text": "Switching to a more powerful model — GPT-4 handles structured data much better than GPT-3.5.", "score": 1},
+      {"letter": "B", "text": "Providing 3-4 few-shot examples showing exact input→output mappings, specifying the output schema with field names, and requesting JSON format. Few-shot examples anchor the model's parsing pattern far more reliably than verbal instructions alone.", "score": 4},
+      {"letter": "C", "text": "Writing a very detailed prompt explaining every field: 'Street means the house number and street name, City means the municipality...' with thorough definitions for each field and explicit rules about what goes where.", "score": 3},
+      {"letter": "D", "text": "Adding 'You are an expert data parser with 20 years of experience' — role-based prompting activates specialized knowledge for data extraction tasks.", "score": 2}
     ]
   },
   {
@@ -224,13 +224,13 @@
     "id": "e03",
     "dim": "promptEngineering",
     "dimLabel": "Prompt Engineering",
-    "q": "You point out an error in AI's code. It responds: 'You're absolutely right, I apologize for that mistake!' and provides a corrected version. How confident should you be in the correction?",
+    "q": "Your coworker thinks there's an edge case bug in your AI-generated validation function. You paste the code into a new chat and say: 'My coworker found a bug with empty strings in this function.' The AI immediately says 'Your coworker is right! Here's the fix...' and rewrites the logic. But you test both versions — the original actually handled empty strings correctly. What happened?",
     "img": "images/scenarios/e03.svg",
     "choices": [
-      {"letter": "A", "text": "The AI recognized its mistake and self-corrected, which shows genuine learning from feedback within the conversation — the corrected version should be reliable.", "score": 2},
-      {"letter": "B", "text": "The apology and acknowledgment shows intellectual honesty. The corrected version is likely accurate since the AI is clearly being more careful this time after being called out.", "score": 1},
-      {"letter": "C", "text": "Not confident — LLMs are trained to be agreeable and will enthusiastically 'apologize' whether or not you were actually right. The correction may be worse, or the original may have been correct all along. Verify the new version independently.", "score": 4},
-      {"letter": "D", "text": "Fairly confident — the fact that AI can recognize errors and produce corrections within a conversation demonstrates its self-debugging capability is working. Just verify the specific fix addresses what you pointed out.", "score": 3}
+      {"letter": "A", "text": "The AI found a genuine improvement your testing missed — edge cases are notoriously tricky and the AI's version is probably more robust even if both pass your tests.", "score": 1},
+      {"letter": "B", "text": "LLMs exhibit 'sycophancy' — when you frame something as a bug ('my coworker found a bug'), the model treats that as an instruction to find and fix one, even fabricating a problem in correct code. Your framing predetermined the response.", "score": 4},
+      {"letter": "C", "text": "The AI wasn't being sycophantic — it was just confused by ambiguous phrasing. Rephrase as a neutral question: 'Does this function handle empty strings correctly?' and it will give the accurate answer.", "score": 3},
+      {"letter": "D", "text": "The AI has more comprehensive testing capabilities than manual tests, so there may actually be an obscure edge case that your tests didn't cover.", "score": 2}
     ]
   },
   {
@@ -393,13 +393,13 @@
     "id": "h01",
     "dim": "humanCollaboration",
     "dimLabel": "AI-Human Collaboration",
-    "q": "You have a theory about why your marketing campaign failed. You describe the campaign to AI and ask for analysis. It responds with a detailed explanation that perfectly supports your theory, citing multiple logical reasons. How should you interpret this?",
+    "q": "You prompt ChatGPT: 'Our email campaign had a 2% click rate, which seems low. Analyze why it failed.' It gives 5 detailed reasons for failure. You open a new chat and prompt: 'Our email campaign had a 2% click rate, which is solid for our industry. Analyze why it succeeded.' It gives 5 equally convincing reasons for success. What does this tell you about using AI for analysis?",
     "img": "images/scenarios/h01.svg",
     "choices": [
-      {"letter": "A", "text": "AI independently arrived at the same conclusion through its own analysis — this validates your thinking, especially since you only described the campaign, not your theory.", "score": 2},
-      {"letter": "B", "text": "The detailed supporting arguments with multiple reasons demonstrate thorough analysis — your theory is almost certainly correct since AI found so many independent logical reasons backing it up.", "score": 1},
-      {"letter": "C", "text": "LLMs are trained to generate agreeable, plausible-sounding responses that follow the framing of your input. If your description implied a conclusion, the AI followed that lead. Test this: ask it to argue AGAINST your theory — if it does so equally convincingly, neither analysis was reliable.", "score": 4},
-      {"letter": "D", "text": "This is useful preliminary validation. To be thorough, also ask AI to identify weaknesses or counterarguments in your theory before fully accepting the analysis as confirmation.", "score": 3}
+      {"letter": "A", "text": "The AI correctly identified that 2% can be interpreted both ways depending on context — both analyses are valid and show AI's ability to consider multiple perspectives.", "score": 2},
+      {"letter": "B", "text": "The second analysis was more accurate because you gave it better context about industry benchmarks, helping it understand the data correctly.", "score": 1},
+      {"letter": "C", "text": "LLMs generate plausible arguments for whatever framing you provide. Neither response independently evaluated whether 2% is good or bad — both just followed your lead. You need to provide raw data with industry benchmarks and ask for objective assessment without pre-framing the conclusion.", "score": 4},
+      {"letter": "D", "text": "This shows AI can see multiple perspectives — use both analyses together for a balanced, comprehensive view of the campaign's performance.", "score": 3}
     ]
   },
   {
@@ -419,13 +419,13 @@
     "id": "h03",
     "dim": "humanCollaboration",
     "dimLabel": "AI-Human Collaboration",
-    "q": "AI gives you a code solution that looks reasonable but something feels off. You ask the AI 'are you sure this is correct?' and it replies 'Yes, this is definitely the right approach.' What should you do?",
+    "q": "You ask AI to write a recursive function. The code looks clean, but you notice there's no base case — it would recurse infinitely. You ask: 'Does this function have proper termination conditions?' The AI responds: 'Yes, the recursive call on line 4 naturally terminates when the input reaches zero.' But line 4 has no such check. Why did AI respond this way?",
     "img": "images/scenarios/h03.svg",
     "choices": [
-      {"letter": "A", "text": "Trust it — the AI confirmed it's correct, so your instinct was probably wrong.", "score": 1},
-      {"letter": "B", "text": "AI will almost always confirm its own outputs when asked — self-verification is unreliable. Test the code yourself or verify the logic independently.", "score": 4},
-      {"letter": "C", "text": "Ask it a third time more forcefully: 'Think again carefully, are you REALLY sure?' — persistence forces the model to reconsider.", "score": 1},
-      {"letter": "D", "text": "Copy the solution and paste it into a different AI model for a second opinion — if both models independently agree on the same approach, the solution is almost certainly correct.", "score": 3}
+      {"letter": "A", "text": "There's a subtle implicit termination condition in the recursion pattern that you're missing — read line 4 more carefully.", "score": 1},
+      {"letter": "B", "text": "The AI made a mistake but is 'doubling down' because it doesn't want to admit errors — rephrase your question more clearly.", "score": 2},
+      {"letter": "C", "text": "LLMs don't execute or trace code — they generate text that sounds like a code review. When asked 'does this work?', they produce a confident explanation by pattern-matching what a code review should say, not by actually verifying logic. Always run the code yourself.", "score": 4},
+      {"letter": "D", "text": "The AI internally tested the code and found it works in most cases. The missing base case only matters for certain inputs, so the AI's assessment is partially correct.", "score": 1}
     ]
   },
   {
@@ -458,13 +458,13 @@
     "id": "v01",
     "dim": "vibeCoding",
     "dimLabel": "Vibe Coding & AI Creation",
-    "q": "You want to build a personal portfolio website using AI. What's the right first step?",
+    "q": "You want to build a personal portfolio website using a vibe-coding tool like Bolt.new. What produces the best results?",
     "img": "images/scenarios/v01.svg",
     "choices": [
-      {"letter": "A", "text": "Open Bolt and type 'make me a portfolio website.'", "score": 2},
-      {"letter": "B", "text": "Sketch what pages you need, what content goes on each, and what impression you want to make first.", "score": 4},
-      {"letter": "C", "text": "Ask AI which tech stack is best for portfolio sites.", "score": 1},
-      {"letter": "D", "text": "Find a portfolio template you like and ask AI to recreate it.", "score": 3}
+      {"letter": "A", "text": "Open Bolt and type 'make me a portfolio website' — AI works best with short, simple prompts that give it creative freedom.", "score": 1},
+      {"letter": "B", "text": "Sketch what pages you need and what content goes on each before prompting.", "score": 3},
+      {"letter": "C", "text": "Write a detailed spec: list each page with sections, specify color scheme and fonts, include example copy, and attach a screenshot of a design you like. Vibe-coding tools generate complete apps in one shot — front-loading detail in your first prompt avoids frustrating multi-round revision cycles.", "score": 4},
+      {"letter": "D", "text": "Ask AI which tech stack is best for portfolio sites before building anything.", "score": 2}
     ]
   },
   {
