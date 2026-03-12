@@ -19,12 +19,13 @@ function doPost(e) {
     var raw = '';
 
     // Try multiple ways to get the JSON payload
-    if (e && e.postData && e.postData.contents) {
-      raw = e.postData.contents;
-    } else if (e && e.parameter && e.parameter.payload) {
+    // Form POST sends data as e.parameter.payload — try this FIRST
+    if (e && e.parameter && e.parameter.payload) {
       raw = e.parameter.payload;
     } else if (e && e.parameters && e.parameters.payload) {
       raw = e.parameters.payload[0];
+    } else if (e && e.postData && e.postData.contents) {
+      raw = e.postData.contents;
     }
 
     if (!raw) {
