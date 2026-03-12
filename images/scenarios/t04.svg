@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Database/contacts -->
+  <ellipse cx="140" cy="200" rx="60" ry="20" fill="none" stroke="#f59e0b" stroke-width="2"/>
+  <path d="M80 200 L80 280 Q80 300 140 300 Q200 300 200 280 L200 200" fill="none" stroke="#f59e0b" stroke-width="2"/>
+  <ellipse cx="140" cy="230" rx="60" ry="15" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.3"/>
+  <ellipse cx="140" cy="260" rx="60" ry="15" fill="none" stroke="#f59e0b" stroke-width="1" opacity="0.3"/>
+  <text x="140" y="330" font-family="Arial" font-size="11" fill="#f59e0b" text-anchor="middle" opacity="0.5">500 contacts</text>
+  <!-- Arrow -->
+  <path d="M210 250 L300 250" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.5"/>
+  <polygon points="300,244 316,250 300,256" fill="#f59e0b" opacity="0.5"/>
+  <!-- AI Processing gear -->
+  <circle cx="370" cy="250" r="45" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+  <circle cx="370" cy="250" r="25" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="370" y="256" font-family="Arial" font-size="14" fill="#f59e0b" text-anchor="middle">AI</text>
+  <!-- Gear teeth -->
+  <g stroke="#f59e0b" stroke-width="2" opacity="0.4">
+    <line x1="370" y1="200" x2="370" y2="210"/><line x1="370" y1="290" x2="370" y2="300"/>
+    <line x1="320" y1="250" x2="330" y2="250"/><line x1="410" y1="250" x2="420" y2="250"/>
+  </g>
+  <!-- Arrow out -->
+  <path d="M420 250 L500 250" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 3" opacity="0.5"/>
+  <polygon points="500,244 516,250 500,256" fill="#f59e0b" opacity="0.5"/>
+  <!-- Multiple personalized emails fanning out -->
+  <g transform="translate(560,150)">
+    <rect x="0" y="0" width="120" height="70" rx="5" fill="#334155" stroke="#f59e0b" stroke-width="1.5" opacity="0.8"/>
+    <path d="M0 0 L60 35 L120 0" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.5"/>
+    <text x="60" y="55" font-family="Arial" font-size="9" fill="#fbbf24" text-anchor="middle">Dear Sarah...</text>
+  </g>
+  <g transform="translate(580,240)">
+    <rect x="0" y="0" width="120" height="70" rx="5" fill="#334155" stroke="#f59e0b" stroke-width="1.5" opacity="0.6"/>
+    <path d="M0 0 L60 35 L120 0" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.4"/>
+    <text x="60" y="55" font-family="Arial" font-size="9" fill="#fbbf24" text-anchor="middle">Dear Mike...</text>
+  </g>
+  <g transform="translate(560,330)">
+    <rect x="0" y="0" width="120" height="70" rx="5" fill="#334155" stroke="#f59e0b" stroke-width="1.5" opacity="0.4"/>
+    <path d="M0 0 L60 35 L120 0" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.3"/>
+    <text x="60" y="55" font-family="Arial" font-size="9" fill="#fbbf24" text-anchor="middle">Dear Alex...</text>
+  </g>
+</svg>

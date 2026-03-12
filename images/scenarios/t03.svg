@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Person icon -->
+  <circle cx="200" cy="180" r="40" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="200" y1="220" x2="200" y2="320" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="200" y1="260" x2="160" y2="300" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="200" y1="260" x2="240" y2="300" stroke="#94a3b8" stroke-width="2.5"/>
+  <!-- English bubble -->
+  <rect x="270" y="100" width="200" height="60" rx="15" fill="#f59e0b" opacity="0.2" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="370" y="137" font-family="Arial" font-size="16" fill="#f59e0b" text-anchor="middle">Hello!</text>
+  <polygon points="285,160 270,180 305,160" fill="#f59e0b" opacity="0.2"/>
+  <!-- Spanish bubble -->
+  <rect x="340" y="220" width="220" height="60" rx="15" fill="#334155" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="450" y="257" font-family="Arial" font-size="16" fill="#fbbf24" text-anchor="middle">¡Hola! ¿Cómo estás?</text>
+  <polygon points="540,280 560,300 520,280" fill="#334155" stroke="#f59e0b" stroke-width="1.5"/>
+  <!-- AI/Speaker icon -->
+  <rect x="560" y="290" width="80" height="80" rx="15" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+  <circle cx="585" cy="320" r="6" fill="#f59e0b"/><circle cx="615" cy="320" r="6" fill="#f59e0b"/>
+  <path d="M585 345 Q600 355 615 345" fill="none" stroke="#f59e0b" stroke-width="2"/>
+  <!-- Sound waves -->
+  <path d="M650 310 Q665 330 650 350" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.4"/>
+  <path d="M665 300 Q685 330 665 360" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.3"/>
+  <!-- More English -->
+  <rect x="280" y="340" width="240" height="60" rx="15" fill="#f59e0b" opacity="0.2" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="400" y="377" font-family="Arial" font-size="16" fill="#f59e0b" text-anchor="middle">How do you say...?</text>
+</svg>

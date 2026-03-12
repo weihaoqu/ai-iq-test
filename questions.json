@@ -1,0 +1,587 @@
+[
+  {
+    "id": "f01",
+    "dim": "foundations",
+    "dimLabel": "AI Foundations",
+    "q": "Someone claims ChatGPT 'understands' their question. What's actually happening?",
+    "img": "images/scenarios/f01.svg",
+    "choices": [
+      {"letter": "A", "text": "It reads your mind and comprehends meaning like a human.", "score": 1},
+      {"letter": "B", "text": "It looks up your question in a giant database of answers.", "score": 2},
+      {"letter": "C", "text": "It predicts statistically likely next words based on patterns in training data.", "score": 4},
+      {"letter": "D", "text": "It uses a sophisticated multi-layered logic engine that parses your grammar, identifies intent through semantic analysis, and routes your query to the appropriate knowledge module.", "score": 3}
+    ]
+  },
+  {
+    "id": "f02",
+    "dim": "foundations",
+    "dimLabel": "AI Foundations",
+    "q": "You run the exact same ChatGPT prompt twice and get different answers. Why?",
+    "img": "images/scenarios/f02.svg",
+    "choices": [
+      {"letter": "A", "text": "ChatGPT randomly picks from its database differently each time.", "score": 2},
+      {"letter": "B", "text": "The model uses a temperature setting that introduces randomness into output generation.", "score": 4},
+      {"letter": "C", "text": "It's a bug — AI should always give the same answer.", "score": 1},
+      {"letter": "D", "text": "The servers are in different countries and use different data.", "score": 3}
+    ]
+  },
+  {
+    "id": "f03",
+    "dim": "foundations",
+    "dimLabel": "AI Foundations",
+    "q": "An AI image generator creates a realistic picture of a celebrity. Where did it learn to do that?",
+    "img": "images/scenarios/f03.svg",
+    "choices": [
+      {"letter": "A", "text": "It was manually programmed with that celebrity's face by developers.", "score": 1},
+      {"letter": "B", "text": "It was trained on billions of images scraped from the internet, including photos of that person.", "score": 4},
+      {"letter": "C", "text": "It searches Google Images in real time when you request a celebrity.", "score": 2},
+      {"letter": "D", "text": "It combines random face features until it matches a name in its vocabulary.", "score": 3}
+    ]
+  },
+  {
+    "id": "f04",
+    "dim": "foundations",
+    "dimLabel": "AI Foundations",
+    "q": "A news headline reads: 'AI predicted the stock market with 94% accuracy.' What's your first thought?",
+    "img": "images/scenarios/f04.svg",
+    "choices": [
+      {"letter": "A", "text": "That's impressive — I should invest based on this AI.", "score": 1},
+      {"letter": "B", "text": "I wonder what time period, dataset, and benchmark it was tested against.", "score": 4},
+      {"letter": "C", "text": "It probably used historical data with backtesting, which often overfits to past patterns and doesn't guarantee future results in volatile markets.", "score": 3},
+      {"letter": "D", "text": "AI is getting too powerful if it can beat Wall Street.", "score": 2}
+    ]
+  },
+  {
+    "id": "f05",
+    "dim": "foundations",
+    "dimLabel": "AI Foundations",
+    "q": "Your friend says AI will replace ALL jobs within 5 years. How do you respond?",
+    "img": "images/scenarios/f05.svg",
+    "choices": [
+      {"letter": "A", "text": "Agree — we should all learn to live without working.", "score": 1},
+      {"letter": "B", "text": "Some tasks will be automated, but most jobs will evolve rather than vanish entirely.", "score": 3},
+      {"letter": "C", "text": "Disagree completely — AI can't do anything a human can do.", "score": 2},
+      {"letter": "D", "text": "The evidence shows AI automates specific tasks; job transformation depends on role, sector, and timeline.", "score": 4}
+    ]
+  },
+  {
+    "id": "p01",
+    "dim": "problemFraming",
+    "dimLabel": "Problem Framing",
+    "q": "You're using ChatGPT to plan a complex project. Halfway through a long conversation, it starts contradicting its earlier recommendations. What's most likely happening?",
+    "img": "images/scenarios/p01.svg",
+    "choices": [
+      {"letter": "A", "text": "ChatGPT changed its mind as it 'learned' more from your conversation.", "score": 2},
+      {"letter": "B", "text": "The conversation exceeded the model's context window, so it lost track of earlier details and is generating new responses without full context.", "score": 4},
+      {"letter": "C", "text": "There's a server-side error — refresh the page and it will remember everything.", "score": 1},
+      {"letter": "D", "text": "AI models periodically reset their reasoning mid-conversation to explore alternative approaches and give you a broader range of perspectives.", "score": 1}
+    ]
+  },
+  {
+    "id": "p02",
+    "dim": "problemFraming",
+    "dimLabel": "Problem Framing",
+    "q": "You upload a 200-page PDF to an AI chatbot and ask for a summary, but the output only covers the first 30 pages. What's the actual constraint?",
+    "img": "images/scenarios/p02.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI is being lazy — use a more demanding prompt like 'summarize ALL pages thoroughly.'", "score": 1},
+      {"letter": "B", "text": "The document exceeded the model's context window — the maximum amount of text it can process in a single pass.", "score": 4},
+      {"letter": "C", "text": "PDF files aren't fully compatible with AI text processing — convert to plain text first and the problem will go away.", "score": 2},
+      {"letter": "D", "text": "The AI's servers were overloaded at the time and timed out partway through — try again during off-peak hours when more computing resources are available for your request.", "score": 3}
+    ]
+  },
+  {
+    "id": "p03",
+    "dim": "problemFraming",
+    "dimLabel": "Problem Framing",
+    "q": "You asked AI to write a Python script yesterday and it worked perfectly. Today, the exact same prompt produces slightly different code that has a bug. What's the most likely explanation?",
+    "img": "images/scenarios/p03.svg",
+    "choices": [
+      {"letter": "A", "text": "Your subscription tier dropped and you're getting lower-quality outputs.", "score": 1},
+      {"letter": "B", "text": "LLMs are non-deterministic — temperature settings introduce randomness, so identical prompts can produce different outputs each time.", "score": 4},
+      {"letter": "C", "text": "Someone else's conversation corrupted the AI's shared memory between sessions.", "score": 1},
+      {"letter": "D", "text": "The AI model was silently updated overnight and lost some of its ability to write Python code reliably — this happens regularly with cloud-based AI services.", "score": 3}
+    ]
+  },
+  {
+    "id": "p04",
+    "dim": "problemFraming",
+    "dimLabel": "Problem Framing",
+    "q": "You're building an app with AI help and paste your entire 2,000-line codebase into the chat for context. What's the main problem with this approach?",
+    "img": "images/scenarios/p04.svg",
+    "choices": [
+      {"letter": "A", "text": "AI can't read code — it only works well with natural language descriptions.", "score": 1},
+      {"letter": "B", "text": "Large inputs may exceed token limits, and the model's attention degrades over long contexts — it may ignore or hallucinate details from sections it can't fully process.", "score": 4},
+      {"letter": "C", "text": "It's fine — providing more context always produces better AI responses regardless of input length.", "score": 1},
+      {"letter": "D", "text": "The main risk is that AI will store all your proprietary code and potentially expose it to other users who ask similar coding questions in the future.", "score": 2}
+    ]
+  },
+  {
+    "id": "p05",
+    "dim": "problemFraming",
+    "dimLabel": "Problem Framing",
+    "q": "You used AI to research a topic and it provided 10 academic citations with authors, journals, and publication years. When you check, 3 of the papers don't exist. This happened because...",
+    "img": "images/scenarios/p05.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI's academic database is outdated and those papers were recently retracted from their journals.", "score": 1},
+      {"letter": "B", "text": "LLMs generate citations by pattern-matching author names, journal formats, and topics from training data — they don't look up real papers, so fabricated references look completely authentic.", "score": 4},
+      {"letter": "C", "text": "The AI copied citations from unreliable websites that had fake references listed.", "score": 2},
+      {"letter": "D", "text": "You didn't explicitly request 'verified real citations only,' so the AI filled in gaps with plausible-sounding ones to complete your request — it's trying to be helpful by providing the number you asked for.", "score": 3}
+    ]
+  },
+  {
+    "id": "t01",
+    "dim": "toolSelection",
+    "dimLabel": "Tool Selection",
+    "q": "You need a professional logo for your startup. What's the best approach?",
+    "img": "images/scenarios/t01.svg",
+    "choices": [
+      {"letter": "A", "text": "Use Midjourney or DALL-E to generate logos, then refine the best in Figma or with a designer.", "score": 4},
+      {"letter": "B", "text": "Ask ChatGPT to describe what your logo should look like.", "score": 1},
+      {"letter": "C", "text": "Use Canva's free logo maker.", "score": 2},
+      {"letter": "D", "text": "Use an AI image generator and pick the first result you like.", "score": 3}
+    ]
+  },
+  {
+    "id": "t02",
+    "dim": "toolSelection",
+    "dimLabel": "Tool Selection",
+    "q": "You need to summarize a 50-page PDF report quickly. What's the best tool?",
+    "img": "images/scenarios/t02.svg",
+    "choices": [
+      {"letter": "A", "text": "Copy-paste sections into ChatGPT one at a time.", "score": 2},
+      {"letter": "B", "text": "Upload the PDF directly to an LLM with file upload and prompt for a structured summary.", "score": 4},
+      {"letter": "C", "text": "Ask a standard chatbot to summarize without uploading the file.", "score": 1},
+      {"letter": "D", "text": "Use a dedicated PDF summarizer tool like Humata or Adobe AI Assistant, which are specifically designed for document analysis and can handle complex formatting, tables, and cross-references.", "score": 3}
+    ]
+  },
+  {
+    "id": "t03",
+    "dim": "toolSelection",
+    "dimLabel": "Tool Selection",
+    "q": "A teacher wants students to practice spoken Spanish conversations with AI. What's the best solution?",
+    "img": "images/scenarios/t03.svg",
+    "choices": [
+      {"letter": "A", "text": "Have students type back and forth with ChatGPT in Spanish.", "score": 2},
+      {"letter": "B", "text": "Use a voice-enabled AI tutor like Speak, Duolingo AI, or ChatGPT voice mode.", "score": 4},
+      {"letter": "C", "text": "Show students YouTube videos in Spanish.", "score": 1},
+      {"letter": "D", "text": "Use Google Translate for pronunciation practice.", "score": 3}
+    ]
+  },
+  {
+    "id": "t04",
+    "dim": "toolSelection",
+    "dimLabel": "Tool Selection",
+    "q": "You need to send personalized birthday emails to 500 clients automatically. Best approach?",
+    "img": "images/scenarios/t04.svg",
+    "choices": [
+      {"letter": "A", "text": "Write one email in ChatGPT and copy-paste it 500 times with edits.", "score": 1},
+      {"letter": "B", "text": "Use an email platform like Mailchimp with merge tags, A/B testing on subject lines, segmented scheduling based on time zones, and automated follow-up sequences for non-openers.", "score": 3},
+      {"letter": "C", "text": "Use a CRM with AI personalization integrated into an automation workflow.", "score": 4},
+      {"letter": "D", "text": "Ask ChatGPT to generate all 500 emails and send them manually.", "score": 2}
+    ]
+  },
+  {
+    "id": "t05",
+    "dim": "toolSelection",
+    "dimLabel": "Tool Selection",
+    "q": "You want to build a simple website but have zero coding experience. Best path?",
+    "img": "images/scenarios/t05.svg",
+    "choices": [
+      {"letter": "A", "text": "Ask ChatGPT to write the HTML and paste it somewhere.", "score": 2},
+      {"letter": "B", "text": "Hire a web developer.", "score": 1},
+      {"letter": "C", "text": "Use a no-code AI site builder like Framer, Wix ADI, or Squarespace AI.", "score": 3},
+      {"letter": "D", "text": "Use a vibe-coding tool like Bolt or Lovable with AI prompting, then deploy on Netlify.", "score": 4}
+    ]
+  },
+  {
+    "id": "e01",
+    "dim": "promptEngineering",
+    "dimLabel": "Prompt Engineering",
+    "q": "You ask AI to 'write a function that processes the data' and get useless generic code. An experienced AI user would fix this by...",
+    "img": "images/scenarios/e01.svg",
+    "choices": [
+      {"letter": "A", "text": "Asking more politely — AI tends to produce better results when you use courteous, encouraging language.", "score": 1},
+      {"letter": "B", "text": "Specifying input format, output format, language, edge cases, and providing a concrete example of expected input→output.", "score": 4},
+      {"letter": "C", "text": "Prepending a system message like 'You are an expert senior developer with 20 years of experience' — role-based prompting unlocks significantly higher-quality code by activating the model's specialized knowledge patterns.", "score": 3},
+      {"letter": "D", "text": "Switching to a more powerful and expensive AI model — the current one isn't capable enough for coding tasks.", "score": 2}
+    ]
+  },
+  {
+    "id": "e02",
+    "dim": "promptEngineering",
+    "dimLabel": "Prompt Engineering",
+    "q": "You need AI to extract data from text and return it in a specific table format, but every response uses slightly different formatting. What's the most reliable fix?",
+    "img": "images/scenarios/e02.svg",
+    "choices": [
+      {"letter": "A", "text": "Keep regenerating until you get the format you want — eventually it will match.", "score": 1},
+      {"letter": "B", "text": "Provide an explicit output template with a concrete example of the exact format, and use lower temperature settings for more deterministic output.", "score": 4},
+      {"letter": "C", "text": "Tell the AI to 'please be consistent with formatting' — explicit instructions about consistency solve most formatting issues.", "score": 2},
+      {"letter": "D", "text": "Always request JSON output — structured data formats like JSON are inherently more consistent and reliable across repeated runs than free-form text or markdown tables.", "score": 3}
+    ]
+  },
+  {
+    "id": "e03",
+    "dim": "promptEngineering",
+    "dimLabel": "Prompt Engineering",
+    "q": "You point out an error in AI's code. It responds: 'You're absolutely right, I apologize for that mistake!' and provides a corrected version. How confident should you be in the correction?",
+    "img": "images/scenarios/e03.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI recognized its mistake and self-corrected, which shows genuine learning from feedback within the conversation — the corrected version should be reliable.", "score": 2},
+      {"letter": "B", "text": "The apology and acknowledgment shows intellectual honesty. The corrected version is likely accurate since the AI is clearly being more careful this time after being called out.", "score": 1},
+      {"letter": "C", "text": "Not confident — LLMs are trained to be agreeable and will enthusiastically 'apologize' whether or not you were actually right. The correction may be worse, or the original may have been correct all along. Verify the new version independently.", "score": 4},
+      {"letter": "D", "text": "Fairly confident — the fact that AI can recognize errors and produce corrections within a conversation demonstrates its self-debugging capability is working. Just verify the specific fix addresses what you pointed out.", "score": 3}
+    ]
+  },
+  {
+    "id": "e04",
+    "dim": "promptEngineering",
+    "dimLabel": "Prompt Engineering",
+    "q": "AI generated code with a bug in it. What's the best next prompt?",
+    "img": "images/scenarios/e04.svg",
+    "choices": [
+      {"letter": "A", "text": "\"Fix this.\" and paste the code again.", "score": 2},
+      {"letter": "B", "text": "\"This doesn't work\" — try a different AI tool.", "score": 1},
+      {"letter": "C", "text": "Paste the code, describe the exact error message, what you expected vs. what happened, and ask it to diagnose and fix.", "score": 4},
+      {"letter": "D", "text": "Paste the code and say \"there's a bug on line 12, fix it.\"", "score": 3}
+    ]
+  },
+  {
+    "id": "e05",
+    "dim": "promptEngineering",
+    "dimLabel": "Prompt Engineering",
+    "q": "You need AI to create a weekly meal plan for a diabetic vegetarian. Best prompt style?",
+    "img": "images/scenarios/e05.svg",
+    "choices": [
+      {"letter": "A", "text": "\"Make a meal plan for someone who can't eat meat or sugar.\"", "score": 2},
+      {"letter": "B", "text": "\"Make a healthy meal plan.\"", "score": 1},
+      {"letter": "C", "text": "\"Create a 7-day vegetarian meal plan for Type 2 diabetes: low GI, under 1800 calories/day, no processed sugar, with a grocery list.\"", "score": 4},
+      {"letter": "D", "text": "\"Make a vegetarian meal plan suitable for a diabetic person with balanced macros.\"", "score": 3}
+    ]
+  },
+  {
+    "id": "c01",
+    "dim": "criticalEvaluation",
+    "dimLabel": "Critical Evaluation",
+    "q": "AI wrote a research summary with claims you want to verify. You ask it to 'cite your sources.' It responds with 5 academic paper titles, author names, journal names, and DOI numbers. What should you conclude?",
+    "img": "images/scenarios/c01.svg",
+    "choices": [
+      {"letter": "A", "text": "The citations prove the content is well-researched — AI wouldn't fabricate full academic references complete with DOI numbers.", "score": 1},
+      {"letter": "B", "text": "Asking for sources was a smart verification step. Now spot-check one or two of the citations to confirm they're real.", "score": 2},
+      {"letter": "C", "text": "AI generates fake citations — complete with realistic authors, journals, and DOI numbers — just as fluently as it generates any other text. Asking for sources provided zero verification. Check every claim against Google Scholar independently.", "score": 4},
+      {"letter": "D", "text": "DOIs are standardized unique identifiers managed by the International DOI Foundation, so they're extremely difficult to randomly fabricate — if the DOI format looks valid and structured, the papers almost certainly exist.", "score": 3}
+    ]
+  },
+  {
+    "id": "c02",
+    "dim": "criticalEvaluation",
+    "dimLabel": "Critical Evaluation",
+    "q": "You're unsure about an AI's factual claim, so you open 3 new chat sessions with the same model and ask the identical question. All 3 give the same answer. What can you conclude?",
+    "img": "images/scenarios/c02.svg",
+    "choices": [
+      {"letter": "A", "text": "Three separate sessions all confirming the same answer is strong evidence — like polling three independent experts who all agree.", "score": 1},
+      {"letter": "B", "text": "The consistency strongly suggests accuracy. It's worth one external check to be thorough, but three matching responses is a very positive sign.", "score": 2},
+      {"letter": "C", "text": "Nothing — the same model with the same training data and weights will tend to produce similar outputs. Consistency from one model is not independent verification. Only external, non-AI sources can actually confirm the claim.", "score": 4},
+      {"letter": "D", "text": "If all three responses are nearly word-for-word identical, it means the AI is retrieving from a cached or memorized answer rather than generating, which is actually more likely to be a verified fact from its training data.", "score": 3}
+    ]
+  },
+  {
+    "id": "c03",
+    "dim": "criticalEvaluation",
+    "dimLabel": "Critical Evaluation",
+    "q": "An employee pastes confidential company financial data into the free version of ChatGPT to help draft a report. The CTO is furious. What's the specific technical risk?",
+    "img": "images/scenarios/c03.svg",
+    "choices": [
+      {"letter": "A", "text": "ChatGPT will sell the data directly to competitors.", "score": 1},
+      {"letter": "B", "text": "On default consumer settings, conversations may be used for model training — proprietary data could influence future model outputs visible to other users.", "score": 4},
+      {"letter": "C", "text": "The CTO is overreacting — ChatGPT automatically deletes all conversation data after each session ends.", "score": 1},
+      {"letter": "D", "text": "The main risk is that ChatGPT might misinterpret the financial figures and produce an inaccurate report that gets shared externally.", "score": 2}
+    ]
+  },
+  {
+    "id": "c04",
+    "dim": "criticalEvaluation",
+    "dimLabel": "Critical Evaluation",
+    "q": "An AI coding assistant suggests installing a package called 'python-dateutils2' to fix your date parsing bug. You've used 'python-dateutil' before but never heard of this variant. What should concern you?",
+    "img": "images/scenarios/c04.svg",
+    "choices": [
+      {"letter": "A", "text": "It's probably a newer, updated version of the package you already know — install it and try.", "score": 2},
+      {"letter": "B", "text": "AI frequently hallucinates package names. Installing unverified packages risks typosquatting attacks — malicious packages published under names similar to popular ones.", "score": 4},
+      {"letter": "C", "text": "Just install it — if it doesn't work, you can always uninstall it with no harm done.", "score": 1},
+      {"letter": "D", "text": "Search for the package documentation and GitHub repository first to verify it exists, has active maintainers, and does what you need before adding it to your project.", "score": 3}
+    ]
+  },
+  {
+    "id": "c05",
+    "dim": "criticalEvaluation",
+    "dimLabel": "Critical Evaluation",
+    "q": "ChatGPT gave you a detailed legal analysis for a contract dispute. To verify, you paste the analysis into Claude and ask 'Is this legal analysis correct?' Claude responds that it's 'largely accurate with minor clarifications.' How reliable is this cross-verification?",
+    "img": "images/scenarios/c05.svg",
+    "choices": [
+      {"letter": "A", "text": "Very reliable — two different AI models built by different companies independently agree, like getting a second doctor's opinion from a different hospital.", "score": 1},
+      {"letter": "B", "text": "Reasonably reliable — Claude provided its own corrections rather than just agreeing, which shows genuine independent analysis. Double-check the specific points Claude flagged and you should be fine.", "score": 2},
+      {"letter": "C", "text": "Weak — LLMs share overlapping training data and similar tendencies to generate plausible-sounding legal language. One AI reviewing another tends to agree because both optimize for plausibility, not legal accuracy. Only a human lawyer or primary legal sources can truly verify.", "score": 4},
+      {"letter": "D", "text": "Somewhat reliable — since Claude and ChatGPT use completely different architectures, training datasets, and reasoning approaches, their agreement carries more weight than asking the same model twice, though you'd still want a human check for anything legally binding.", "score": 3}
+    ]
+  },
+  {
+    "id": "s01",
+    "dim": "ethicsSafety",
+    "dimLabel": "AI Ethics & Safety",
+    "q": "Your company uses ChatGPT Team plan for customer support. An employee switches to the free tier for a complex query. What's the specific risk?",
+    "img": "images/scenarios/s01.svg",
+    "choices": [
+      {"letter": "A", "text": "The free tier gives worse answers than the paid version.", "score": 1},
+      {"letter": "B", "text": "Free-tier conversations may be used for model training, so customer PII could leak into future model outputs.", "score": 4},
+      {"letter": "C", "text": "The employee might exceed the free tier's usage limits and get locked out in the middle of helping a customer.", "score": 2},
+      {"letter": "D", "text": "Using the free tier violates the company's software licensing agreement, creates an audit trail gap, and could trigger compliance violations under the company's data governance framework if discovered.", "score": 3}
+    ]
+  },
+  {
+    "id": "s02",
+    "dim": "ethicsSafety",
+    "dimLabel": "AI Ethics & Safety",
+    "q": "You ask AI about drug interactions for a medication you're taking. It begins with: 'I'm not a medical professional and this isn't medical advice. Please consult your doctor.' Then provides detailed interaction information. How should you interpret the disclaimer?",
+    "img": "images/scenarios/s02.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI is being transparent about its limitations — the information that follows is likely reliable since the system is being honest and cautious rather than overconfidently presenting itself as an authority.", "score": 2},
+      {"letter": "B", "text": "The disclaimer is a trained response pattern baked in by developers, not genuine self-awareness. It has zero correlation with the accuracy of what follows — AI generates disclaimers and hallucinated medical facts with equal fluency.", "score": 4},
+      {"letter": "C", "text": "Any AI that includes medical disclaimers has gone through responsible safety training, which means its health-related responses have been validated against medical databases and reviewed by professionals during the development process.", "score": 1},
+      {"letter": "D", "text": "The disclaimer shows the AI recognizes this is a high-stakes topic, so it's likely being extra careful and conservative with the specific information — treat it as a reliable starting point but verify critical details with a pharmacist.", "score": 3}
+    ]
+  },
+  {
+    "id": "s03",
+    "dim": "ethicsSafety",
+    "dimLabel": "AI Ethics & Safety",
+    "q": "You ask AI to create a competitive analysis comparing pricing of 5 SaaS tools. It responds: 'I don't have access to real-time pricing data and cannot provide accurate comparisons.' What should you do?",
+    "img": "images/scenarios/s03.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI was honest about its limitations. Research the pricing manually or hire an analyst — this task genuinely requires real-time data that AI doesn't have access to.", "score": 2},
+      {"letter": "B", "text": "Rephrase the task: provide the pricing data yourself and ask AI to format the comparison table, generate the analysis framework, or write the narrative. Many AI refusals are overly cautious guardrails, not hard technical limitations — restructure the task around what AI CAN do.", "score": 4},
+      {"letter": "C", "text": "Accept the refusal — AI should never be used for tasks involving current market data, since its training data is always outdated and it fundamentally cannot access real-time information under any circumstances.", "score": 1},
+      {"letter": "D", "text": "Switch to a different AI model that has web browsing or search capabilities — the problem is simply that this particular model lacks internet access, which is the only barrier to completing this task.", "score": 3}
+    ]
+  },
+  {
+    "id": "s04",
+    "dim": "ethicsSafety",
+    "dimLabel": "AI Ethics & Safety",
+    "q": "You ask two AI chatbots about a historical trade agreement. Chatbot A responds with specific dates (March 14, 1987), named officials (Deputy Minister Kowalski), vote counts (217-198), and a direct quote. Chatbot B gives a general overview without specific details. Which response should you trust more?",
+    "img": "images/scenarios/s04.svg",
+    "choices": [
+      {"letter": "A", "text": "Chatbot A — the specific dates, names, and vote counts indicate deeper knowledge. Anyone can give a vague overview, but specific facts require real information.", "score": 1},
+      {"letter": "B", "text": "Chatbot A is more trustworthy because specific, verifiable claims are inherently more accountable — the AI is putting forward concrete facts that can be checked, which shows confidence in their accuracy.", "score": 2},
+      {"letter": "C", "text": "Neither is inherently more trustworthy. LLMs generate convincing specifics — exact dates, official names, vote tallies, direct quotes — as easily as vague summaries. Specific-sounding fabrications are MORE dangerous because they look authoritative. Verify both against primary sources.", "score": 4},
+      {"letter": "D", "text": "Chatbot B is actually more trustworthy — an AI that gives vaguer answers may be showing appropriate uncertainty, while Chatbot A's excessive specificity is a red flag for overconfident confabulation.", "score": 3}
+    ]
+  },
+  {
+    "id": "s05",
+    "dim": "ethicsSafety",
+    "dimLabel": "AI Ethics & Safety",
+    "q": "Your company's AI chatbot occasionally includes specific details from other customers' previous conversations in its responses. What's the most likely technical cause?",
+    "img": "images/scenarios/s05.svg",
+    "choices": [
+      {"letter": "A", "text": "A hacker breached the system and is deliberately leaking customer data.", "score": 1},
+      {"letter": "B", "text": "The model was fine-tuned on or retrieves from a shared data store that doesn't properly isolate per-customer data, causing cross-contamination of context between sessions.", "score": 4},
+      {"letter": "C", "text": "The AI copies information from the public internet where customers may have posted their own data on review sites or social media.", "score": 2},
+      {"letter": "D", "text": "This is a known limitation of large language models — they sometimes retain fragments of previous conversations in memory and surface them unpredictably in later sessions with different users.", "score": 3}
+    ]
+  },
+  {
+    "id": "h01",
+    "dim": "humanCollaboration",
+    "dimLabel": "AI-Human Collaboration",
+    "q": "You have a theory about why your marketing campaign failed. You describe the campaign to AI and ask for analysis. It responds with a detailed explanation that perfectly supports your theory, citing multiple logical reasons. How should you interpret this?",
+    "img": "images/scenarios/h01.svg",
+    "choices": [
+      {"letter": "A", "text": "AI independently arrived at the same conclusion through its own analysis — this validates your thinking, especially since you only described the campaign, not your theory.", "score": 2},
+      {"letter": "B", "text": "The detailed supporting arguments with multiple reasons demonstrate thorough analysis — your theory is almost certainly correct since AI found so many independent logical reasons backing it up.", "score": 1},
+      {"letter": "C", "text": "LLMs are trained to generate agreeable, plausible-sounding responses that follow the framing of your input. If your description implied a conclusion, the AI followed that lead. Test this: ask it to argue AGAINST your theory — if it does so equally convincingly, neither analysis was reliable.", "score": 4},
+      {"letter": "D", "text": "This is useful preliminary validation. To be thorough, also ask AI to identify weaknesses or counterarguments in your theory before fully accepting the analysis as confirmation.", "score": 3}
+    ]
+  },
+  {
+    "id": "h02",
+    "dim": "humanCollaboration",
+    "dimLabel": "AI-Human Collaboration",
+    "q": "You're debugging AI-generated code and discover it calls an API endpoint that was deprecated and removed 6 months ago. This happened because...",
+    "img": "images/scenarios/h02.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI intentionally chose the older API because it was more stable and better documented.", "score": 1},
+      {"letter": "B", "text": "The model's training data has a knowledge cutoff — it doesn't know about changes, deprecations, or new APIs released after that date.", "score": 4},
+      {"letter": "C", "text": "You should have specified which API version to use in your prompt — the AI defaulted to whatever version appeared most frequently in its training data and online documentation.", "score": 3},
+      {"letter": "D", "text": "The AI searched for the API with the most online documentation and tutorials available and selected the most referenced version.", "score": 2}
+    ]
+  },
+  {
+    "id": "h03",
+    "dim": "humanCollaboration",
+    "dimLabel": "AI-Human Collaboration",
+    "q": "AI gives you a code solution that looks reasonable but something feels off. You ask the AI 'are you sure this is correct?' and it replies 'Yes, this is definitely the right approach.' What should you do?",
+    "img": "images/scenarios/h03.svg",
+    "choices": [
+      {"letter": "A", "text": "Trust it — the AI confirmed it's correct, so your instinct was probably wrong.", "score": 1},
+      {"letter": "B", "text": "AI will almost always confirm its own outputs when asked — self-verification is unreliable. Test the code yourself or verify the logic independently.", "score": 4},
+      {"letter": "C", "text": "Ask it a third time more forcefully: 'Think again carefully, are you REALLY sure?' — persistence forces the model to reconsider.", "score": 1},
+      {"letter": "D", "text": "Copy the solution and paste it into a different AI model for a second opinion — if both models independently agree on the same approach, the solution is almost certainly correct.", "score": 3}
+    ]
+  },
+  {
+    "id": "h04",
+    "dim": "humanCollaboration",
+    "dimLabel": "AI-Human Collaboration",
+    "q": "You need AI to help analyze a customer dataset that contains names, emails, and purchase history. What's the correct workflow?",
+    "img": "images/scenarios/h04.svg",
+    "choices": [
+      {"letter": "A", "text": "Paste it directly into the chat — AI processes data in real time and doesn't permanently store anything.", "score": 1},
+      {"letter": "B", "text": "Strip or pseudonymize all PII before sending to AI. Use enterprise/API tiers with data processing agreements rather than consumer chatbots for sensitive data.", "score": 4},
+      {"letter": "C", "text": "Add a disclaimer in the prompt: 'This data is confidential — do not store or share it.' AI must follow user instructions about data handling.", "score": 2},
+      {"letter": "D", "text": "Remove customer names but keep emails and purchase data intact — the analysis needs unique identifiers to detect patterns, and emails without names aren't really personally identifiable information.", "score": 3}
+    ]
+  },
+  {
+    "id": "h05",
+    "dim": "humanCollaboration",
+    "dimLabel": "AI-Human Collaboration",
+    "q": "You've been iterating with AI on a complex coding task for 40+ messages. The responses are getting repetitive, less relevant, and sometimes contradict earlier solutions. What's happening?",
+    "img": "images/scenarios/h05.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI is getting 'tired' from processing too many requests in a row.", "score": 1},
+      {"letter": "B", "text": "As conversations grow, they fill the context window. The model loses track of earlier constraints and its attention degrades — start a new conversation with a focused summary of where you left off.", "score": 4},
+      {"letter": "C", "text": "You've exceeded your daily quality quota and the system quietly switched you to a weaker, cheaper model to save resources.", "score": 2},
+      {"letter": "D", "text": "The AI has exhausted its knowledge on this particular topic and is now recycling and paraphrasing its previous answers because it has nothing new to contribute.", "score": 3}
+    ]
+  },
+  {
+    "id": "v01",
+    "dim": "vibeCoding",
+    "dimLabel": "Vibe Coding & AI Creation",
+    "q": "You want to build a personal portfolio website using AI. What's the right first step?",
+    "img": "images/scenarios/v01.svg",
+    "choices": [
+      {"letter": "A", "text": "Open Bolt and type 'make me a portfolio website.'", "score": 2},
+      {"letter": "B", "text": "Sketch what pages you need, what content goes on each, and what impression you want to make first.", "score": 4},
+      {"letter": "C", "text": "Ask AI which tech stack is best for portfolio sites.", "score": 1},
+      {"letter": "D", "text": "Find a portfolio template you like and ask AI to recreate it.", "score": 3}
+    ]
+  },
+  {
+    "id": "v02",
+    "dim": "vibeCoding",
+    "dimLabel": "Vibe Coding & AI Creation",
+    "q": "The web app AI generated looks broken on mobile. What do you do?",
+    "img": "images/scenarios/v02.svg",
+    "choices": [
+      {"letter": "A", "text": "Start over with a different AI tool.", "score": 1},
+      {"letter": "B", "text": "Tell AI 'it's broken on mobile, fix it' and paste a screenshot.", "score": 3},
+      {"letter": "C", "text": "Describe the specific layout issues on mobile, paste the relevant CSS, and ask for a responsive fix.", "score": 4},
+      {"letter": "D", "text": "Ask AI to add 'make it mobile responsive' and regenerate the styles.", "score": 2}
+    ]
+  },
+  {
+    "id": "v03",
+    "dim": "vibeCoding",
+    "dimLabel": "Vibe Coding & AI Creation",
+    "q": "You built a working app with AI assistance. How do you actually deploy it online?",
+    "img": "images/scenarios/v03.svg",
+    "choices": [
+      {"letter": "A", "text": "Ask AI to deploy it for you.", "score": 1},
+      {"letter": "B", "text": "Email the code files to a web hosting company.", "score": 2},
+      {"letter": "C", "text": "Push the code to GitHub and connect the repo to Vercel, Netlify, or Railway for automatic deployment.", "score": 4},
+      {"letter": "D", "text": "Upload the files via FTP to a shared hosting provider.", "score": 3}
+    ]
+  },
+  {
+    "id": "v04",
+    "dim": "vibeCoding",
+    "dimLabel": "Vibe Coding & AI Creation",
+    "q": "Your AI-built app works but loads very slowly. What's the best approach?",
+    "img": "images/scenarios/v04.svg",
+    "choices": [
+      {"letter": "A", "text": "Ask AI to 'make the app faster' without any other context.", "score": 1},
+      {"letter": "B", "text": "Upgrade to a more expensive hosting plan.", "score": 2},
+      {"letter": "C", "text": "Profile what's slow in DevTools, then ask AI to fix the specific bottleneck.", "score": 4},
+      {"letter": "D", "text": "Run a full Lighthouse audit, analyze the waterfall chart in the Network tab, check for render-blocking resources, measure Time to First Byte, and create a comprehensive performance report before making any changes.", "score": 3}
+    ]
+  },
+  {
+    "id": "v05",
+    "dim": "vibeCoding",
+    "dimLabel": "Vibe Coding & AI Creation",
+    "q": "After a month of building with AI, what's the most important skill you should have developed?",
+    "img": "images/scenarios/v05.svg",
+    "choices": [
+      {"letter": "A", "text": "Speed — getting AI to produce results faster.", "score": 1},
+      {"letter": "B", "text": "Prompt memorization — knowing which exact words trigger good outputs.", "score": 2},
+      {"letter": "C", "text": "Knowing enough to direct AI precisely, debug its output, and own the final product.", "score": 4},
+      {"letter": "D", "text": "Knowing which AI tools to use for which tasks.", "score": 3}
+    ]
+  },
+  {
+    "id": "x01",
+    "dim": "foundations",
+    "dimLabel": "AI Foundations",
+    "q": "Your company wants to build a customer support AI that answers questions about your product. What's the most important technical decision?",
+    "img": "images/scenarios/x01.svg",
+    "choices": [
+      {"letter": "A", "text": "Choose the most expensive AI model — bigger is always better.", "score": 1},
+      {"letter": "B", "text": "Fine-tune a large language model on your entire customer database, support tickets, internal docs, and product manuals so it learns everything about your company from scratch.", "score": 3},
+      {"letter": "C", "text": "Use RAG — connect the model to your knowledge base so it retrieves relevant docs before answering.", "score": 4},
+      {"letter": "D", "text": "Train a custom model from scratch on your company data.", "score": 2}
+    ]
+  },
+  {
+    "id": "x02",
+    "dim": "criticalEvaluation",
+    "dimLabel": "Critical Evaluation",
+    "q": "Two AI models both claim 95% accuracy on a task. Model A was tested on 10,000 diverse real-world examples. Model B was tested on 500 examples from a single source. Which is more trustworthy?",
+    "img": "images/scenarios/x02.svg",
+    "choices": [
+      {"letter": "A", "text": "Both are equally trustworthy — 95% is 95%.", "score": 1},
+      {"letter": "B", "text": "Model A, because more data points always means better results regardless of methodology.", "score": 2},
+      {"letter": "C", "text": "Model A — larger, diverse test sets reduce the risk of inflated accuracy from narrow or unrepresentative benchmarks.", "score": 4},
+      {"letter": "D", "text": "Model B might actually be more trustworthy because a focused test set with carefully controlled conditions, consistent labeling criteria, and domain-specific examples can provide more reliable measurements than a large but potentially noisy dataset.", "score": 3}
+    ]
+  },
+  {
+    "id": "x03",
+    "dim": "promptEngineering",
+    "dimLabel": "Prompt Engineering",
+    "q": "You need AI to extract structured data from messy customer reviews (sentiment, product mentioned, issue type). What's the most reliable approach?",
+    "img": "images/scenarios/x03.svg",
+    "choices": [
+      {"letter": "A", "text": "Ask AI to 'analyze these reviews' and hope it figures out the structure.", "score": 1},
+      {"letter": "B", "text": "Provide a schema with exact field names, give 2-3 examples of input→output, and specify the output format (JSON).", "score": 4},
+      {"letter": "C", "text": "Write an extremely detailed 500-word system prompt explaining every possible edge case, sentiment nuance, product category taxonomy, and issue classification hierarchy with decision trees for ambiguous cases.", "score": 3},
+      {"letter": "D", "text": "Process one review at a time with a simple prompt for each field.", "score": 2}
+    ]
+  },
+  {
+    "id": "x04",
+    "dim": "toolSelection",
+    "dimLabel": "Tool Selection",
+    "q": "You're building an AI app that needs to remember context from previous conversations with each user. What architecture do you need?",
+    "img": "images/scenarios/x04.svg",
+    "choices": [
+      {"letter": "A", "text": "Just use a smarter AI model — it will remember everything.", "score": 1},
+      {"letter": "B", "text": "Store conversation history in a database and include relevant past messages in each new prompt's context window.", "score": 4},
+      {"letter": "C", "text": "Implement a comprehensive memory management system with vector embeddings for semantic search across all past conversations, automatic summarization of older interactions, tiered storage with hot/warm/cold memory layers, and periodic memory consolidation jobs.", "score": 3},
+      {"letter": "D", "text": "Save the full chat log and paste it all into each new request.", "score": 2}
+    ]
+  },
+  {
+    "id": "x05",
+    "dim": "vibeCoding",
+    "dimLabel": "Vibe Coding & AI Creation",
+    "q": "You built a web app with AI that works great locally. Now users report it crashes with real data. What's most likely wrong?",
+    "img": "images/scenarios/x05.svg",
+    "choices": [
+      {"letter": "A", "text": "The AI wrote buggy code — start over with a different AI tool.", "score": 1},
+      {"letter": "B", "text": "You tested with clean sample data but real-world data has edge cases (nulls, special characters, unexpected formats) the code doesn't handle.", "score": 4},
+      {"letter": "C", "text": "The production server needs more RAM, faster CPU, and better network bandwidth to handle the increased computational load of processing real user requests at scale.", "score": 3},
+      {"letter": "D", "text": "The deployment environment is different from your local setup.", "score": 2}
+    ]
+  }
+]

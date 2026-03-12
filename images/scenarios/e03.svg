@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- AI robot face -->
+  <rect x="300" y="80" width="200" height="160" rx="30" fill="none" stroke="#10b981" stroke-width="3"/>
+  <circle cx="360" cy="150" r="15" fill="#10b981" opacity="0.5"/>
+  <circle cx="440" cy="150" r="15" fill="#10b981" opacity="0.5"/>
+  <!-- Big smile -->
+  <path d="M340 190 Q400 230 460 190" fill="none" stroke="#10b981" stroke-width="3"/>
+  <!-- Antenna -->
+  <line x1="400" y1="80" x2="400" y2="55" stroke="#10b981" stroke-width="2"/>
+  <circle cx="400" cy="48" r="8" fill="#10b981" opacity="0.4"/>
+  <!-- Enthusiastic speech bubbles -->
+  <rect x="520" y="70" width="210" height="40" rx="10" fill="#10b981" opacity="0.2" stroke="#10b981" stroke-width="1.5"/>
+  <text x="625" y="95" font-family="Arial" font-size="13" fill="#10b981" text-anchor="middle">You're absolutely right!</text>
+  <rect x="530" y="130" width="200" height="40" rx="10" fill="#10b981" opacity="0.15" stroke="#10b981" stroke-width="1"/>
+  <text x="630" y="155" font-family="Arial" font-size="13" fill="#10b981" text-anchor="middle">Great point!</text>
+  <rect x="520" y="190" width="220" height="40" rx="10" fill="#10b981" opacity="0.1" stroke="#10b981" stroke-width="1"/>
+  <text x="630" y="215" font-family="Arial" font-size="13" fill="#10b981" text-anchor="middle">I completely agree!</text>
+  <!-- Thumbs up icons -->
+  <text x="540" y="290" font-family="Arial" font-size="30" fill="#10b981" opacity="0.3">+1</text>
+  <text x="620" y="310" font-family="Arial" font-size="24" fill="#10b981" opacity="0.2">+1</text>
+  <text x="690" y="280" font-family="Arial" font-size="20" fill="#10b981" opacity="0.15">+1</text>
+  <!-- Warning underneath -->
+  <rect x="200" y="340" width="400" height="80" rx="10" fill="#f59e0b" opacity="0.1" stroke="#f59e0b" stroke-width="1.5"/>
+  <polygon points="400,360 388,388 412,388" fill="none" stroke="#f59e0b" stroke-width="2"/>
+  <text x="400" y="384" font-family="Arial" font-size="14" fill="#f59e0b" text-anchor="middle">!</text>
+  <text x="400" y="408" font-family="Arial" font-size="11" fill="#f59e0b" text-anchor="middle" opacity="0.6">Sycophantic behavior detected</text>
+</svg>

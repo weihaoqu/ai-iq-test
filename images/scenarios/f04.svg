@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Newspaper -->
+  <rect x="180" y="60" width="440" height="380" rx="5" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+  <rect x="180" y="60" width="440" height="50" fill="#334155"/>
+  <rect x="210" y="75" width="200" height="10" rx="3" fill="#6366f1"/>
+  <rect x="210" y="92" width="280" height="8" rx="3" fill="#6366f1" opacity="0.5"/>
+  <!-- Headline area -->
+  <rect x="210" y="125" width="380" height="12" rx="3" fill="#94a3b8" opacity="0.7"/>
+  <rect x="210" y="145" width="300" height="8" rx="3" fill="#64748b" opacity="0.5"/>
+  <!-- Stock chart -->
+  <rect x="210" y="170" width="380" height="160" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  <polyline points="230,300 270,280 310,290 350,250 390,260 430,220 470,200 510,230 550,190 570,210" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+  <polyline points="230,310 270,305 310,300 350,280 390,275 430,260 470,250 510,240 550,235 570,230" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.5" stroke-dasharray="4 2"/>
+  <!-- 94% badge -->
+  <rect x="460" y="125" width="120" height="35" rx="8" fill="#6366f1" opacity="0.2" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="520" y="148" font-family="Arial" font-size="18" font-weight="bold" fill="#6366f1" text-anchor="middle">94%</text>
+  <!-- Warning icon -->
+  <polygon points="400,370 380,410 420,410" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="400" y="405" font-family="Arial" font-size="18" font-weight="bold" fill="#f59e0b" text-anchor="middle">!</text>
+</svg>

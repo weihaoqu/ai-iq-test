@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Comparison table -->
+  <rect x="150" y="60" width="500" height="320" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+  <!-- Header -->
+  <rect x="150" y="60" width="500" height="40" rx="10" fill="#8b5cf6" opacity="0.2"/>
+  <rect x="270" y="74" width="80" height="8" rx="3" fill="#8b5cf6" opacity="0.5"/>
+  <rect x="380" y="74" width="80" height="8" rx="3" fill="#8b5cf6" opacity="0.5"/>
+  <rect x="490" y="74" width="80" height="8" rx="3" fill="#8b5cf6" opacity="0.5"/>
+  <!-- Row labels -->
+  <g fill="#94a3b8" opacity="0.4" font-family="Arial" font-size="11">
+    <text x="210" y="125">Price</text><text x="210" y="165">Features</text>
+    <text x="210" y="205">Support</text><text x="210" y="245">Rating</text>
+  </g>
+  <!-- Vertical lines -->
+  <line x1="260" y1="100" x2="260" y2="380" stroke="#334155" stroke-width="1"/>
+  <line x1="370" y1="100" x2="370" y2="380" stroke="#334155" stroke-width="1"/>
+  <line x1="480" y1="100" x2="480" y2="380" stroke="#334155" stroke-width="1"/>
+  <!-- Horizontal lines -->
+  <line x1="150" y1="140" x2="650" y2="140" stroke="#334155" stroke-width="0.5"/>
+  <line x1="150" y1="180" x2="650" y2="180" stroke="#334155" stroke-width="0.5"/>
+  <line x1="150" y1="220" x2="650" y2="220" stroke="#334155" stroke-width="0.5"/>
+  <line x1="150" y1="260" x2="650" y2="260" stroke="#334155" stroke-width="0.5"/>
+  <!-- Data placeholders -->
+  <g fill="#94a3b8" opacity="0.3">
+    <rect x="285" y="118" width="50" height="6" rx="2"/><rect x="395" y="118" width="50" height="6" rx="2"/><rect x="505" y="118" width="50" height="6" rx="2"/>
+    <rect x="285" y="158" width="50" height="6" rx="2"/><rect x="395" y="158" width="50" height="6" rx="2"/><rect x="505" y="158" width="50" height="6" rx="2"/>
+    <rect x="285" y="198" width="50" height="6" rx="2"/><rect x="395" y="198" width="50" height="6" rx="2"/><rect x="505" y="198" width="50" height="6" rx="2"/>
+  </g>
+  <!-- "No real-time data" overlay -->
+  <rect x="200" y="280" width="400" height="60" rx="8" fill="#8b5cf6" opacity="0.1" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="400" y="310" font-family="Arial" font-size="14" fill="#8b5cf6" text-anchor="middle" opacity="0.6">No real-time pricing data</text>
+  <text x="400" y="330" font-family="Arial" font-size="11" fill="#94a3b8" text-anchor="middle" opacity="0.4">Training data cutoff applies</text>
+  <!-- Refusal message -->
+  <rect x="200" y="410" width="400" height="50" rx="10" fill="#334155" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="400" y="440" font-family="Arial" font-size="12" fill="#8b5cf6" text-anchor="middle" opacity="0.6">AI: "I don't have access to current pricing..."</text>
+</svg>

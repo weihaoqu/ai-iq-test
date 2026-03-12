@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Person -->
+  <circle cx="300" cy="150" r="40" fill="none" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="300" y1="190" x2="300" y2="300" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="300" y1="230" x2="260" y2="280" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="300" y1="230" x2="340" y2="270" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="300" y1="300" x2="270" y2="380" stroke="#94a3b8" stroke-width="2.5"/>
+  <line x1="300" y1="300" x2="330" y2="380" stroke="#94a3b8" stroke-width="2.5"/>
+  <!-- Arm pointing to screen -->
+  <line x1="340" y1="270" x2="420" y2="240" stroke="#94a3b8" stroke-width="2.5"/>
+  <!-- Code screen -->
+  <rect x="420" y="80" width="300" height="300" rx="10" fill="#0f172a" stroke="#f97316" stroke-width="2"/>
+  <rect x="420" y="80" width="300" height="28" rx="10" fill="#334155"/>
+  <!-- Code being read/understood -->
+  <rect x="440" y="125" width="100" height="5" rx="2" fill="#f97316" opacity="0.6"/>
+  <rect x="440" y="140" width="240" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="460" y="155" width="200" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="460" y="170" width="180" height="5" rx="2" fill="#22c55e" opacity="0.3"/>
+  <rect x="460" y="185" width="220" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="200" width="160" height="5" rx="2" fill="#f97316" opacity="0.5"/>
+  <rect x="460" y="215" width="240" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="460" y="230" width="200" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="250" width="120" height="5" rx="2" fill="#f97316" opacity="0.5"/>
+  <!-- Understanding indicator - lightbulb -->
+  <circle cx="260" cy="100" r="20" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+  <line x1="260" y1="85" x2="260" y2="95" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+  <line x1="252" y1="106" x2="268" y2="106" stroke="#f59e0b" stroke-width="2" opacity="0.5"/>
+  <!-- Rays -->
+  <line x1="260" y1="72" x2="260" y2="65" stroke="#f59e0b" stroke-width="1.5" opacity="0.3"/>
+  <line x1="240" y1="82" x2="234" y2="76" stroke="#f59e0b" stroke-width="1.5" opacity="0.3"/>
+  <line x1="280" y1="82" x2="286" y2="76" stroke="#f59e0b" stroke-width="1.5" opacity="0.3"/>
+  <!-- Skill label -->
+  <rect x="350" y="420" width="250" height="50" rx="10" fill="#f97316" opacity="0.1" stroke="#f97316" stroke-width="1.5"/>
+  <text x="475" y="450" font-family="Arial" font-size="12" fill="#f97316" text-anchor="middle" opacity="0.6">Read, Understand, Own the Code</text>
+</svg>

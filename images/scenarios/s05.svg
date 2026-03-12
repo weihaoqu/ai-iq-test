@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- User A conversation -->
+  <rect x="60" y="80" width="220" height="200" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+  <circle cx="100" cy="110" r="15" fill="none" stroke="#22c55e" stroke-width="2"/>
+  <text x="100" y="115" font-family="Arial" font-size="10" fill="#22c55e" text-anchor="middle">A</text>
+  <text x="130" y="115" font-family="Arial" font-size="11" fill="#22c55e" opacity="0.6">Customer A</text>
+  <rect x="80" y="140" width="180" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="80" y="155" width="150" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="80" y="170" width="170" height="5" rx="2" fill="#22c55e" opacity="0.3"/>
+  <rect x="80" y="185" width="140" height="5" rx="2" fill="#22c55e" opacity="0.3"/>
+  <!-- Central AI chatbot -->
+  <rect x="320" y="140" width="160" height="120" rx="20" fill="none" stroke="#8b5cf6" stroke-width="2.5"/>
+  <circle cx="370" cy="190" r="10" fill="#8b5cf6" opacity="0.5"/>
+  <circle cx="430" cy="190" r="10" fill="#8b5cf6" opacity="0.5"/>
+  <path d="M370 220 Q400 235 430 220" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="400" y="280" font-family="Arial" font-size="12" fill="#8b5cf6" text-anchor="middle" opacity="0.5">AI Chatbot</text>
+  <!-- User B conversation -->
+  <rect x="520" y="80" width="220" height="200" rx="10" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+  <circle cx="560" cy="110" r="15" fill="none" stroke="#ef4444" stroke-width="2"/>
+  <text x="560" y="115" font-family="Arial" font-size="10" fill="#ef4444" text-anchor="middle">B</text>
+  <text x="590" y="115" font-family="Arial" font-size="11" fill="#ef4444" opacity="0.6">Customer B</text>
+  <rect x="540" y="140" width="180" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="540" y="155" width="150" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <!-- Leaked data in B's conversation -->
+  <rect x="540" y="170" width="170" height="5" rx="2" fill="#22c55e" opacity="0.4"/>
+  <rect x="540" y="185" width="140" height="5" rx="2" fill="#22c55e" opacity="0.4"/>
+  <!-- Data leak arrows -->
+  <path d="M170 220 Q170 350 320 350 Q320 300 340 260" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 3" opacity="0.4"/>
+  <path d="M460 260 Q480 300 520 320 Q600 350 630 270" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 3" opacity="0.4"/>
+  <!-- Warning -->
+  <rect x="200" y="380" width="400" height="60" rx="10" fill="#ef4444" opacity="0.1" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="400" y="408" font-family="Arial" font-size="13" fill="#ef4444" text-anchor="middle" opacity="0.7">Data Cross-Contamination</text>
+  <text x="400" y="428" font-family="Arial" font-size="11" fill="#94a3b8" text-anchor="middle" opacity="0.5">Customer A's data appearing in B's session</text>
+</svg>

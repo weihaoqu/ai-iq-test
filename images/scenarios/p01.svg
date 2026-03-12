@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Chat bubbles fading from clear to fuzzy -->
+  <rect x="120" y="40" width="250" height="50" rx="12" fill="#ec4899" opacity="0.9"/>
+  <rect x="140" y="55" width="180" height="6" rx="3" fill="#1e293b" opacity="0.5"/>
+  <rect x="140" y="68" width="120" height="6" rx="3" fill="#1e293b" opacity="0.4"/>
+  
+  <rect x="430" y="110" width="250" height="50" rx="12" fill="#334155" opacity="0.9"/>
+  <rect x="450" y="125" width="180" height="6" rx="3" fill="#ec4899" opacity="0.5"/>
+  <rect x="450" y="138" width="140" height="6" rx="3" fill="#ec4899" opacity="0.4"/>
+  
+  <rect x="120" y="180" width="250" height="50" rx="12" fill="#ec4899" opacity="0.6"/>
+  <rect x="140" y="195" width="180" height="6" rx="3" fill="#1e293b" opacity="0.3"/>
+  <rect x="140" y="208" width="120" height="6" rx="3" fill="#1e293b" opacity="0.2"/>
+  
+  <rect x="430" y="250" width="250" height="50" rx="12" fill="#334155" opacity="0.5"/>
+  <rect x="450" y="265" width="180" height="6" rx="3" fill="#ec4899" opacity="0.3"/>
+  <rect x="450" y="278" width="140" height="6" rx="3" fill="#ec4899" opacity="0.2"/>
+  
+  <rect x="120" y="320" width="250" height="50" rx="12" fill="#ec4899" opacity="0.25"/>
+  <rect x="140" y="335" width="180" height="6" rx="3" fill="#1e293b" opacity="0.15"/>
+  <rect x="140" y="348" width="120" height="6" rx="3" fill="#1e293b" opacity="0.1"/>
+  
+  <rect x="430" y="390" width="250" height="50" rx="12" fill="#334155" opacity="0.15"/>
+  <rect x="450" y="405" width="180" height="6" rx="3" fill="#ec4899" opacity="0.1"/>
+  <!-- Fade arrow -->
+  <text x="60" y="100" font-family="Arial" font-size="12" fill="#ec4899" opacity="0.8" transform="rotate(-90,60,200)">CONTEXT FADING</text>
+  <line x1="40" y1="60" x2="40" y2="430" stroke="#ec4899" stroke-width="1.5" opacity="0.3" stroke-dasharray="4 4"/>
+  <polygon points="35,430 40,445 45,430" fill="#ec4899" opacity="0.3"/>
+</svg>

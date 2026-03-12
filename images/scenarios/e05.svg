@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Prompt evolution: vague -> specific -->
+  <!-- Level 1: vague -->
+  <rect x="100" y="50" width="300" height="50" rx="10" fill="#10b981" opacity="0.15" stroke="#10b981" stroke-width="1"/>
+  <rect x="120" y="68" width="140" height="6" rx="3" fill="#10b981" opacity="0.3"/>
+  <text x="420" y="80" font-family="Arial" font-size="11" fill="#94a3b8" opacity="0.5">Vague</text>
+  <!-- Arrow down -->
+  <line x1="250" y1="110" x2="250" y2="140" stroke="#10b981" stroke-width="1.5" opacity="0.3"/>
+  <polygon points="244,140 250,155 256,140" fill="#10b981" opacity="0.3"/>
+  <!-- Level 2: better -->
+  <rect x="100" y="160" width="400" height="60" rx="10" fill="#10b981" opacity="0.25" stroke="#10b981" stroke-width="1.5"/>
+  <rect x="120" y="175" width="200" height="6" rx="3" fill="#10b981" opacity="0.4"/>
+  <rect x="120" y="190" width="160" height="6" rx="3" fill="#10b981" opacity="0.3"/>
+  <text x="520" y="195" font-family="Arial" font-size="11" fill="#94a3b8" opacity="0.5">Better</text>
+  <!-- Arrow down -->
+  <line x1="300" y1="230" x2="300" y2="260" stroke="#10b981" stroke-width="1.5" opacity="0.4"/>
+  <polygon points="294,260 300,275 306,260" fill="#10b981" opacity="0.4"/>
+  <!-- Level 3: specific -->
+  <rect x="100" y="280" width="520" height="90" rx="10" fill="#10b981" opacity="0.35" stroke="#10b981" stroke-width="2"/>
+  <rect x="120" y="296" width="280" height="6" rx="3" fill="#10b981" opacity="0.6"/>
+  <rect x="120" y="312" width="240" height="6" rx="3" fill="#10b981" opacity="0.5"/>
+  <rect x="120" y="328" width="300" height="6" rx="3" fill="#10b981" opacity="0.5"/>
+  <rect x="120" y="344" width="200" height="6" rx="3" fill="#10b981" opacity="0.4"/>
+  <text x="640" y="330" font-family="Arial" font-size="11" fill="#10b981" opacity="0.7">Specific!</text>
+  <!-- Checkmark -->
+  <circle cx="660" cy="325" r="18" fill="none" stroke="#10b981" stroke-width="2" opacity="0.5"/>
+  <polyline points="650,325 657,333 672,318" fill="none" stroke="#10b981" stroke-width="2.5" opacity="0.5"/>
+  <!-- Food icons at bottom -->
+  <circle cx="250" cy="430" r="25" fill="#10b981" opacity="0.1" stroke="#10b981" stroke-width="1.5"/>
+  <circle cx="350" cy="430" r="25" fill="#10b981" opacity="0.1" stroke="#10b981" stroke-width="1.5"/>
+  <circle cx="450" cy="430" r="25" fill="#10b981" opacity="0.1" stroke="#10b981" stroke-width="1.5"/>
+  <text x="250" y="435" font-family="Arial" font-size="9" fill="#10b981" text-anchor="middle" opacity="0.5">Mon</text>
+  <text x="350" y="435" font-family="Arial" font-size="9" fill="#10b981" text-anchor="middle" opacity="0.5">Tue</text>
+  <text x="450" y="435" font-family="Arial" font-size="9" fill="#10b981" text-anchor="middle" opacity="0.5">Wed</text>
+</svg>

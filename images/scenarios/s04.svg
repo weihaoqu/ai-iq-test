@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Chatbot A -->
+  <rect x="60" y="60" width="310" height="340" rx="12" fill="#0f172a" stroke="#8b5cf6" stroke-width="2"/>
+  <rect x="80" y="80" width="80" height="25" rx="5" fill="#8b5cf6" opacity="0.3"/>
+  <text x="120" y="97" font-family="Arial" font-size="12" fill="#8b5cf6" text-anchor="middle">Bot A</text>
+  <!-- Specific details -->
+  <rect x="80" y="120" width="270" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="80" y="138" width="200" height="5" rx="2" fill="#8b5cf6" opacity="0.5"/>
+  <text x="80" y="165" font-family="Arial" font-size="10" fill="#a78bfa" opacity="0.7">March 14, 1987</text>
+  <text x="80" y="185" font-family="Arial" font-size="10" fill="#a78bfa" opacity="0.7">Deputy Minister Kowalski</text>
+  <text x="80" y="205" font-family="Arial" font-size="10" fill="#a78bfa" opacity="0.7">Vote: 217-198</text>
+  <rect x="80" y="220" width="260" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="80" y="235" width="240" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <!-- Chatbot B -->
+  <rect x="430" y="60" width="310" height="340" rx="12" fill="#0f172a" stroke="#a78bfa" stroke-width="2"/>
+  <rect x="450" y="80" width="80" height="25" rx="5" fill="#a78bfa" opacity="0.3"/>
+  <text x="490" y="97" font-family="Arial" font-size="12" fill="#a78bfa" text-anchor="middle">Bot B</text>
+  <!-- Vague response -->
+  <rect x="450" y="120" width="270" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="450" y="138" width="250" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="450" y="156" width="230" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="450" y="174" width="260" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="450" y="192" width="240" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="450" y="210" width="220" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <text x="585" y="260" font-family="Arial" font-size="10" fill="#94a3b8" text-anchor="middle" opacity="0.5">General overview</text>
+  <!-- VS -->
+  <text x="400" y="250" font-family="Arial" font-size="20" fill="#8b5cf6" text-anchor="middle" opacity="0.4">VS</text>
+  <!-- Bottom warning -->
+  <rect x="200" y="420" width="400" height="50" rx="10" fill="#8b5cf6" opacity="0.1" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="400" y="445" font-family="Arial" font-size="12" fill="#8b5cf6" text-anchor="middle" opacity="0.6">Specific ≠ Accurate | Verify both</text>
+</svg>

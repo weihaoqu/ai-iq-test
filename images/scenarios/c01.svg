@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- AI output box -->
+  <rect x="100" y="40" width="600" height="360" rx="12" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <!-- Citations list -->
+  <g font-family="Arial" font-size="11" fill="#94a3b8" opacity="0.5">
+    <text x="130" y="80">1. Smith, J. (2023). "Neural Networks in Practice"</text>
+    <text x="130" y="100">   Journal of AI Research, 45(2), pp. 112-128</text>
+    <text x="130" y="125">2. Chen, L. &amp; Park, M. (2022). "Deep Learning Methods"</text>
+    <text x="130" y="145">   Nature Computing, 18(4), pp. 89-103</text>
+  </g>
+  <!-- Fake citation highlighted -->
+  <rect x="120" y="158" width="540" height="42" rx="5" fill="#ef4444" opacity="0.1"/>
+  <g font-family="Arial" font-size="11" fill="#ef4444" opacity="0.7">
+    <text x="130" y="174">3. Williams, R. (2024). "Transformative AI Architectures"</text>
+    <text x="130" y="194">   Computational Intelligence Review, 7(1), pp. 45-67</text>
+  </g>
+  <text x="670" y="180" font-family="Arial" font-size="14" fill="#ef4444" font-weight="bold">FAKE</text>
+  <!-- More citations -->
+  <g font-family="Arial" font-size="11" fill="#94a3b8" opacity="0.5">
+    <text x="130" y="224">4. Kumar, A. (2023). "Attention Mechanisms Revisited"</text>
+    <text x="130" y="244">   IEEE Trans. on ML, 12(3), pp. 201-218</text>
+  </g>
+  <rect x="120" y="258" width="540" height="42" rx="5" fill="#ef4444" opacity="0.1"/>
+  <g font-family="Arial" font-size="11" fill="#ef4444" opacity="0.7">
+    <text x="130" y="274">5. Taylor, S. (2022). "Emergent Behaviors in LLMs"</text>
+    <text x="130" y="294">   AI Conference Proceedings, pp. 334-351</text>
+  </g>
+  <text x="670" y="280" font-family="Arial" font-size="14" fill="#ef4444" font-weight="bold">FAKE</text>
+  <!-- DOI warning -->
+  <rect x="200" y="410" width="400" height="50" rx="10" fill="#ef4444" opacity="0.1" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="400" y="440" font-family="Arial" font-size="12" fill="#ef4444" text-anchor="middle" opacity="0.7">DOIs look real but don't resolve</text>
+</svg>

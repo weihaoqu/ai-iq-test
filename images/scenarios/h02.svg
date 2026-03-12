@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Code window -->
+  <rect x="80" y="60" width="360" height="280" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <rect x="80" y="60" width="360" height="28" rx="10" fill="#334155"/>
+  <circle cx="100" cy="74" r="4" fill="#ef4444" opacity="0.7"/>
+  <!-- Code with API call highlighted -->
+  <rect x="100" y="105" width="80" height="5" rx="2" fill="#0ea5e9" opacity="0.5"/>
+  <rect x="100" y="120" width="200" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="120" y="135" width="180" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <!-- Highlighted deprecated line -->
+  <rect x="95" y="150" width="330" height="22" rx="3" fill="#ef4444" opacity="0.1"/>
+  <rect x="120" y="155" width="280" height="5" rx="2" fill="#ef4444" opacity="0.5"/>
+  <rect x="120" y="175" width="160" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="120" y="190" width="200" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="100" y="210" width="120" height="5" rx="2" fill="#0ea5e9" opacity="0.5"/>
+  <!-- Arrow pointing to API -->
+  <path d="M450 165 L530 165" stroke="#ef4444" stroke-width="2" opacity="0.5"/>
+  <polygon points="530,159 548,165 530,171" fill="#ef4444" opacity="0.5"/>
+  <!-- Old API server (broken) -->
+  <rect x="560" y="100" width="160" height="130" rx="10" fill="#334155" stroke="#ef4444" stroke-width="2" opacity="0.6"/>
+  <text x="640" y="140" font-family="Arial" font-size="12" fill="#ef4444" text-anchor="middle" opacity="0.7">API v1</text>
+  <text x="640" y="160" font-family="monospace" font-size="10" fill="#ef4444" text-anchor="middle" opacity="0.5">/api/v1/data</text>
+  <!-- X over it -->
+  <line x1="580" y1="120" x2="700" y2="210" stroke="#ef4444" stroke-width="3" opacity="0.4"/>
+  <line x1="700" y1="120" x2="580" y2="210" stroke="#ef4444" stroke-width="3" opacity="0.4"/>
+  <text x="640" y="195" font-family="Arial" font-size="11" fill="#ef4444" text-anchor="middle" opacity="0.6">DEPRECATED</text>
+  <!-- Calendar showing 6 months -->
+  <rect x="560" y="280" width="160" height="100" rx="8" fill="#334155" stroke="#0ea5e9" stroke-width="1.5"/>
+  <text x="640" y="305" font-family="Arial" font-size="11" fill="#0ea5e9" text-anchor="middle" opacity="0.6">6 months ago</text>
+  <rect x="580" y="320" width="120" height="20" rx="3" fill="#0ea5e9" opacity="0.1"/>
+  <text x="640" y="335" font-family="Arial" font-size="10" fill="#0ea5e9" text-anchor="middle" opacity="0.5">Knowledge cutoff</text>
+  <!-- New API (what should be used) -->
+  <rect x="200" y="380" width="200" height="60" rx="8" fill="#334155" stroke="#22c55e" stroke-width="1.5" opacity="0.5"/>
+  <text x="300" y="405" font-family="Arial" font-size="11" fill="#22c55e" text-anchor="middle" opacity="0.6">API v2 (current)</text>
+  <text x="300" y="425" font-family="monospace" font-size="10" fill="#22c55e" text-anchor="middle" opacity="0.4">/api/v2/data</text>
+</svg>

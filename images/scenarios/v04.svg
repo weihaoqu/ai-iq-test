@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Browser window -->
+  <rect x="150" y="50" width="500" height="380" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <rect x="150" y="50" width="500" height="30" rx="10" fill="#334155"/>
+  <circle cx="172" cy="65" r="4" fill="#ef4444" opacity="0.7"/>
+  <!-- Loading spinner -->
+  <circle cx="400" cy="220" r="60" fill="none" stroke="#334155" stroke-width="6"/>
+  <path d="M400 160 A60 60 0 0 1 460 220" fill="none" stroke="#f97316" stroke-width="6" stroke-linecap="round"/>
+  <!-- Progress bar -->
+  <rect x="280" y="320" width="240" height="12" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <rect x="280" y="320" width="60" height="12" rx="6" fill="#f97316" opacity="0.5"/>
+  <!-- Loading text dots -->
+  <text x="400" y="365" font-family="Arial" font-size="14" fill="#f97316" text-anchor="middle" opacity="0.5">Loading...</text>
+  <!-- Speed meter on side -->
+  <rect x="680" y="120" width="80" height="250" rx="10" fill="#334155" stroke="#f97316" stroke-width="1.5"/>
+  <text x="720" y="150" font-family="Arial" font-size="10" fill="#f97316" text-anchor="middle" opacity="0.5">Speed</text>
+  <!-- Meter fill (low) -->
+  <rect x="700" y="280" width="40" height="70" rx="5" fill="#ef4444" opacity="0.3"/>
+  <rect x="700" y="220" width="40" height="60" rx="0" fill="#f59e0b" opacity="0.2"/>
+  <!-- Slow indicator -->
+  <text x="720" y="380" font-family="Arial" font-size="10" fill="#ef4444" text-anchor="middle" opacity="0.6">SLOW</text>
+  <!-- Clock -->
+  <circle cx="100" cy="240" r="35" fill="none" stroke="#f97316" stroke-width="2" opacity="0.3"/>
+  <line x1="100" y1="240" x2="100" y2="215" stroke="#f97316" stroke-width="2" opacity="0.3"/>
+  <line x1="100" y1="240" x2="118" y2="250" stroke="#f97316" stroke-width="1.5" opacity="0.3"/>
+</svg>

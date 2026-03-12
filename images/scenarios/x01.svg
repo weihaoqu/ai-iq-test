@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Knowledge base documents on left -->
+  <rect x="60" y="80" width="120" height="80" rx="5" fill="#334155" stroke="#6366f1" stroke-width="1.5" opacity="0.8"/>
+  <rect x="75" y="95" width="80" height="4" rx="2" fill="#6366f1" opacity="0.4"/>
+  <rect x="75" y="107" width="60" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+  <rect x="75" y="119" width="70" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+  
+  <rect x="60" y="180" width="120" height="80" rx="5" fill="#334155" stroke="#6366f1" stroke-width="1.5" opacity="0.7"/>
+  <rect x="75" y="195" width="80" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+  <rect x="75" y="207" width="60" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+  
+  <rect x="60" y="280" width="120" height="80" rx="5" fill="#334155" stroke="#6366f1" stroke-width="1.5" opacity="0.6"/>
+  <rect x="75" y="295" width="80" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+  <rect x="75" y="307" width="70" height="4" rx="2" fill="#6366f1" opacity="0.3"/>
+  
+  <text x="120" y="400" font-family="Arial" font-size="11" fill="#6366f1" text-anchor="middle" opacity="0.5">Knowledge Base</text>
+  <!-- Retrieval arrows -->
+  <g stroke="#6366f1" stroke-width="1.5" opacity="0.4" stroke-dasharray="5 3">
+    <line x1="190" y1="120" x2="300" y2="200"/>
+    <line x1="190" y1="220" x2="300" y2="230"/>
+    <line x1="190" y1="320" x2="300" y2="260"/>
+  </g>
+  <!-- Vector search -->
+  <circle cx="280" cy="230" r="40" fill="#6366f1" opacity="0.08" stroke="#6366f1" stroke-width="1.5" opacity="0.3"/>
+  <text x="280" y="235" font-family="Arial" font-size="10" fill="#6366f1" text-anchor="middle" opacity="0.5">Search</text>
+  <!-- Arrow to LLM -->
+  <path d="M320 230 L400 230" stroke="#6366f1" stroke-width="2" opacity="0.4"/>
+  <polygon points="400,224 418,230 400,236" fill="#6366f1" opacity="0.4"/>
+  <!-- LLM brain -->
+  <rect x="420" y="160" width="160" height="140" rx="20" fill="none" stroke="#818cf8" stroke-width="2.5"/>
+  <text x="500" y="220" font-family="Arial" font-size="18" fill="#818cf8" text-anchor="middle" opacity="0.5">LLM</text>
+  <text x="500" y="245" font-family="Arial" font-size="10" fill="#6366f1" text-anchor="middle" opacity="0.4">+ Retrieved Context</text>
+  <!-- Output -->
+  <path d="M590 230 L660 230" stroke="#6366f1" stroke-width="2" opacity="0.4"/>
+  <polygon points="660,224 678,230 660,236" fill="#6366f1" opacity="0.4"/>
+  <rect x="680" y="190" width="80" height="80" rx="10" fill="#334155" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="695" y="210" width="50" height="4" rx="2" fill="#22c55e" opacity="0.5"/>
+  <rect x="695" y="222" width="40" height="4" rx="2" fill="#22c55e" opacity="0.4"/>
+  <rect x="695" y="234" width="45" height="4" rx="2" fill="#22c55e" opacity="0.4"/>
+  <text x="720" y="258" font-family="Arial" font-size="9" fill="#22c55e" text-anchor="middle" opacity="0.5">Grounded</text>
+  <!-- RAG label -->
+  <text x="400" y="420" font-family="Arial" font-size="14" fill="#6366f1" text-anchor="middle" opacity="0.4">Retrieval-Augmented Generation (RAG)</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Pill/medicine bottles -->
+  <rect x="120" y="200" width="80" height="140" rx="10" fill="none" stroke="#8b5cf6" stroke-width="2.5"/>
+  <rect x="115" y="190" width="90" height="25" rx="5" fill="#8b5cf6" opacity="0.3"/>
+  <text x="160" y="280" font-family="Arial" font-size="24" fill="#8b5cf6" text-anchor="middle" opacity="0.4">Rx</text>
+  <rect x="240" y="220" width="70" height="120" rx="10" fill="none" stroke="#a78bfa" stroke-width="2"/>
+  <rect x="236" y="212" width="78" height="20" rx="5" fill="#a78bfa" opacity="0.2"/>
+  <!-- Plus sign between -->
+  <text x="205" y="290" font-family="Arial" font-size="24" fill="#8b5cf6" text-anchor="middle" opacity="0.4">+</text>
+  <!-- Question mark -->
+  <text x="350" y="290" font-family="Arial" font-size="60" fill="#8b5cf6" text-anchor="middle" opacity="0.3">?</text>
+  <!-- AI chat response -->
+  <rect x="420" y="60" width="320" height="380" rx="12" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <!-- Disclaimer banner -->
+  <rect x="420" y="60" width="320" height="60" rx="12" fill="#f59e0b" opacity="0.1" stroke="#f59e0b" stroke-width="1"/>
+  <polygon points="450,85 442,100 458,100" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="450" y="98" font-family="Arial" font-size="10" fill="#f59e0b" text-anchor="middle">!</text>
+  <text x="530" y="90" font-family="Arial" font-size="10" fill="#f59e0b" opacity="0.7">Not medical advice</text>
+  <text x="530" y="106" font-family="Arial" font-size="10" fill="#f59e0b" opacity="0.5">Consult your doctor</text>
+  <!-- Detailed response below -->
+  <rect x="440" y="140" width="280" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="155" width="260" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="170" width="240" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="185" width="270" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="200" width="250" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="440" y="220" width="280" height="5" rx="2" fill="#8b5cf6" opacity="0.3"/>
+  <rect x="440" y="235" width="230" height="5" rx="2" fill="#8b5cf6" opacity="0.3"/>
+  <rect x="440" y="250" width="260" height="5" rx="2" fill="#8b5cf6" opacity="0.3"/>
+  <!-- Warning at bottom -->
+  <rect x="440" y="380" width="280" height="40" rx="8" fill="#ef4444" opacity="0.1"/>
+  <text x="580" y="405" font-family="Arial" font-size="10" fill="#ef4444" text-anchor="middle" opacity="0.6">Disclaimer ≠ Accuracy</text>
+</svg>

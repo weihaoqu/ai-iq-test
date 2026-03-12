@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Desktop (working) on left -->
+  <rect x="60" y="80" width="300" height="200" rx="8" fill="#0f172a" stroke="#22c55e" stroke-width="2"/>
+  <rect x="60" y="80" width="300" height="25" rx="8" fill="#334155"/>
+  <circle cx="78" cy="92" r="4" fill="#22c55e" opacity="0.5"/>
+  <!-- Desktop content (nice layout) -->
+  <rect x="75" y="115" width="270" height="30" rx="3" fill="#f97316" opacity="0.2"/>
+  <rect x="75" y="155" width="130" height="60" rx="3" fill="#f97316" opacity="0.15"/>
+  <rect x="215" y="155" width="130" height="60" rx="3" fill="#f97316" opacity="0.15"/>
+  <rect x="75" y="225" width="270" height="30" rx="3" fill="#f97316" opacity="0.1"/>
+  <circle cx="210" cy="310" r="6" fill="#22c55e" opacity="0.4"/>
+  <!-- Phone (broken) on right -->
+  <rect x="500" y="50" width="180" height="380" rx="25" fill="#0f172a" stroke="#ef4444" stroke-width="2.5"/>
+  <rect x="560" y="60" width="60" height="8" rx="4" fill="#334155"/>
+  <!-- Broken layout on phone -->
+  <rect x="515" y="85" width="250" height="30" rx="3" fill="#f97316" opacity="0.2"/>
+  <!-- Content overflowing -->
+  <rect x="515" y="125" width="200" height="50" rx="3" fill="#f97316" opacity="0.15"/>
+  <rect x="515" y="185" width="220" height="50" rx="3" fill="#f97316" opacity="0.15"/>
+  <!-- Elements off-screen (overflow) -->
+  <rect x="650" y="125" width="80" height="50" rx="3" fill="#ef4444" opacity="0.15"/>
+  <rect x="660" y="245" width="60" height="40" rx="3" fill="#ef4444" opacity="0.1"/>
+  <!-- Overlapping elements -->
+  <rect x="515" y="240" width="150" height="40" rx="3" fill="#f97316" opacity="0.15"/>
+  <rect x="520" y="255" width="150" height="40" rx="3" fill="#ef4444" opacity="0.15"/>
+  <!-- Tiny unreadable text -->
+  <rect x="515" y="310" width="140" height="3" rx="1" fill="#94a3b8" opacity="0.2"/>
+  <rect x="515" y="318" width="120" height="3" rx="1" fill="#94a3b8" opacity="0.15"/>
+  <!-- Warning zigzag -->
+  <polyline points="500,390 520,380 540,395 560,378 580,393 600,382 620,396 640,380 660,392 680,384" fill="none" stroke="#ef4444" stroke-width="1.5" opacity="0.3"/>
+  <!-- Labels -->
+  <text x="210" y="360" font-family="Arial" font-size="12" fill="#22c55e" text-anchor="middle" opacity="0.5">Desktop OK</text>
+  <text x="590" y="460" font-family="Arial" font-size="12" fill="#ef4444" text-anchor="middle" opacity="0.5">Mobile Broken</text>
+</svg>

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>AI IQ Test — What's Your AI Intelligence?</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --primary:#6366f1;--primary-light:#818cf8;--primary-dark:#4f46e5;
+  --accent:#f59e0b;--accent-light:#fbbf24;
+  --bg:#f5f3ff;--surface:#fff;--text:#1e293b;--text-light:#64748b;
+  --danger:#ef4444;--success:#22c55e;
+  --dim-foundations:#6366f1;--dim-problem:#ec4899;--dim-tool:#f59e0b;
+  --dim-prompt:#10b981;--dim-critical:#ef4444;--dim-ethics:#8b5cf6;
+  --dim-collab:#0ea5e9;--dim-vibe:#f97316;
+  --radius:16px;--radius-sm:10px;
+  --shadow:0 4px 24px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.12);
+}
+html{font-size:16px;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;overflow-x:hidden}
+
+.app{max-width:520px;margin:0 auto;padding:16px;min-height:100dvh;display:flex;flex-direction:column}
+.screen{display:none;flex-direction:column;gap:20px;animation:fadeUp .35s ease}
+.screen.active{display:flex}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes countUp{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes barGrow{from{width:0}to{width:var(--bar-w)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+h1{font-size:1.6rem;font-weight:800;line-height:1.2}
+h2{font-size:1.3rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{line-height:1.5}
+.subtitle{color:var(--text-light);font-size:.9rem}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s;-webkit-appearance:none}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-primary:disabled{background:#94a3b8;cursor:not-allowed;transform:none}
+.btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.btn-outline:hover{background:rgba(99,102,241,.06)}
+.btn-full{width:100%}
+.btn-lg{padding:16px 32px;font-size:1.1rem;border-radius:var(--radius)}
+.btn-share{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;border:none}
+
+.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+
+.input-group{display:flex;flex-direction:column;gap:6px}
+.input-group label{font-weight:600;font-size:.9rem}
+.input-group select{padding:12px 16px;border:2px solid #e2e8f0;border-radius:var(--radius-sm);font-size:1rem;transition:border-color .2s;background:#fff}
+.input-group select:focus{outline:none;border-color:var(--primary)}
+
+/* Progress */
+.progress-wrap{display:flex;align-items:center;gap:12px}
+.progress-label{font-size:.8rem;font-weight:700;color:var(--text-light);white-space:nowrap}
+.progress-track{flex:1;height:8px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:99px;transition:width .4s ease}
+
+/* Dimension Badge */
+.badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:99px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#fff}
+
+/* Scenario Image */
+.scenario-img-wrap{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:#e2e8f0;aspect-ratio:16/10;position:relative}
+.scenario-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.scenario-img-wrap .img-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:.9rem;background:linear-gradient(135deg,#e2e8f0,#f1f5f9);background-size:200% 100%;animation:shimmer 2s infinite linear}
+
+.question-text{font-size:1.05rem;font-weight:600;line-height:1.4}
+
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice-btn{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:var(--radius-sm);background:#fff;font-size:.95rem;text-align:left;cursor:pointer;transition:all .2s;min-height:52px;-webkit-appearance:none;line-height:1.3}
+.choice-btn:active{transform:scale(.98)}
+.choice-btn .choice-letter{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;color:var(--text-light);transition:all .2s}
+.choice-btn .choice-text{flex:1;font-weight:500}
+.choice-btn.selected{border-color:var(--primary);background:rgba(99,102,241,.06)}
+.choice-btn.selected .choice-letter{background:var(--primary);color:#fff}
+
+.nav-row{display:flex;gap:12px;padding-top:8px}
+.nav-row .btn{flex:1}
+
+/* Landing */
+.landing-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:16px 0}
+.landing-hero{width:100%;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg)}
+.landing-hero img{width:100%;display:block}
+.iq-badge-big{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:99px;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;font-size:1.1rem;font-weight:800;letter-spacing:1px}
+.dim-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:0 8px}
+.dim-pill{padding:4px 10px;border-radius:99px;font-size:.7rem;font-weight:600;color:#fff}
+
+/* Results */
+.iq-score-wrap{text-align:center;padding:24px 0}
+.iq-score-num{font-size:4rem;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;animation:popIn .6s ease}
+.iq-score-label{font-size:1rem;color:var(--text-light);font-weight:600;margin-top:4px}
+.iq-level{display:inline-block;padding:6px 20px;border-radius:99px;font-size:1.1rem;font-weight:700;margin-top:8px}
+.iq-level-1{background:#fee2e2;color:#dc2626}
+.iq-level-2{background:#fef3c7;color:#d97706}
+.iq-level-3{background:#d1fae5;color:#059669}
+.iq-level-4{background:#c7d2fe;color:#4f46e5}
+
+/* Radar Chart */
+.radar-wrap{display:flex;justify-content:center;padding:8px 0}
+canvas#radarChart{max-width:320px;max-height:320px}
+
+/* Dimension Bars */
+.dim-bars{display:flex;flex-direction:column;gap:14px}
+.dim-bar-item{display:flex;flex-direction:column;gap:4px}
+.dim-bar-header{display:flex;justify-content:space-between;align-items:center}
+.dim-bar-name{font-size:.85rem;font-weight:600}
+.dim-bar-score{font-size:.8rem;font-weight:700;color:var(--text-light)}
+.dim-bar-track{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:99px;animation:barGrow .8s ease forwards;width:0}
+
+/* Analysis */
+.analysis-card{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #c4b5fd;border-radius:var(--radius);padding:20px}
+.analysis-card h3{margin-bottom:10px;color:var(--primary-dark)}
+.analysis-text{font-size:.9rem;line-height:1.65;color:var(--text)}
+.analysis-text strong{color:var(--primary-dark)}
+.strength-tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.75rem;font-weight:600;margin:2px 4px 2px 0}
+.strength-tag.high{background:#d1fae5;color:#059669}
+.strength-tag.mid{background:#fef3c7;color:#d97706}
+.strength-tag.low{background:#fee2e2;color:#dc2626}
+
+/* Share Card */
+.share-card{background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:var(--radius);padding:24px;color:#fff;text-align:center}
+.share-card .share-iq{font-size:3rem;font-weight:900;line-height:1}
+.share-card .share-level{font-size:1rem;opacity:.9;margin-top:4px}
+.share-card .share-dims{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.share-card .share-dim{padding:3px 8px;border-radius:99px;font-size:.65rem;font-weight:600;background:rgba(255,255,255,.2)}
+.share-url{font-size:.75rem;color:var(--text-light);margin-top:8px;word-break:break-all}
+
+/* Review */
+.review-section{border-top:1px solid #e2e8f0;padding-top:16px}
+.review-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:.95rem;color:var(--primary);border:none;background:none;padding:8px 0;width:100%}
+.review-toggle .arrow{transition:transform .3s;font-size:.8rem}
+.review-toggle.open .arrow{transform:rotate(90deg)}
+.review-items{display:none;flex-direction:column;gap:12px;padding-top:12px}
+.review-items.open{display:flex}
+.review-item{padding:12px;border-radius:var(--radius-sm);background:#f8fafc;border-left:4px solid var(--primary)}
+.review-item .ri-q{font-weight:600;font-size:.85rem;margin-bottom:4px}
+.review-item .ri-your{font-size:.8rem;color:var(--text-light)}
+.review-item .ri-best{font-size:.8rem;color:var(--success);font-weight:600}
+
+/* Footer */
+.app-footer{margin-top:auto;padding:16px 0 8px;text-align:center;font-size:.75rem;color:var(--text-light);border-top:1px solid #e2e8f0}
+.app-footer a{color:var(--primary);text-decoration:none;font-weight:600}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:var(--radius-sm);font-size:.9rem;font-weight:600;opacity:0;transition:all .3s;z-index:99;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(min-width:600px){
+  .app{padding:24px}
+  .scenario-img-wrap{aspect-ratio:16/9}
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- SCREEN: Landing -->
+  <div class="screen active" id="screen-landing">
+    <div class="landing-wrap">
+      <div class="iq-badge-big">AI IQ TEST</div>
+      <div>
+        <h1>What's Your<br>AI Intelligence?</h1>
+        <p class="subtitle" style="margin-top:8px">45 real-world scenarios. ~10 minutes.<br>Discover your AI mastery level.</p>
+      </div>
+      <div class="dim-pills">
+        <span class="dim-pill" style="background:var(--dim-foundations)">Foundations</span>
+        <span class="dim-pill" style="background:var(--dim-problem)">Problem Framing</span>
+        <span class="dim-pill" style="background:var(--dim-tool)">Tool Selection</span>
+        <span class="dim-pill" style="background:var(--dim-prompt)">Prompting</span>
+        <span class="dim-pill" style="background:var(--dim-critical)">Critical Eval</span>
+        <span class="dim-pill" style="background:var(--dim-ethics)">Ethics & Safety</span>
+        <span class="dim-pill" style="background:var(--dim-collab)">Collaboration</span>
+        <span class="dim-pill" style="background:var(--dim-vibe)">Vibe Coding</span>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" onclick="startTest()">Start Test</button>
+      <p class="subtitle" style="font-size:.75rem">Free. No sign-up. Instant results.</p>
+    </div>
+  </div>
+
+  <!-- SCREEN: Welcome -->
+  <div class="screen" id="screen-welcome">
+    <div style="text-align:center;padding-top:16px">
+      <h1>Quick Background</h1>
+      <p class="subtitle" style="margin-top:6px">Just one question before we start</p>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:16px">
+      <div class="input-group">
+        <label for="inp-background">Your experience with AI tools</label>
+        <select id="inp-background">
+          <option value="">Select one...</option>
+          <option value="none">Never used AI tools</option>
+          <option value="beginner">Tried ChatGPT a few times</option>
+          <option value="regular">Use AI tools regularly</option>
+          <option value="advanced">Build things with AI daily</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" onclick="beginQuiz()">Let's Go!</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: Question -->
+  <div class="screen" id="screen-question">
+    <div class="progress-wrap">
+      <span class="progress-label" id="q-counter">Q1 of 45</span>
+      <div class="progress-track"><div class="progress-fill" id="q-progress" style="width:2.5%"></div></div>
+    </div>
+    <div id="q-badge"></div>
+    <div class="scenario-img-wrap">
+      <div class="img-placeholder" id="q-img-placeholder">Loading...</div>
+      <img id="q-img" src="" alt="Scenario" loading="lazy" onload="this.previousElementSibling.style.display='none'" onerror="this.previousElementSibling.textContent=this.parentElement.dataset.dim||'Scenario'">
+    </div>
+    <p class="question-text" id="q-text"></p>
+    <div class="choices" id="q-choices"></div>
+    <div class="nav-row">
+      <button class="btn btn-outline" id="btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-primary" id="btn-next" onclick="goNext()" disabled>Next</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: Results -->
+  <div class="screen" id="screen-results">
+    <div class="iq-score-wrap">
+      <div class="iq-score-num" id="res-iq">0</div>
+      <div class="iq-score-label">AI IQ Score</div>
+      <div><span class="iq-level" id="res-level"></span></div>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="card">
+      <h3 style="margin-bottom:8px;text-align:center">Your AI Profile</h3>
+      <div class="radar-wrap">
+        <canvas id="radarChart" width="320" height="320"></canvas>
+      </div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="analysis-card" id="res-analysis"></div>
+
+    <!-- Dimension Bars -->
+    <div class="card">
+      <h3 style="margin-bottom:14px">Dimension Breakdown</h3>
+      <div class="dim-bars" id="res-dims"></div>
+    </div>
+
+    <!-- Share Card -->
+    <div class="share-card" id="share-card">
+      <div>My AI IQ</div>
+      <div class="share-iq" id="share-iq">0</div>
+      <div class="share-level" id="share-level"></div>
+      <div class="share-dims" id="share-dims"></div>
+    </div>
+    <button class="btn btn-share btn-full" onclick="shareResults()">Share Your AI IQ</button>
+
+    <!-- Review -->
+    <div class="card review-section">
+      <button class="review-toggle" id="review-toggle" onclick="toggleReview()">
+        <span class="arrow">&#9654;</span> Review All 45 Answers
+      </button>
+      <div class="review-items" id="review-items"></div>
+    </div>
+  </div>
+
+  <footer class="app-footer">&copy; 2025 LearnAI Team &middot; <a href="https://lainow.com" target="_blank">lainow.com</a></footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── Questions will be loaded here ──────────────────────────────────────
+let QUESTIONS = [];
+
+// ─── Dimensions ─────────────────────────────────────────────────────────
+const DIMS = [
+  {key:'foundations',       label:'AI Foundations',         color:'var(--dim-foundations)'},
+  {key:'problemFraming',    label:'Problem Framing',        color:'var(--dim-problem)'},
+  {key:'toolSelection',     label:'Tool Selection',         color:'var(--dim-tool)'},
+  {key:'promptEngineering', label:'Prompt Engineering',     color:'var(--dim-prompt)'},
+  {key:'criticalEvaluation',label:'Critical Evaluation',    color:'var(--dim-critical)'},
+  {key:'ethicsSafety',      label:'Ethics & Safety',        color:'var(--dim-ethics)'},
+  {key:'humanCollaboration',label:'AI-Human Collaboration', color:'var(--dim-collab)'},
+  {key:'vibeCoding',        label:'Vibe Coding & Creation', color:'var(--dim-vibe)'}
+];
+
+const LEVELS = [
+  {min:45, max:79,  label:'AI Novice',       lvl:1, cls:'iq-level-1'},
+  {min:80, max:114, label:'AI Apprentice',   lvl:2, cls:'iq-level-2'},
+  {min:115,max:149, label:'AI Practitioner', lvl:3, cls:'iq-level-3'},
+  {min:150,max:180, label:'AI Master',       lvl:4, cls:'iq-level-4'}
+];
+
+// ─── State ──────────────────────────────────────────────────────────────
+let currentQ = 0;
+let answers = [];
+let shuffledChoices = [];
+let participantId = '';
+
+// ─── Shuffle ────────────────────────────────────────────────────────────
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+// ─── Screen ─────────────────────────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function startTest(){
+  showScreen('screen-welcome');
+}
+
+function beginQuiz(){
+  const bg=document.getElementById('inp-background').value;
+  if(!bg){showToast('Please select your AI experience');return;}
+  participantId='AIQ'+Date.now();
+  shuffledChoices=QUESTIONS.map(q=>shuffle(q.choices));
+  currentQ=0;
+  answers=new Array(QUESTIONS.length).fill(null);
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+// ─── Question ───────────────────────────────────────────────────────────
+function renderQuestion(){
+  const q=QUESTIONS[currentQ];
+  const sc=shuffledChoices[currentQ];
+  const total=QUESTIONS.length;
+  const dim=DIMS.find(d=>d.key===q.dim);
+
+  document.getElementById('q-counter').textContent=`Q${currentQ+1} of ${total}`;
+  document.getElementById('q-progress').style.width=`${((currentQ+1)/total)*100}%`;
+  document.getElementById('q-badge').innerHTML=`<span class="badge" style="background:${dim.color}">${dim.label}</span>`;
+
+  const img=document.getElementById('q-img');
+  const ph=document.getElementById('q-img-placeholder');
+  ph.style.display='flex';
+  ph.textContent='Loading...';
+  document.querySelector('.scenario-img-wrap').dataset.dim=dim.label;
+  img.src=q.img;
+
+  document.getElementById('q-text').textContent=q.q;
+
+  const cDiv=document.getElementById('q-choices');
+  const letters=['A','B','C','D'];
+  cDiv.innerHTML=sc.map((c,i)=>`
+    <button class="choice-btn${answers[currentQ]&&answers[currentQ].choiceIdx===i?' selected':''}"
+            onclick="selectChoice(${i})" type="button">
+      <span class="choice-letter">${letters[i]}</span>
+      <span class="choice-text">${c.text}</span>
+    </button>`).join('');
+
+  document.getElementById('btn-back').style.visibility=currentQ===0?'hidden':'visible';
+  const nextBtn=document.getElementById('btn-next');
+  nextBtn.disabled=!answers[currentQ];
+  nextBtn.textContent=currentQ===total-1?'See Results':'Next';
+}
+
+function selectChoice(idx){
+  const sc=shuffledChoices[currentQ];
+  const chosen=sc[idx];
+  answers[currentQ]={choiceIdx:idx,origLetter:chosen.letter,score:chosen.score};
+  document.querySelectorAll('.choice-btn').forEach((btn,i)=>btn.classList.toggle('selected',i===idx));
+  document.getElementById('btn-next').disabled=false;
+}
+
+function goBack(){
+  if(currentQ>0){currentQ--;renderQuestion();}
+}
+
+function goNext(){
+  if(!answers[currentQ])return;
+  if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestion();}
+  else{buildResults();showScreen('screen-results');}
+}
+
+// ─── Results ────────────────────────────────────────────────────────────
+function buildResults(){
+  const total=answers.reduce((s,a)=>s+a.score,0);
+  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+
+  // IQ Score
+  const iqEl=document.getElementById('res-iq');
+  animateCount(iqEl,total,1200);
+
+  const lvlEl=document.getElementById('res-level');
+  lvlEl.textContent=level.label;
+  lvlEl.className='iq-level '+level.cls;
+
+  // Dimension scores
+  const dimScores={};
+  DIMS.forEach(d=>{dimScores[d.key]=0;});
+  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
+
+  // Dimension bars (dynamic max per dimension)
+  const dimMax={};
+  DIMS.forEach(d=>{dimMax[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
+  const dimsEl=document.getElementById('res-dims');
+  dimsEl.innerHTML=DIMS.map(d=>{
+    const score=dimScores[d.key];
+    const mx=dimMax[d.key];
+    const pct=(score/mx)*100;
+    return`<div class="dim-bar-item">
+      <div class="dim-bar-header">
+        <span class="dim-bar-name">${d.label}</span>
+        <span class="dim-bar-score">${score}/${mx}</span>
+      </div>
+      <div class="dim-bar-track">
+        <div class="dim-bar-fill" style="--bar-w:${pct}%;background:${d.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.dim-bar-fill').forEach(el=>{
+      el.style.width=el.style.getPropertyValue('--bar-w');
+    });
+  });
+
+  // Radar Chart
+  drawRadar(dimScores);
+
+  // Analysis
+  const analysis=generateAnalysis(total,level,dimScores);
+  document.getElementById('res-analysis').innerHTML=analysis.html;
+
+  // Share card
+  document.getElementById('share-iq').textContent=total;
+  document.getElementById('share-level').textContent=level.label;
+  const shareDims=document.getElementById('share-dims');
+  shareDims.innerHTML=DIMS.map(d=>`<span class="share-dim">${d.label}: ${dimScores[d.key]}/${dimMax[d.key]}</span>`).join('');
+
+  // Review
+  const revEl=document.getElementById('review-items');
+  revEl.innerHTML=QUESTIONS.map((q,i)=>{
+    const ans=answers[i];
+    const best=q.choices.find(c=>c.score===4);
+    const yours=q.choices.find(c=>c.letter===ans.origLetter);
+    const dim=DIMS.find(d=>d.key===q.dim);
+    return`<div class="review-item" style="border-left-color:${dim.color}">
+      <div class="ri-q">Q${i+1} (${dim.label}): ${q.q}</div>
+      <div class="ri-your">Your answer: ${ans.origLetter}. ${yours.text} (${ans.score}/4)</div>
+      ${ans.score<4?`<div class="ri-best">Best: ${best.letter}. ${best.text}</div>`:`<div class="ri-best">Perfect!</div>`}
+    </div>`;
+  }).join('');
+
+  // Submit to Google Sheets
+  submitData(total,level,dimScores,analysis.plain);
+}
+
+function animateCount(el,target,duration){
+  const start=performance.now();
+  function tick(now){
+    const t=Math.min((now-start)/duration,1);
+    const ease=1-Math.pow(1-t,3);
+    el.textContent=Math.round(ease*target);
+    if(t<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ─── Radar Chart (pure canvas) ──────────────────────────────────────────
+function drawRadar(dimScores){
+  const canvas=document.getElementById('radarChart');
+  const ctx=canvas.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const size=320;
+  canvas.width=size*dpr;canvas.height=size*dpr;
+  canvas.style.width=size+'px';canvas.style.height=size+'px';
+  ctx.scale(dpr,dpr);
+
+  const cx=size/2,cy=size/2,maxR=120;
+  const n=DIMS.length;
+  const angleStep=(2*Math.PI)/n;
+  const startAngle=-Math.PI/2;
+
+  // Grid
+  [0.25,0.5,0.75,1].forEach(frac=>{
+    ctx.beginPath();
+    for(let i=0;i<=n;i++){
+      const angle=startAngle+i*angleStep;
+      const x=cx+Math.cos(angle)*maxR*frac;
+      const y=cy+Math.sin(angle)*maxR*frac;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;ctx.stroke();
+  });
+
+  // Axes + Labels
+  const colors=[
+    '#6366f1','#ec4899','#f59e0b','#10b981',
+    '#ef4444','#8b5cf6','#0ea5e9','#f97316'
+  ];
+  DIMS.forEach((d,i)=>{
+    const angle=startAngle+i*angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+Math.cos(angle)*maxR,cy+Math.sin(angle)*maxR);
+    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;ctx.stroke();
+
+    const lx=cx+Math.cos(angle)*(maxR+28);
+    const ly=cy+Math.sin(angle)*(maxR+28);
+    ctx.font='bold 9px -apple-system,sans-serif';
+    ctx.fillStyle=colors[i];
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    // Wrap short labels
+    const words=d.label.split(' ');
+    if(words.length<=2){
+      ctx.fillText(d.label,lx,ly);
+    } else {
+      ctx.fillText(words.slice(0,2).join(' '),lx,ly-6);
+      ctx.fillText(words.slice(2).join(' '),lx,ly+6);
+    }
+  });
+
+  // Data polygon
+  const dimMaxR={};
+  DIMS.forEach(d=>{dimMaxR[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
+  const values=DIMS.map(d=>dimScores[d.key]/dimMaxR[d.key]);
+  ctx.beginPath();
+  values.forEach((v,i)=>{
+    const angle=startAngle+i*angleStep;
+    const x=cx+Math.cos(angle)*maxR*v;
+    const y=cy+Math.sin(angle)*maxR*v;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle='rgba(99,102,241,.2)';ctx.fill();
+  ctx.strokeStyle='#6366f1';ctx.lineWidth=2.5;ctx.stroke();
+
+  // Data points
+  values.forEach((v,i)=>{
+    const angle=startAngle+i*angleStep;
+    const x=cx+Math.cos(angle)*maxR*v;
+    const y=cy+Math.sin(angle)*maxR*v;
+    ctx.beginPath();ctx.arc(x,y,4,0,2*Math.PI);
+    ctx.fillStyle=colors[i];ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+  });
+}
+
+// ─── Analysis Generator ─────────────────────────────────────────────────
+const DIM_INSIGHTS={
+  foundations:{
+    high:'You understand how AI actually works — training data, probabilistic outputs, and limitations.',
+    mid:'You have a basic grasp of AI concepts but some misconceptions remain.',
+    low:'You may have unrealistic expectations of AI. Understanding how it works helps you use it better.'
+  },
+  problemFraming:{
+    high:'You define problems clearly before involving AI — the most important step most people skip.',
+    mid:'You sometimes plan ahead but tend to jump into tools too quickly.',
+    low:'You jump straight to AI without defining what you need — this leads to wasted effort and vague results.'
+  },
+  toolSelection:{
+    high:'You can match the right AI tool to any situation, considering constraints and user needs.',
+    mid:'You know some tools but default to ChatGPT for everything. The AI landscape is much wider.',
+    low:'You may not realize how many AI tools exist beyond ChatGPT — no-code builders, built-in AI, specialized tools.'
+  },
+  promptEngineering:{
+    high:'You write specific, structured prompts and iterate effectively — the key differentiator of skilled AI users.',
+    mid:'Your prompts are decent but could be more specific. Adding details transforms results.',
+    low:'Vague prompts give vague results. Learning to be specific with AI is the highest-ROI skill you can develop.'
+  },
+  criticalEvaluation:{
+    high:'You verify AI output rigorously and catch hallucinations, bias, and errors before they cause harm.',
+    mid:'You check some things but miss others. AI can be confidently wrong — always verify critical claims.',
+    low:'You trust AI output too readily. AI hallucinations are common and can sound very convincing.'
+  },
+  ethicsSafety:{
+    high:'You understand AI privacy risks, bias issues, and responsible use — and apply this knowledge in practice.',
+    mid:'You have some ethical awareness but may miss privacy risks or bias patterns.',
+    low:'AI ethics matter more than you think — data privacy, bias in hiring, deepfakes, and academic integrity all affect you.'
+  },
+  humanCollaboration:{
+    high:'You treat AI as a tool you direct, not an oracle. You own the process and can articulate your role clearly.',
+    mid:'You collaborate with AI but sometimes over-delegate or under-supervise.',
+    low:'AI works best when YOU drive the process. Blindly accepting AI output or avoiding it entirely both miss the point.'
+  },
+  vibeCoding:{
+    high:'You can go from idea to deployed product using AI — defining, building, testing, and shipping independently.',
+    mid:'You can build with AI but struggle with deployment, testing, or mobile responsiveness.',
+    low:'Building with AI is learnable. Start with: define what you need, pick the right tool, prompt specifically, test everything.'
+  }
+};
+
+function generateAnalysis(total,level,dimScores){
+  let parts=[];
+  parts.push(`Your AI IQ is <strong>${total}</strong>, placing you at <strong>${level.label}</strong> level.`);
+
+  if(level.lvl===4)parts.push('You demonstrate mastery across all dimensions — you\'re an effective, responsible AI power user.');
+  else if(level.lvl===3)parts.push('You have strong AI skills with room to sharpen a few specific areas.');
+  else if(level.lvl===2)parts.push('You\'re developing real AI skills. Focusing on your weak areas will make a big difference.');
+  else parts.push('You\'re early in your AI journey — the good news is these skills are very learnable.');
+
+  const strengths=[],developing=[],weak=[];
+  DIMS.forEach(d=>{
+    const mx=QUESTIONS.filter(q=>q.dim===d.key).length*4;
+    const pct=dimScores[d.key]/mx;
+    if(pct>=0.75)strengths.push(d);
+    else if(pct>=0.5)developing.push(d);
+    else weak.push(d);
+  });
+
+  if(strengths.length){
+    const tags=strengths.map(d=>`<span class="strength-tag high">${d.label}</span>`).join('');
+    parts.push(`<strong>Strengths:</strong> ${tags}`);
+    strengths.forEach(d=>parts.push(DIM_INSIGHTS[d.key].high));
+  }
+  if(developing.length){
+    const tags=developing.map(d=>`<span class="strength-tag mid">${d.label}</span>`).join('');
+    parts.push(`<strong>Developing:</strong> ${tags}`);
+    developing.forEach(d=>parts.push(DIM_INSIGHTS[d.key].mid));
+  }
+  if(weak.length){
+    const tags=weak.map(d=>`<span class="strength-tag low">${d.label}</span>`).join('');
+    parts.push(`<strong>Areas to improve:</strong> ${tags}`);
+    weak.forEach(d=>parts.push(DIM_INSIGHTS[d.key].low));
+  }
+
+  const html=`<h3>Your Analysis</h3><div class="analysis-text">${parts.map(p=>`<p style="margin-bottom:8px">${p}</p>`).join('')}</div>`;
+  const plain=parts.map(p=>p.replace(/<[^>]+>/g,'')).join(' ');
+  return{html,plain};
+}
+
+// ─── Share ───────────────────────────────────────────────────────────────
+function shareResults(){
+  const total=answers.reduce((s,a)=>s+a.score,0);
+  const text=`My AI IQ is ${total}! Take the test: ${location.href}`;
+  if(navigator.share){
+    navigator.share({title:'My AI IQ Score',text}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard!')).catch(()=>showToast('Share: '+text));
+  }
+}
+
+// ─── Submit ──────────────────────────────────────────────────────────────
+function submitData(total,level,dimScores,analysis){
+  const bg=document.getElementById('inp-background').value;
+  const payload={
+    participant_id:participantId,
+    timestamp:new Date().toISOString(),
+    ai_experience:bg,
+    total_score:total,
+    level:level.label
+  };
+  DIMS.forEach(d=>{payload['dim_'+d.key]=dimScores[d.key];});
+  QUESTIONS.forEach((q,i)=>{
+    payload[q.id+'_score']=answers[i].score;
+    payload[q.id+'_choice']=answers[i].origLetter.toLowerCase();
+  });
+  payload.analysis=analysis;
+
+  const backupKey=`ai_iq_${participantId}`;
+  try{localStorage.setItem(backupKey,JSON.stringify(payload));}catch(e){}
+
+  const SCRIPT_URL='YOUR_GOOGLE_SCRIPT_URL';
+  if(SCRIPT_URL!=='YOUR_GOOGLE_SCRIPT_URL'){
+    fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{});
+  } else {
+    console.log('AI IQ payload:',payload);
+  }
+}
+
+// ─── Review Toggle ───────────────────────────────────────────────────────
+function toggleReview(){
+  document.getElementById('review-toggle').classList.toggle('open');
+  document.getElementById('review-items').classList.toggle('open');
+}
+
+// ─── Toast ───────────────────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ─── Load Questions ─────────────────────────────────────────────────────
+fetch('questions.json').then(r=>r.json()).then(data=>{
+  QUESTIONS=data;
+  console.log(`Loaded ${QUESTIONS.length} questions`);
+}).catch(err=>{
+  console.error('Failed to load questions:',err);
+  showToast('Error loading questions');
+});
+</script>
+</body>
+</html>

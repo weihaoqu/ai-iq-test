@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Browser window -->
+  <rect x="150" y="50" width="500" height="380" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <rect x="150" y="50" width="500" height="35" rx="10" fill="#334155"/>
+  <circle cx="175" cy="68" r="5" fill="#ef4444" opacity="0.7"/><circle cx="193" cy="68" r="5" fill="#f59e0b" opacity="0.7"/><circle cx="211" cy="68" r="5" fill="#22c55e" opacity="0.7"/>
+  <rect x="250" y="60" width="200" height="16" rx="8" fill="#1e293b"/>
+  <!-- Building blocks being placed -->
+  <!-- Header block -->
+  <rect x="180" y="100" width="440" height="50" rx="5" fill="#f59e0b" opacity="0.2" stroke="#f59e0b" stroke-width="1.5"/>
+  <rect x="200" y="115" width="100" height="8" rx="4" fill="#f59e0b" opacity="0.5"/>
+  <rect x="480" y="115" width="40" height="8" rx="4" fill="#f59e0b" opacity="0.3"/>
+  <rect x="530" y="115" width="40" height="8" rx="4" fill="#f59e0b" opacity="0.3"/>
+  <!-- Hero block -->
+  <rect x="180" y="160" width="440" height="100" rx="5" fill="#f59e0b" opacity="0.1" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 4"/>
+  <rect x="220" y="185" width="180" height="10" rx="4" fill="#f59e0b" opacity="0.4"/>
+  <rect x="220" y="205" width="140" height="8" rx="3" fill="#f59e0b" opacity="0.2"/>
+  <rect x="220" y="225" width="80" height="25" rx="5" fill="#f59e0b" opacity="0.3"/>
+  <!-- Content blocks -->
+  <rect x="180" y="270" width="210" height="80" rx="5" fill="#f59e0b" opacity="0.1" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 4"/>
+  <rect x="410" y="270" width="210" height="80" rx="5" fill="#f59e0b" opacity="0.1" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4 4"/>
+  <!-- Floating block being placed -->
+  <rect x="180" y="360" width="440" height="50" rx="5" fill="#f59e0b" opacity="0.15" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <!-- Hand/cursor placing block -->
+  <path d="M660 300 L670 310 L670 340 L660 340 L658 330 L652 340 L644 340 L646 330 L640 340 L632 340 L636 320 L640 310" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.6"/>
+</svg>

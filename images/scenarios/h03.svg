@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <!-- Code window -->
+  <rect x="100" y="60" width="400" height="320" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <rect x="100" y="60" width="400" height="28" rx="10" fill="#334155"/>
+  <circle cx="118" cy="74" r="4" fill="#ef4444" opacity="0.7"/>
+  <!-- Code lines -->
+  <rect x="120" y="105" width="120" height="5" rx="2" fill="#0ea5e9" opacity="0.5"/>
+  <rect x="120" y="120" width="280" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="140" y="140" width="200" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="140" y="160" width="260" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="140" y="180" width="180" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="140" y="200" width="240" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="140" y="220" width="220" height="5" rx="2" fill="#94a3b8" opacity="0.3"/>
+  <rect x="120" y="240" width="160" height="5" rx="2" fill="#0ea5e9" opacity="0.5"/>
+  <!-- Wavy "something feels off" aura -->
+  <path d="M510 100 Q530 130 510 160 Q490 190 510 220 Q530 250 510 280 Q490 310 510 340" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.3"/>
+  <path d="M540 100 Q560 130 540 160 Q520 190 540 220 Q560 250 540 280 Q520 310 540 340" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.2"/>
+  <!-- Person thinking -->
+  <circle cx="650" cy="180" r="35" fill="none" stroke="#94a3b8" stroke-width="2"/>
+  <!-- Thought bubble -->
+  <ellipse cx="620" cy="100" rx="60" ry="30" fill="none" stroke="#0ea5e9" stroke-width="1.5" opacity="0.4"/>
+  <text x="620" y="106" font-family="Arial" font-size="11" fill="#0ea5e9" text-anchor="middle" opacity="0.5">Hmm...</text>
+  <circle cx="640" cy="140" r="4" fill="#0ea5e9" opacity="0.3"/>
+  <circle cx="645" cy="155" r="3" fill="#0ea5e9" opacity="0.2"/>
+  <!-- Gut feeling meter -->
+  <rect x="560" y="280" width="180" height="80" rx="10" fill="#334155" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="650" y="305" font-family="Arial" font-size="11" fill="#f59e0b" text-anchor="middle" opacity="0.6">Intuition says:</text>
+  <rect x="580" y="320" width="140" height="12" rx="6" fill="#1e293b"/>
+  <rect x="580" y="320" width="90" height="12" rx="6" fill="#f59e0b" opacity="0.4"/>
+  <text x="650" y="352" font-family="Arial" font-size="10" fill="#f59e0b" text-anchor="middle" opacity="0.5">Something's off</text>
+  <!-- AI checkmark saying "Yes, this is correct" -->
+  <rect x="200" y="400" width="300" height="50" rx="10" fill="#334155" stroke="#0ea5e9" stroke-width="1.5"/>
+  <text x="350" y="430" font-family="Arial" font-size="12" fill="#0ea5e9" text-anchor="middle" opacity="0.6">AI: "Yes, this is definitely correct"</text>
+</svg>
