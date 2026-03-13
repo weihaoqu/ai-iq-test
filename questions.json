@@ -237,26 +237,26 @@
     "id": "e04",
     "dim": "promptEngineering",
     "dimLabel": "Prompt Engineering",
-    "q": "AI generated code with a bug in it. What's the best next prompt?",
+    "q": "You've been going back and forth with AI for 15 messages trying to fix a sorting algorithm. Each time you describe the bug clearly, it apologizes and produces a 'fix' that has the SAME logical error in a slightly different form. What's the most effective next step?",
     "img": "images/scenarios/e04.svg",
     "choices": [
-      {"letter": "A", "text": "\"Fix this.\" and paste the code again.", "score": 2},
-      {"letter": "B", "text": "\"This doesn't work\" — try a different AI tool.", "score": 1},
-      {"letter": "C", "text": "Paste the code, describe the exact error message, what you expected vs. what happened, and ask it to diagnose and fix.", "score": 4},
-      {"letter": "D", "text": "Paste the code and say \"there's a bug on line 12, fix it.\"", "score": 3}
+      {"letter": "A", "text": "Keep iterating — describe the error even more precisely with a step-by-step trace showing exactly where the logic goes wrong.", "score": 3},
+      {"letter": "B", "text": "Start a fresh conversation. Paste only the requirements and the specific failing test case. Long conversations accumulate context noise — the model weights its own failed attempts as heavily as your corrections, reinforcing the error pattern.", "score": 4},
+      {"letter": "C", "text": "Try a completely different AI model — some models are better at algorithms than others.", "score": 2},
+      {"letter": "D", "text": "The AI clearly can't solve this — write the algorithm manually instead.", "score": 1}
     ]
   },
   {
     "id": "e05",
     "dim": "promptEngineering",
     "dimLabel": "Prompt Engineering",
-    "q": "You need AI to create a weekly meal plan for a diabetic vegetarian. Best prompt style?",
+    "q": "You ask AI to analyze a dataset and it gives you a confident but wrong conclusion. You point out the error with evidence, and it apologizes but gives a DIFFERENT wrong conclusion. What's the best approach?",
     "img": "images/scenarios/e05.svg",
     "choices": [
-      {"letter": "A", "text": "\"Make a meal plan for someone who can't eat meat or sugar.\"", "score": 2},
-      {"letter": "B", "text": "\"Make a healthy meal plan.\"", "score": 1},
-      {"letter": "C", "text": "\"Create a 7-day vegetarian meal plan for Type 2 diabetes: low GI, under 1800 calories/day, no processed sugar, with a grocery list.\"", "score": 4},
-      {"letter": "D", "text": "\"Make a vegetarian meal plan suitable for a diabetic person with balanced macros.\"", "score": 3}
+      {"letter": "A", "text": "Provide even more data and context so the AI has everything it needs to reach the correct answer this time.", "score": 2},
+      {"letter": "B", "text": "Ask it to 'think step by step' — break the analysis into explicit stages where you verify each intermediate result before it proceeds. LLMs make fewer reasoning errors when forced to show their work rather than jumping to conclusions.", "score": 4},
+      {"letter": "C", "text": "AI clearly can't handle this type of analysis — export the data to Excel or a statistics tool instead.", "score": 1},
+      {"letter": "D", "text": "Ask the AI to first list all its assumptions about the data, then perform the analysis — this way you can catch where its reasoning diverges from reality before it reaches a conclusion.", "score": 3}
     ]
   },
   {
@@ -471,13 +471,13 @@
     "id": "v02",
     "dim": "vibeCoding",
     "dimLabel": "Vibe Coding & AI Creation",
-    "q": "The web app AI generated looks broken on mobile. What do you do?",
+    "q": "You built a web app with AI. Desktop looks perfect, but on mobile the layout is completely broken — text overflows, buttons overlap, sidebar covers content. This is extremely common with AI-generated web code. Why?",
     "img": "images/scenarios/v02.svg",
     "choices": [
-      {"letter": "A", "text": "Start over with a different AI tool.", "score": 1},
-      {"letter": "B", "text": "Tell AI 'it's broken on mobile, fix it' and paste a screenshot.", "score": 3},
-      {"letter": "C", "text": "Describe the specific layout issues on mobile, paste the relevant CSS, and ask for a responsive fix.", "score": 4},
-      {"letter": "D", "text": "Ask AI to add 'make it mobile responsive' and regenerate the styles.", "score": 2}
+      {"letter": "A", "text": "AI can only generate code for one screen size at a time — you need to specifically request a separate mobile version.", "score": 1},
+      {"letter": "B", "text": "LLMs are trained on more desktop-oriented code examples, so AI-generated layouts default to fixed widths and absolute positioning. You must specifically request mobile-first responsive design with viewport-relative units in your initial prompt.", "score": 4},
+      {"letter": "C", "text": "Mobile browsers render CSS differently than desktop browsers — this is a browser compatibility issue that would happen with human-written code too.", "score": 2},
+      {"letter": "D", "text": "The AI probably used an outdated CSS technique. Describe the specific layout issues on mobile, paste the CSS, and ask for a responsive fix using modern flexbox or grid.", "score": 3}
     ]
   },
   {
@@ -510,13 +510,13 @@
     "id": "v05",
     "dim": "vibeCoding",
     "dimLabel": "Vibe Coding & AI Creation",
-    "q": "After a month of building with AI, what's the most important skill you should have developed?",
+    "q": "You've been vibe-coding with AI for a month. What's the MOST surprising lesson experienced AI builders learn that beginners don't expect?",
     "img": "images/scenarios/v05.svg",
     "choices": [
-      {"letter": "A", "text": "Speed — getting AI to produce results faster.", "score": 1},
-      {"letter": "B", "text": "Prompt memorization — knowing which exact words trigger good outputs.", "score": 2},
-      {"letter": "C", "text": "Knowing enough to direct AI precisely, debug its output, and own the final product.", "score": 4},
-      {"letter": "D", "text": "Knowing which AI tools to use for which tasks.", "score": 3}
+      {"letter": "A", "text": "AI is faster than expected — most apps can be built in a single conversation with a good enough prompt.", "score": 1},
+      {"letter": "B", "text": "AI-generated code accumulates invisible technical debt — it works but uses inconsistent patterns, redundant logic, and hardcoded values across files. Learning to read and refactor AI output matters more than prompting skill.", "score": 4},
+      {"letter": "C", "text": "Knowing enough to direct AI precisely, debug its output, and own the final product is the most important meta-skill.", "score": 3},
+      {"letter": "D", "text": "The biggest differentiator is knowing which AI tool to use for each task — Claude for analysis, GPT for creative writing, Copilot for code.", "score": 2}
     ]
   },
   {
@@ -575,13 +575,13 @@
     "id": "x05",
     "dim": "vibeCoding",
     "dimLabel": "Vibe Coding & AI Creation",
-    "q": "You built a web app with AI that works great locally. Now users report it crashes with real data. What's most likely wrong?",
+    "q": "Your AI-built web app works perfectly during development. After launch, users report random crashes, garbled text, and incorrect calculations. You check the code and the logic LOOKS fine. What's the most likely cause specific to AI-generated code?",
     "img": "images/scenarios/x05.svg",
     "choices": [
-      {"letter": "A", "text": "The AI wrote buggy code — start over with a different AI tool.", "score": 1},
-      {"letter": "B", "text": "You tested with clean sample data but real-world data has edge cases (nulls, special characters, unexpected formats) the code doesn't handle.", "score": 4},
-      {"letter": "C", "text": "The production server needs more RAM, faster CPU, and better network bandwidth to handle the increased computational load of processing real user requests at scale.", "score": 3},
-      {"letter": "D", "text": "The deployment environment is different from your local setup.", "score": 2}
+      {"letter": "A", "text": "The code needs more computational resources — production traffic requires better servers than your local development machine.", "score": 1},
+      {"letter": "B", "text": "AI-generated code is 'happy path' code — it works with the clean examples you tested but omits input validation, error handling, and edge case logic for nulls, Unicode, empty strings, and unexpected formats that real users inevitably produce.", "score": 4},
+      {"letter": "C", "text": "You tested with clean sample data but real-world data is messier — add more input validation and error handling to handle unexpected formats.", "score": 3},
+      {"letter": "D", "text": "The deployment environment has different library versions than your development setup, causing subtle behavior differences.", "score": 2}
     ]
   }
 ]
