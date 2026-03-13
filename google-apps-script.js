@@ -44,7 +44,7 @@ function doPost(e) {
       sheet = ss.insertSheet('Responses');
       var headers = [
         'participant_id', 'participant_name', 'timestamp', 'date', 'ai_experience',
-        'total_score', 'level',
+        'total_score', 'level', 'duration_seconds',
         'dim_foundations', 'dim_problemFraming', 'dim_toolSelection',
         'dim_promptEngineering', 'dim_criticalEvaluation', 'dim_ethicsSafety',
         'dim_humanCollab', 'dim_vibeCoding'
@@ -75,7 +75,8 @@ function doPost(e) {
       date,
       data.ai_experience || '',
       data.total_score || 0,
-      data.level || ''
+      data.level || '',
+      data.duration_seconds || 0
     ];
 
     // Dimension scores
@@ -117,11 +118,29 @@ function doGet(e) {
       var ss = SpreadsheetApp.getActiveSpreadsheet();
       var sheet = ss.getSheetByName('Responses');
       if (!sheet) {
+        // Create with same full headers as doPost
         sheet = ss.insertSheet('Responses');
-        sheet.appendRow(['participant_id','timestamp','date','ai_experience','total_score','level']);
+        var headers = [
+          'participant_id', 'participant_name', 'timestamp', 'date', 'ai_experience',
+          'total_score', 'level', 'duration_seconds',
+          'dim_foundations', 'dim_problemFraming', 'dim_toolSelection',
+          'dim_promptEngineering', 'dim_criticalEvaluation', 'dim_ethicsSafety',
+          'dim_humanCollab', 'dim_vibeCoding'
+        ];
+        var qids = [
+          'f01','f02','f03','f04','f05','p01','p02','p03','p04','p05',
+          't01','t02','t03','t04','t05','e01','e02','e03','e04','e05',
+          'c01','c02','c03','c04','c05','s01','s02','s03','s04','s05',
+          'h01','h02','h03','h04','h05','v01','v02','v03','v04','v05',
+          'x01','x02','x03','x04','x05'
+        ];
+        qids.forEach(function(qid) { headers.push(qid + '_score'); headers.push(qid + '_choice'); });
+        headers.push('analysis');
+        sheet.appendRow(headers);
+        sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
         sheet.setFrozenRows(1);
       }
-      sheet.appendRow(['GET_TEST', new Date().toISOString(), '', 'test', 0, 'test']);
+      sheet.appendRow(['GET_TEST', '', new Date().toISOString(), '', 'test', 0, 'test', 0]);
       return ContentService
         .createTextOutput(JSON.stringify({ status: 'success', message: 'Test row added!' }))
         .setMimeType(ContentService.MimeType.JSON);

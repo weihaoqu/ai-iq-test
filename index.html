@@ -529,6 +529,7 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <button class="btn btn-share" style="flex:1" onclick="shareViaSMS()">&#128172; Text</button>
         <button class="btn btn-share" style="flex:1" onclick="shareResults()">&#128279; Copy Link</button>
       </div>
+      <button class="btn btn-outline btn-full" style="margin-top:6px;opacity:.7" onclick="retakeQuiz()">&#8635; Retake Quiz</button>
     </div>
 
     <!-- Review -->
@@ -574,6 +575,7 @@ let answers = [];
 let shuffledChoices = [];
 let participantId = '';
 let participantName = '';
+let quizStartTime = null;
 
 // ─── Shuffle ────────────────────────────────────────────────────────────
 function shuffle(arr){
@@ -598,6 +600,7 @@ function beginQuiz(){
   if(!bg){showToast('Please select your AI experience');return;}
   participantName=document.getElementById('inp-name').value.trim()||'Anonymous';
   participantId='AIQ'+Date.now();
+  quizStartTime=Date.now();
   shuffledChoices=QUESTIONS.map(q=>shuffle(q.choices));
   currentQ=0;
   answers=new Array(QUESTIONS.length).fill(null);
@@ -938,7 +941,8 @@ function submitData(total,level,dimScores,analysis){
     timestamp:new Date().toISOString(),
     ai_experience:bg,
     total_score:total,
-    level:level.label
+    level:level.label,
+    duration_seconds:quizStartTime?Math.round((Date.now()-quizStartTime)/1000):0
   };
   DIMS.forEach(d=>{payload['dim_'+d.key]=dimScores[d.key];});
   QUESTIONS.forEach((q,i)=>{
@@ -973,6 +977,17 @@ function submitData(total,level,dimScores,analysis){
   setTimeout(()=>form.remove(),2000);
   showToast('Results saved!');
   console.log('AI IQ data submitted via form POST');
+}
+
+// ─── Retake ─────────────────────────────────────────────────────────────
+function retakeQuiz(){
+  currentQ=0;answers=[];shuffledChoices=[];
+  participantId='';participantName='';quizStartTime=null;
+  document.getElementById('inp-name').value='';
+  document.getElementById('inp-background').value='';
+  document.getElementById('review-toggle').classList.remove('open');
+  document.getElementById('review-items').classList.remove('open');
+  showScreen('screen-intro');
 }
 
 // ─── Review Toggle ───────────────────────────────────────────────────────
