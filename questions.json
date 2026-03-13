@@ -74,7 +74,7 @@
       {"letter": "A", "text": "ChatGPT changed its mind as it 'learned' more from your conversation.", "score": 2},
       {"letter": "B", "text": "The conversation exceeded the model's context window, so it lost track of earlier details and is generating new responses without full context.", "score": 4},
       {"letter": "C", "text": "There's a server-side error — refresh the page and it will remember everything.", "score": 1},
-      {"letter": "D", "text": "AI models periodically reset their reasoning mid-conversation to explore alternative approaches and give you a broader range of perspectives.", "score": 1}
+      {"letter": "D", "text": "AI models periodically reset their reasoning mid-conversation to explore alternative approaches and give you a broader range of perspectives.", "score": 3}
     ]
   },
   {
@@ -99,7 +99,7 @@
     "choices": [
       {"letter": "A", "text": "Your subscription tier dropped and you're getting lower-quality outputs.", "score": 1},
       {"letter": "B", "text": "LLMs are non-deterministic — temperature settings introduce randomness, so identical prompts can produce different outputs each time.", "score": 4},
-      {"letter": "C", "text": "Someone else's conversation corrupted the AI's shared memory between sessions.", "score": 1},
+      {"letter": "C", "text": "Someone else's conversation corrupted the AI's shared memory between sessions.", "score": 2},
       {"letter": "D", "text": "The AI model was silently updated overnight and lost some of its ability to write Python code reliably — this happens regularly with cloud-based AI services.", "score": 3}
     ]
   },
@@ -112,8 +112,8 @@
     "choices": [
       {"letter": "A", "text": "AI can't read code — it only works well with natural language descriptions.", "score": 1},
       {"letter": "B", "text": "Large inputs may exceed token limits, and the model's attention degrades over long contexts — it may ignore or hallucinate details from sections it can't fully process.", "score": 4},
-      {"letter": "C", "text": "It's fine — providing more context always produces better AI responses regardless of input length.", "score": 1},
-      {"letter": "D", "text": "The main risk is that AI will store all your proprietary code and potentially expose it to other users who ask similar coding questions in the future.", "score": 2}
+      {"letter": "C", "text": "It's fine — providing more context always produces better AI responses regardless of input length.", "score": 2},
+      {"letter": "D", "text": "The main risk is that AI will store all your proprietary code and potentially expose it to other users who ask similar coding questions in the future.", "score": 3}
     ]
   },
   {
@@ -292,10 +292,10 @@
     "q": "An employee pastes confidential company financial data into the free version of ChatGPT to help draft a report. The CTO is furious. What's the specific technical risk?",
     "img": "images/scenarios/c03.svg",
     "choices": [
-      {"letter": "A", "text": "ChatGPT will sell the data directly to competitors.", "score": 1},
+      {"letter": "A", "text": "ChatGPT will sell the data directly to competitors.", "score": 2},
       {"letter": "B", "text": "On default consumer settings, conversations may be used for model training — proprietary data could influence future model outputs visible to other users.", "score": 4},
       {"letter": "C", "text": "The CTO is overreacting — ChatGPT automatically deletes all conversation data after each session ends.", "score": 1},
-      {"letter": "D", "text": "The main risk is that ChatGPT might misinterpret the financial figures and produce an inaccurate report that gets shared externally.", "score": 2}
+      {"letter": "D", "text": "The main risk is that ChatGPT might misinterpret the financial figures and produce an inaccurate report that gets shared externally.", "score": 3}
     ]
   },
   {
@@ -425,7 +425,7 @@
       {"letter": "A", "text": "There's a subtle implicit termination condition in the recursion pattern that you're missing — read line 4 more carefully.", "score": 1},
       {"letter": "B", "text": "The AI made a mistake but is 'doubling down' because it doesn't want to admit errors — rephrase your question more clearly.", "score": 2},
       {"letter": "C", "text": "LLMs don't execute or trace code — they generate text that sounds like a code review. When asked 'does this work?', they produce a confident explanation by pattern-matching what a code review should say, not by actually verifying logic. Always run the code yourself.", "score": 4},
-      {"letter": "D", "text": "The AI internally tested the code and found it works in most cases. The missing base case only matters for certain inputs, so the AI's assessment is partially correct.", "score": 1}
+      {"letter": "D", "text": "The AI internally tested the code and found it works in most cases. The missing base case only matters for certain inputs, so the AI's assessment is partially correct.", "score": 3}
     ]
   },
   {
