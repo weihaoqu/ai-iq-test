@@ -489,6 +489,7 @@ canvas#radarChart{max-width:340px;max-height:340px}
       <div class="iq-score-num" id="res-iq">0</div>
       <div class="iq-score-label">AI IQ Score</div>
       <div><span class="iq-level" id="res-level"></span></div>
+      <div id="res-time" style="font-size:.85rem;color:var(--text-dim);margin-top:6px"></div>
     </div>
 
     <!-- Radar Chart -->
@@ -541,7 +542,7 @@ canvas#radarChart{max-width:340px;max-height:340px}
     </div>
   </div>
 
-  <footer class="app-footer">&copy; 2025 LearnAI Team &middot; <a href="https://lainow.com" target="_blank">lainow.com</a></footer>
+  <footer class="app-footer">&copy; 2026 LearnAI Team &middot; <a href="https://lainow.com" target="_blank">lainow.com</a></footer>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -674,6 +675,14 @@ function buildResults(){
   const lvlEl=document.getElementById('res-level');
   lvlEl.textContent=level.label;
   lvlEl.className='iq-level '+level.cls;
+
+  // Show duration
+  if(quizStartTime){
+    const secs=Math.round((Date.now()-quizStartTime)/1000);
+    const mins=Math.floor(secs/60);
+    const remSecs=secs%60;
+    document.getElementById('res-time').textContent=`Completed in ${mins}m ${remSecs}s`;
+  }
 
   const dimScores={};
   DIMS.forEach(d=>{dimScores[d.key]=0;});
@@ -1060,7 +1069,7 @@ div[style*="background:#1a1a2e"]{background:#e5e5e5!important}
 <div class="score-big">${total}</div>
 <div style="font-size:14px;color:#7c8599;margin-top:4px">out of 180</div>
 <div class="level-badge">${level.label}</div>
-<div class="meta"><span>Date: ${date}</span><span>ID: ${participantId}</span></div>
+<div class="meta"><span>Date: ${date}</span><span>ID: ${participantId}</span>${quizStartTime?`<span>Time: ${Math.floor((Date.now()-quizStartTime)/60000)}m ${Math.round(((Date.now()-quizStartTime)/1000)%60)}s</span>`:''}</div>
 </div>
 <div class="section"><h2>Dimension Breakdown</h2>${dimBarsHTML}</div>
 <div class="section"><h2>Personalized Analysis</h2><div style="padding:20px;border-radius:12px;background:#0d1117;border:1px solid rgba(167,139,250,.15);font-size:14px;line-height:1.7">${analysis.html.replace('<h3>Your Analysis</h3>','')}</div></div>
