@@ -784,9 +784,9 @@ function goNext(){
     const finalScore=answers.reduce((s,a)=>s+a.score,0);
     if(finalScore>=120)launchConfetti();
     else{
-      // Subtle glow pulse for lower scores — still rewarding for completing
-      const scoreEl=document.getElementById('res-iq');
-      scoreEl.style.animation='popIn .6s ease, glowPulse 2s ease-in-out 2';
+      // Subtle glow pulse on score wrapper for lower scores — still rewarding for completing
+      const scoreWrap=document.querySelector('.iq-score-wrap');
+      scoreWrap.style.animation='glowPulse 2s ease-in-out 2';
     }
   }
 }
@@ -1169,13 +1169,10 @@ function shareAsImage(){
 
 // ─── Share ───────────────────────────────────────────────────────────────
 function shareResults(){
-  const total=answers.reduce((s,a)=>s+a.score,0);
-  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const baseUrl=location.href.split('?')[0].split('#')[0];
-  const shareUrl=`${baseUrl}?score=${total}&level=${encodeURIComponent(level.label)}&name=${encodeURIComponent(participantName)}`;
-  const text=`I scored ${total}/180 (${level.label}) on the AI IQ Test! Take it: ${shareUrl}`;
+  const{total,level,url}=getShareUrl();
+  const text=`I scored ${total}/180 (${level.label}) on the AI IQ Test! Take it: ${url}`;
   if(navigator.share){
-    navigator.share({title:'My AI IQ Score',text,url:shareUrl}).catch(()=>{});
+    navigator.share({title:'My AI IQ Score',text,url}).catch(()=>{});
   } else {
     navigator.clipboard.writeText(text).then(()=>showToast('Copied to clipboard!')).catch(()=>showToast('Share: '+text));
   }
@@ -1238,6 +1235,8 @@ function retakeQuiz(){
   document.getElementById('review-toggle').classList.remove('open');
   document.getElementById('review-items').classList.remove('open');
   document.getElementById('q-dots').innerHTML='';
+  document.getElementById('review-filters').style.display='none';
+  document.querySelector('.iq-score-wrap').style.animation='';
   showScreen('screen-landing');
 }
 
@@ -1445,21 +1444,24 @@ function downloadCertificatePDF(){
 }
 
 // ─── Share via Email ────────────────────────────────────────────────────
-function shareViaEmail(){
+function getShareUrl(){
   const total=answers.reduce((s,a)=>s+a.score,0);
   const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const testUrl=location.href.split('?')[0];
+  const baseUrl=location.href.split('?')[0].split('#')[0];
+  return{total,level,url:`${baseUrl}?score=${total}&level=${encodeURIComponent(level.label)}&name=${encodeURIComponent(participantName)}`};
+}
+
+function shareViaEmail(){
+  const{total,level,url}=getShareUrl();
   const subject=encodeURIComponent(`I scored ${total}/180 on the AI IQ Test!`);
-  const body=encodeURIComponent(`Hey!\n\nI just took the AI IQ Test and scored ${total}/180 — ${level.label} level!\n\nTest your own AI intelligence: ${testUrl}\n\n- ${participantName}`);
+  const body=encodeURIComponent(`Hey!\n\nI just took the AI IQ Test and scored ${total}/180 — ${level.label} level!\n\nCan you beat my score? ${url}\n\n- ${participantName}`);
   window.open(`mailto:?subject=${subject}&body=${body}`);
 }
 
 // ─── Share via SMS ──────────────────────────────────────────────────────
 function shareViaSMS(){
-  const total=answers.reduce((s,a)=>s+a.score,0);
-  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const testUrl=location.href.split('?')[0];
-  const text=encodeURIComponent(`I scored ${total}/180 (${level.label}) on the AI IQ Test! Try it: ${testUrl}`);
+  const{total,level,url}=getShareUrl();
+  const text=encodeURIComponent(`I scored ${total}/180 (${level.label}) on the AI IQ Test! Beat me: ${url}`);
   window.open(`sms:?&body=${text}`);
 }
 
