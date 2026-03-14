@@ -779,7 +779,7 @@ function renderQuestion(){
     dotsEl.innerHTML=Array.from({length:total},(_,i)=>`<button class="dot" data-idx="${i}" title="Q${i+1}" aria-label="Jump to question ${i+1}"></button>`).join('');
     dotsEl.addEventListener('click',function(e){
       const idx=e.target.dataset.idx;
-      if(idx!==undefined){currentQ=parseInt(idx);renderQuestion();}
+      if(idx!==undefined){currentQ=parseInt(idx);renderQuestion();window.scrollTo({top:0,behavior:'smooth'});}
     });
   }
   dotsEl.querySelectorAll('.dot').forEach((dot,i)=>{
@@ -839,6 +839,7 @@ function goNext(){
     if(unanswered!==-1){
       showToast(`Question ${unanswered+1} is unanswered — jumping there`);
       currentQ=unanswered;renderQuestion();
+      window.scrollTo({top:0,behavior:'smooth'});
       return;
     }
     buildResults();showScreen('screen-results');
