@@ -364,12 +364,12 @@ canvas#radarChart{max-width:340px;max-height:340px}
 /* ── Analysis ── */
 .analysis-card{
   background:var(--bg-card);backdrop-filter:var(--glass-blur);
-  border:1px solid rgba(167,139,250,.2);border-radius:var(--radius);padding:24px;
+  border:1px solid rgba(37,99,235,.2);border-radius:var(--radius);padding:24px;
   position:relative;overflow:hidden;
 }
 .analysis-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--primary-dark),var(--primary),var(--cyan));
+  background:linear-gradient(90deg,var(--primary-dark),var(--primary),var(--accent),var(--accent-light));
 }
 .analysis-card h3{margin-bottom:12px;color:var(--primary-light);font-size:1.1rem}
 .analysis-text{font-size:.9rem;line-height:1.7;color:var(--text)}
@@ -385,15 +385,15 @@ canvas#radarChart{max-width:340px;max-height:340px}
 
 /* ── Share Card ── */
 .share-card{
-  background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(109,40,217,.2));
-  border:1px solid rgba(167,139,250,.25);
+  background:linear-gradient(135deg,rgba(29,78,216,.25),rgba(245,158,11,.1));
+  border:1px solid rgba(245,158,11,.2);
   backdrop-filter:var(--glass-blur);
   border-radius:var(--radius);padding:28px;color:#fff;text-align:center;
   position:relative;overflow:hidden;
 }
 .share-card::before{
   content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;
-  background:radial-gradient(circle at 30% 30%,rgba(34,211,238,.08),transparent 50%);
+  background:radial-gradient(circle at 30% 30%,rgba(245,158,11,.08),transparent 50%);
   pointer-events:none;
 }
 .share-card .share-iq{font-size:3.5rem;font-weight:900;line-height:1;position:relative}
@@ -999,8 +999,8 @@ function drawRadar(dimScores){
 
   // Axes + Labels
   const colors=[
-    '#818cf8','#f472b6','#fbbf24','#34d399',
-    '#fb7185','#c084fc','#38bdf8','#fb923c'
+    '#60a5fa','#f472b6','#f59e0b','#34d399',
+    '#fb923c','#a78bfa','#38bdf8','#f97316'
   ];
   DIMS.forEach((d,i)=>{
     const angle=startAngle+i*angleStep;
@@ -1036,8 +1036,8 @@ function drawRadar(dimScores){
     i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
   });
   ctx.closePath();
-  ctx.shadowColor='rgba(167,139,250,.5)';ctx.shadowBlur=20;
-  ctx.fillStyle='rgba(167,139,250,.1)';ctx.fill();
+  ctx.shadowColor='rgba(37,99,235,.5)';ctx.shadowBlur=20;
+  ctx.fillStyle='rgba(37,99,235,.1)';ctx.fill();
   ctx.restore();
 
   // Main polygon
@@ -1050,10 +1050,10 @@ function drawRadar(dimScores){
   });
   ctx.closePath();
   const grad=ctx.createLinearGradient(cx-maxR,cy-maxR,cx+maxR,cy+maxR);
-  grad.addColorStop(0,'rgba(129,140,248,.15)');
-  grad.addColorStop(1,'rgba(34,211,238,.1)');
+  grad.addColorStop(0,'rgba(37,99,235,.15)');
+  grad.addColorStop(1,'rgba(245,158,11,.08)');
   ctx.fillStyle=grad;ctx.fill();
-  ctx.strokeStyle='rgba(167,139,250,.6)';ctx.lineWidth=2;ctx.stroke();
+  ctx.strokeStyle='rgba(96,165,250,.6)';ctx.lineWidth=2;ctx.stroke();
 
   // Data points
   values.forEach((v,i)=>{
@@ -1168,11 +1168,11 @@ function shareAsImage(){
 
   // Subtle glow
   const glow=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,200);
-  glow.addColorStop(0,'rgba(124,58,237,.12)');glow.addColorStop(1,'transparent');
+  glow.addColorStop(0,'rgba(245,158,11,.1)');glow.addColorStop(1,'transparent');
   ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
 
   // Border
-  ctx.strokeStyle='rgba(167,139,250,.3)';ctx.lineWidth=2;
+  ctx.strokeStyle='rgba(96,165,250,.3)';ctx.lineWidth=2;
   ctx.strokeRect(1,1,W-2,H-2);
 
   // Header
@@ -1186,12 +1186,12 @@ function shareAsImage(){
   // Score
   ctx.font='900 64px Outfit,sans-serif';
   const scoreGrad=ctx.createLinearGradient(W/2-60,80,W/2+60,160);
-  scoreGrad.addColorStop(0,'#c4b5fd');scoreGrad.addColorStop(0.5,'#22d3ee');scoreGrad.addColorStop(1,'#fbbf24');
+  scoreGrad.addColorStop(0,'#f59e0b');scoreGrad.addColorStop(0.5,'#fbbf24');scoreGrad.addColorStop(1,'#60a5fa');
   ctx.fillStyle=scoreGrad;
   ctx.fillText(String(total),W/2,150);
 
   // Level badge
-  const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#c4b5fd'};
+  const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#60a5fa'};
   const lc=levelColors[level.lvl];
   ctx.font='700 16px Outfit,sans-serif';ctx.fillStyle=lc;
   ctx.fillText(level.label,W/2,178);
@@ -1199,7 +1199,7 @@ function shareAsImage(){
   // Mini radar chart
   const cx=W/2,cy=265,maxR=55;
   const n=DIMS.length;const angleStep=(2*Math.PI)/n;const startAngle=-Math.PI/2;
-  const dimColors=['#818cf8','#f472b6','#fbbf24','#34d399','#fb7185','#c084fc','#38bdf8','#fb923c'];
+  const dimColors=['#60a5fa','#f472b6','#f59e0b','#34d399','#fb923c','#a78bfa','#38bdf8','#f97316'];
 
   // Grid
   ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=0.5;
@@ -1214,8 +1214,8 @@ function shareAsImage(){
   ctx.beginPath();
   values.forEach((v,i)=>{const a=startAngle+i*angleStep;const x=cx+Math.cos(a)*maxR*v;const y=cy+Math.sin(a)*maxR*v;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
   ctx.closePath();
-  ctx.fillStyle='rgba(167,139,250,.15)';ctx.fill();
-  ctx.strokeStyle='rgba(167,139,250,.6)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle='rgba(37,99,235,.15)';ctx.fill();
+  ctx.strokeStyle='rgba(96,165,250,.6)';ctx.lineWidth=1.5;ctx.stroke();
 
   // Points
   values.forEach((v,i)=>{const a=startAngle+i*angleStep;ctx.beginPath();ctx.arc(cx+Math.cos(a)*maxR*v,cy+Math.sin(a)*maxR*v,3,0,2*Math.PI);ctx.fillStyle=dimColors[i];ctx.fill();});
@@ -1364,7 +1364,7 @@ function buildReportHTML(){
     return`<div style="padding:12px 16px;margin-bottom:8px;border-radius:10px;background:#0d1117;border-left:3px solid ${color}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="color:${iconColor};font-size:16px">${icon}</span><span style="font-weight:600;font-size:13px;color:#e8eaf0">Q${i+1}. ${q.q}</span></div><div style="font-size:12px;color:#7c8599;margin-left:24px">Your answer: ${ans.origLetter}. ${yours.text} <span style="color:${iconColor};font-weight:700">(${ans.score}/4)</span></div>${ans.score<4?`<div style="font-size:12px;color:#34d399;margin-left:24px;margin-top:2px">Best: ${best.letter}. ${best.text}</div>`:''}</div>`;
   }).join('');
 
-  const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#c4b5fd'};
+  const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#60a5fa'};
   const lc=levelColors[level.lvl]||'#c4b5fd';
 
   return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Report - ${esc(participantName)}</title>
@@ -1541,7 +1541,7 @@ function launchConfetti(){
   const canvas=document.getElementById('confetti-canvas');
   const ctx=canvas.getContext('2d');
   canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  const colors=['#a78bfa','#c4b5fd','#22d3ee','#fbbf24','#34d399','#fb7185','#f472b6','#818cf8'];
+  const colors=['#2563eb','#60a5fa','#38bdf8','#f59e0b','#fbbf24','#f97316','#34d399','#fb923c'];
   const particles=[];
   for(let i=0;i<120;i++){
     particles.push({
