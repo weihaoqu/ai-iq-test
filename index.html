@@ -490,7 +490,7 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <span class="dim-pill" style="background:rgba(245,158,11,.15);color:#f59e0b;border-color:rgba(245,158,11,.25)">Tool Selection</span>
         <span class="dim-pill" style="background:rgba(52,211,153,.15);color:var(--dim-prompt);border-color:rgba(52,211,153,.25)">Prompting</span>
         <span class="dim-pill" style="background:rgba(251,146,60,.15);color:#fb923c;border-color:rgba(251,146,60,.25)">Critical Eval</span>
-        <span class="dim-pill" style="background:rgba(167,139,250,.15);color:#a78bfa;border-color:rgba(167,139,250,.25)">Ethics & Safety</span>
+        <span class="dim-pill" style="background:rgba(37,99,235,.15);color:#a78bfa;border-color:rgba(167,139,250,.25)">Ethics & Safety</span>
         <span class="dim-pill" style="background:rgba(56,189,248,.15);color:var(--dim-collab);border-color:rgba(56,189,248,.25)">Collaboration</span>
         <span class="dim-pill" style="background:rgba(249,115,22,.15);color:#f97316;border-color:rgba(249,115,22,.25)">Vibe Coding</span>
       </div>
@@ -952,7 +952,7 @@ function buildResults(){
 
   // Build dimension filter buttons
   const filtersEl=document.getElementById('review-filters');
-  const dimColors2=['#818cf8','#f472b6','#fbbf24','#34d399','#fb7185','#c084fc','#38bdf8','#fb923c'];
+  const dimColors2=['#60a5fa','#f472b6','#f59e0b','#34d399','#fb923c','#a78bfa','#38bdf8','#f97316'];
   filtersEl.innerHTML=`<button class="dim-filter active" data-dim="all" onclick="filterReview('all')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:var(--primary);color:#fff;cursor:pointer;font-family:'Outfit',sans-serif">All</button>`+
     DIMS.map((d,i)=>`<button class="dim-filter" data-dim="${d.key}" onclick="filterReview('${d.key}')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid ${dimColors2[i]}40;background:transparent;color:var(--text-dim);cursor:pointer;font-family:'Outfit',sans-serif">${d.label.split(' ')[0]}</button>`).join('');
 
@@ -1346,7 +1346,7 @@ function buildReportHTML(){
   const analysis=generateAnalysis(total,level,dimScores);
   const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
 
-  const dimColors={foundations:'#818cf8',problemFraming:'#f472b6',toolSelection:'#fbbf24',promptEngineering:'#34d399',criticalEvaluation:'#fb7185',ethicsSafety:'#c084fc',humanCollaboration:'#38bdf8',vibeCoding:'#fb923c'};
+  const dimColors={foundations:'#60a5fa',problemFraming:'#f472b6',toolSelection:'#f59e0b',promptEngineering:'#34d399',criticalEvaluation:'#fb923c',ethicsSafety:'#a78bfa',humanCollaboration:'#38bdf8',vibeCoding:'#f97316'};
 
   const dimBarsHTML=DIMS.map(d=>{
     const pct=Math.round((dimScores[d.key]/dimMax[d.key])*100);
@@ -1372,18 +1372,18 @@ function buildReportHTML(){
 <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#06080f;color:#e8eaf0;min-height:100vh;padding:40px 20px}
 .report{max-width:700px;margin:0 auto}
 .header{text-align:center;padding:40px 0 30px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:30px}
-.score-big{font-size:72px;font-weight:900;background:linear-gradient(135deg,#c4b5fd,#22d3ee,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.score-big{font-size:72px;font-weight:900;background:linear-gradient(135deg,#f59e0b,#fbbf24,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
 .level-badge{display:inline-block;padding:6px 20px;border-radius:99px;font-weight:700;margin-top:10px;border:1.5px solid ${lc}40;background:${lc}18;color:${lc}}
 .section{margin-bottom:30px;page-break-inside:avoid}
-.section h2{font-size:18px;font-weight:700;margin-bottom:16px;color:#c4b5fd;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.section h2{font-size:18px;font-weight:700;margin-bottom:16px;color:#60a5fa;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06)}
 .meta{display:flex;gap:24px;justify-content:center;font-size:13px;color:#7c8599;margin-top:12px;font-family:'Space Mono',monospace}
 .footer{text-align:center;padding:30px 0;border-top:1px solid rgba(255,255,255,.08);margin-top:30px;font-size:12px;color:#6a7688}
 @media print{body{background:#fff;color:#111;padding:20px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.score-big{-webkit-text-fill-color:#7c3aed}
+.score-big{-webkit-text-fill-color:#1d4ed8}
 div[style*="background:#0d1117"]{background:#f5f5f5!important}
 div[style*="background:#1a1a2e"]{background:#e5e5e5!important}
-.level-badge{border-color:#7c3aed!important;color:#7c3aed!important}
-.section h2{color:#7c3aed!important}
+.level-badge{border-color:#1d4ed8!important;color:#1d4ed8!important}
+.section h2{color:#1d4ed8!important}
 .header{page-break-after:avoid}
 }
 </style></head><body><div class="report">
@@ -1396,7 +1396,7 @@ div[style*="background:#1a1a2e"]{background:#e5e5e5!important}
 <div class="meta"><span>Date: ${date}</span><span>ID: ${participantId}</span>${quizStartTime?`<span>Time: ${Math.floor((Date.now()-quizStartTime)/60000)}m ${Math.round(((Date.now()-quizStartTime)/1000)%60)}s</span>`:''}</div>
 </div>
 <div class="section"><h2>Dimension Breakdown</h2>${dimBarsHTML}</div>
-<div class="section"><h2>Personalized Analysis</h2><div style="padding:20px;border-radius:12px;background:#0d1117;border:1px solid rgba(167,139,250,.15);font-size:14px;line-height:1.7">${analysis.html.replace('<h3>Your Analysis</h3>','')}</div></div>
+<div class="section"><h2>Personalized Analysis</h2><div style="padding:20px;border-radius:12px;background:#0d1117;border:1px solid rgba(37,99,235,.15);font-size:14px;line-height:1.7">${analysis.html.replace('<h3>Your Analysis</h3>','')}</div></div>
 <div class="section"><h2>All 45 Questions</h2>${reviewHTML}</div>
 <div class="footer">&copy; ${new Date().getFullYear()} LearnAI Team &middot; AI IQ Test &middot; lainow.com</div>
 </div></body></html>`;
@@ -1422,10 +1422,10 @@ function buildCertificateHTML(){
   DIMS.forEach(d=>{dimScores[d.key]=0;});
   QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
 
-  const levelColors={1:['#fb7185','#f43f5e'],2:['#fbbf24','#f59e0b'],3:['#34d399','#10b981'],4:['#c4b5fd','#a78bfa']};
+  const levelColors={1:['#fb7185','#f43f5e'],2:['#fbbf24','#f59e0b'],3:['#34d399','#10b981'],4:['#60a5fa','#2563eb']};
   const [lc1,lc2]=levelColors[level.lvl]||['#c4b5fd','#a78bfa'];
 
-  const dimColors2=['#818cf8','#f472b6','#fbbf24','#34d399','#fb7185','#c084fc','#38bdf8','#fb923c'];
+  const dimColors2=['#60a5fa','#f472b6','#f59e0b','#34d399','#fb923c','#a78bfa','#38bdf8','#f97316'];
   const dimListHTML=DIMS.map((d,i)=>{
     return`<div style="display:flex;align-items:center;gap:10px;padding:6px 0"><div style="width:10px;height:10px;border-radius:50%;background:${dimColors2[i]}"></div><div style="flex:1;font-size:13px;color:#c0c8dd">${d.label}</div><div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:600;color:${dimColors2[i]}">${dimScores[d.key]}/${dimMax[d.key]}</div></div>`;
   }).join('');
@@ -1434,19 +1434,19 @@ function buildCertificateHTML(){
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box}
 body{background:#06080f;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;font-family:'Outfit',sans-serif}
-.cert{width:800px;min-height:560px;background:linear-gradient(135deg,#0d1117 0%,#111827 50%,#0d1117 100%);border-radius:24px;position:relative;overflow:hidden;padding:48px 56px;color:#e8eaf0;border:1.5px solid rgba(167,139,250,.2);box-shadow:0 20px 80px rgba(0,0,0,.5)}
-.cert::before{content:'';position:absolute;inset:12px;border:1px solid rgba(167,139,250,.1);border-radius:16px;pointer-events:none}
-.cert::after{content:'';position:absolute;top:-60%;right:-30%;width:80%;height:160%;background:radial-gradient(ellipse,rgba(124,58,237,.08) 0%,transparent 70%);pointer-events:none}
-.orb1{position:absolute;top:-40px;left:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.12),transparent 70%);pointer-events:none}
-.orb2{position:absolute;bottom:-60px;right:-60px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.08),transparent 70%);pointer-events:none}
+.cert{width:800px;min-height:560px;background:linear-gradient(135deg,#0d1117 0%,#111827 50%,#0d1117 100%);border-radius:24px;position:relative;overflow:hidden;padding:48px 56px;color:#e8eaf0;border:1.5px solid rgba(37,99,235,.2);box-shadow:0 20px 80px rgba(0,0,0,.5)}
+.cert::before{content:'';position:absolute;inset:12px;border:1px solid rgba(37,99,235,.1);border-radius:16px;pointer-events:none}
+.cert::after{content:'';position:absolute;top:-60%;right:-30%;width:80%;height:160%;background:radial-gradient(ellipse,rgba(29,78,216,.08) 0%,transparent 70%);pointer-events:none}
+.orb1{position:absolute;top:-40px;left:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(29,78,216,.12),transparent 70%);pointer-events:none}
+.orb2{position:absolute;bottom:-60px;right:-60px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.08),transparent 70%);pointer-events:none}
 .top-row{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
 .logo{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:3px;color:#7c8599;text-transform:uppercase}
 .cert-id{font-family:'Space Mono',monospace;font-size:10px;color:#6a7688}
 .main{text-align:center;position:relative;z-index:1;margin:28px 0 24px}
 .cert-title{font-size:13px;font-weight:600;letter-spacing:4px;color:${lc1};text-transform:uppercase;margin-bottom:16px}
-.cert-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:800;line-height:1.2;margin-bottom:20px;background:linear-gradient(135deg,#fff,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cert-name{font-family:'Playfair Display',serif;font-size:38px;font-weight:800;line-height:1.2;margin-bottom:20px;background:linear-gradient(135deg,#fff,#60a5fa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .score-row{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:16px}
-.score-num{font-size:64px;font-weight:900;line-height:1;background:linear-gradient(135deg,${lc1},#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.score-num{font-size:64px;font-weight:900;line-height:1;background:linear-gradient(135deg,${lc1},#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .score-meta{text-align:left}
 .score-of{font-size:13px;color:#7c8599}
 .score-level{display:inline-block;padding:4px 16px;border-radius:99px;font-size:13px;font-weight:700;background:${lc1}18;color:${lc1};border:1px solid ${lc1}40;margin-top:4px}
@@ -1635,7 +1635,7 @@ function startTimer(){
   const level=params.get('level');
   if(score&&name){
     const banner=document.createElement('div');
-    banner.style.cssText='text-align:center;padding:12px 16px;margin-bottom:8px;border-radius:var(--radius-sm);background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);font-size:.85rem;color:var(--text)';
+    banner.style.cssText='text-align:center;padding:12px 16px;margin-bottom:8px;border-radius:var(--radius-sm);background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);font-size:.85rem;color:var(--text)';
     banner.innerHTML=`<strong>${esc(name)}</strong> scored <strong>${esc(score)}/180</strong>${level?' — '+esc(level):''}. Can you beat it?`;
     const landing=document.getElementById('screen-landing');
     landing.querySelector('.landing-wrap').prepend(banner);
