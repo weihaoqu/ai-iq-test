@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://weihaoqu.github.io/ai-iq-test/sitemap.xml
