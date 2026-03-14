@@ -31,7 +31,7 @@
   --bg:#06080f;--bg-elevated:#0d1117;--bg-card:rgba(15,20,35,.65);
   --surface:rgba(255,255,255,.04);--surface-hover:rgba(255,255,255,.07);
   --border:rgba(255,255,255,.08);--border-active:rgba(167,139,250,.5);
-  --text:#e8eaf0;--text-dim:#7c8599;--text-muted:#4a5568;
+  --text:#e8eaf0;--text-dim:#7c8599;--text-muted:#6a7688;
   --dim-foundations:#818cf8;--dim-problem:#f472b6;--dim-tool:#fbbf24;
   --dim-prompt:#34d399;--dim-critical:#fb7185;--dim-ethics:#c084fc;
   --dim-collab:#38bdf8;--dim-vibe:#fb923c;
@@ -1212,7 +1212,7 @@ function shareAsImage(){
   DIMS.forEach((d,i)=>{const a=startAngle+i*angleStep;ctx.fillStyle=dimColors[i];ctx.fillText(d.label.split(' ')[0],cx+Math.cos(a)*(maxR+18),cy+Math.sin(a)*(maxR+18));});
 
   // Footer
-  ctx.font='500 11px Outfit,sans-serif';ctx.fillStyle='#4a5568';ctx.textAlign='center';
+  ctx.font='500 11px Outfit,sans-serif';ctx.fillStyle='#6a7688';ctx.textAlign='center';
   ctx.fillText('weihaoqu.github.io/ai-iq-test',W/2,H-16);
 
   // Download

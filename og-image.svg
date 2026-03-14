@@ -36,7 +36,7 @@
     <text x="550" y="5" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#fb923c">Vibe Coding</text>
   </g>
   <!-- Stats -->
-  <g transform="translate(600,500)" text-anchor="middle" font-family="monospace" font-size="14" fill="#4a5568">
+  <g transform="translate(600,500)" text-anchor="middle" font-family="monospace" font-size="14" fill="#6a7688">
     <circle cx="-130" cy="0" r="3" fill="#a78bfa"/>
     <text x="-115" y="5">Free</text>
     <circle cx="-30" cy="0" r="3" fill="#22d3ee"/>
@@ -45,5 +45,5 @@
     <text x="125" y="5">Instant results</text>
   </g>
   <!-- Footer -->
-  <text x="600" y="580" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#4a5568">weihaoqu.github.io/ai-iq-test</text>
+  <text x="600" y="580" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" fill="#6a7688">weihaoqu.github.io/ai-iq-test</text>
 </svg>
