@@ -18,6 +18,7 @@
 <meta name="twitter:image" content="https://weihaoqu.github.io/ai-iq-test/og-image.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Quiz","name":"AI IQ Test","description":"45 real-world scenarios across 8 dimensions. Discover your AI mastery level in ~10 minutes.","url":"https://weihaoqu.github.io/ai-iq-test/","educationalLevel":"All levels","numberOfQuestions":45,"timeRequired":"PT10M","isAccessibleForFree":true,"inLanguage":"en"}</script>
+<link rel="preload" href="images/scenarios/f01.svg" as="image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -492,18 +493,18 @@ canvas#radarChart{max-width:340px;max-height:340px}
       <button class="btn btn-primary btn-full btn-lg" id="btn-start" onclick="startTest()">
         <span id="btn-start-text">Start Test</span>
       </button>
-      <div style="display:flex;gap:16px;width:100%;text-align:left;margin-top:4px">
-        <div style="flex:1;padding:12px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border)">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;width:100%;text-align:left;margin-top:4px">
+        <div style="flex:1;min-width:90px;padding:12px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border)">
           <div style="font-size:1.2rem;margin-bottom:4px">&#128161;</div>
           <div style="font-size:.75rem;font-weight:600;color:var(--text)">Read scenario</div>
           <div style="font-size:.7rem;color:var(--text-muted)">Real-world AI situations</div>
         </div>
-        <div style="flex:1;padding:12px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border)">
+        <div style="flex:1;min-width:90px;padding:12px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border)">
           <div style="font-size:1.2rem;margin-bottom:4px">&#127919;</div>
           <div style="font-size:.75rem;font-weight:600;color:var(--text)">Pick best action</div>
           <div style="font-size:.7rem;color:var(--text-muted)">4 choices per question</div>
         </div>
-        <div style="flex:1;padding:12px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border)">
+        <div style="flex:1;min-width:90px;padding:12px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border)">
           <div style="font-size:1.2rem;margin-bottom:4px">&#128202;</div>
           <div style="font-size:.75rem;font-weight:600;color:var(--text)">Get your profile</div>
           <div style="font-size:.7rem;color:var(--text-muted)">Radar chart + analysis</div>
@@ -707,6 +708,10 @@ const LEVELS = [
   {min:160,max:180, label:'AI Master',       lvl:4, cls:'iq-level-4'}
 ];
 
+// Precompute max scores per dimension (avoids repeated filter calls)
+const DIM_MAX={};
+DIMS.forEach(d=>{DIM_MAX[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
+
 // ─── State ──────────────────────────────────────────────────────────────
 let currentQ = 0;
 let answers = [];
@@ -716,6 +721,9 @@ let participantName = '';
 let quizStartTime = null;
 
 // ─── Shuffle ────────────────────────────────────────────────────────────
+// HTML-escape user input for safe innerHTML insertion
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
 function shuffle(arr){
   const a=[...arr];
   for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
@@ -725,8 +733,12 @@ function shuffle(arr){
 // ─── Screen ─────────────────────────────────────────────────────────────
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const el=document.getElementById(id);
+  el.classList.add('active');
   window.scrollTo({top:0,behavior:'instant'});
+  // Focus first focusable element for accessibility
+  const focusable=el.querySelector('button,input,select,[tabindex]');
+  if(focusable)setTimeout(()=>focusable.focus({preventScroll:true}),100);
 }
 
 function startTest(){
@@ -878,8 +890,7 @@ function buildResults(){
   DIMS.forEach(d=>{dimScores[d.key]=0;});
   QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
 
-  const dimMax={};
-  DIMS.forEach(d=>{dimMax[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
+  const dimMax=DIM_MAX;
   const dimsEl=document.getElementById('res-dims');
   dimsEl.innerHTML=DIMS.map((d,idx)=>{
     const score=dimScores[d.key];
@@ -1000,9 +1011,7 @@ function drawRadar(dimScores){
   });
 
   // Data polygon with glow
-  const dimMaxR={};
-  DIMS.forEach(d=>{dimMaxR[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
-  const values=DIMS.map(d=>dimScores[d.key]/dimMaxR[d.key]);
+  const values=DIMS.map(d=>dimScores[d.key]/DIM_MAX[d.key]);
 
   // Glow layer
   ctx.save();
@@ -1099,7 +1108,7 @@ function generateAnalysis(total,level,dimScores){
 
   const strengths=[],developing=[],weak=[];
   DIMS.forEach(d=>{
-    const mx=QUESTIONS.filter(q=>q.dim===d.key).length*4;
+    const mx=DIM_MAX[d.key];
     const pct=dimScores[d.key]/mx;
     if(pct>=0.75)strengths.push(d);
     else if(pct>=0.5)developing.push(d);
@@ -1131,9 +1140,9 @@ function generateAnalysis(total,level,dimScores){
 function shareAsImage(){
   const total=answers.reduce((s,a)=>s+a.score,0);
   const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const dimScores={},dimMax={};
-  DIMS.forEach(d=>{dimScores[d.key]=0;dimMax[d.key]=0;});
-  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);dimMax[q.dim]+=4;});
+  const dimScores={},dimMax=DIM_MAX;
+  DIMS.forEach(d=>{dimScores[d.key]=0;});
+  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
 
   const W=600,H=400;
   const c=document.createElement('canvas');c.width=W;c.height=H;
@@ -1318,9 +1327,9 @@ function showToast(msg){
 function buildReportHTML(){
   const total=answers.reduce((s,a)=>s+a.score,0);
   const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const dimScores={},dimMax={};
-  DIMS.forEach(d=>{dimScores[d.key]=0;dimMax[d.key]=0;});
-  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);dimMax[q.dim]+=4;});
+  const dimScores={},dimMax=DIM_MAX;
+  DIMS.forEach(d=>{dimScores[d.key]=0;});
+  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
   const analysis=generateAnalysis(total,level,dimScores);
   const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
 
@@ -1345,7 +1354,7 @@ function buildReportHTML(){
   const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#c4b5fd'};
   const lc=levelColors[level.lvl]||'#c4b5fd';
 
-  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Report - ${participantName}</title>
+  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Report - ${esc(participantName)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#06080f;color:#e8eaf0;min-height:100vh;padding:40px 20px}
 .report{max-width:700px;margin:0 auto}
@@ -1367,7 +1376,7 @@ div[style*="background:#1a1a2e"]{background:#e5e5e5!important}
 </style></head><body><div class="report">
 <div class="header">
 <div style="font-size:13px;font-weight:600;letter-spacing:2px;color:#7c8599;text-transform:uppercase;margin-bottom:12px">AI IQ Test Report</div>
-<div style="font-size:24px;font-weight:700;margin-bottom:8px">${participantName}</div>
+<div style="font-size:24px;font-weight:700;margin-bottom:8px">${esc(participantName)}</div>
 <div class="score-big">${total}</div>
 <div style="font-size:14px;color:#7c8599;margin-top:4px">out of 180</div>
 <div class="level-badge">${level.label}</div>
@@ -1396,9 +1405,9 @@ function buildCertificateHTML(){
   const total=answers.reduce((s,a)=>s+a.score,0);
   const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
   const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  const dimScores={},dimMax={};
-  DIMS.forEach(d=>{dimScores[d.key]=0;dimMax[d.key]=0;});
-  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);dimMax[q.dim]+=4;});
+  const dimScores={},dimMax=DIM_MAX;
+  DIMS.forEach(d=>{dimScores[d.key]=0;});
+  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
 
   const levelColors={1:['#fb7185','#f43f5e'],2:['#fbbf24','#f59e0b'],3:['#34d399','#10b981'],4:['#c4b5fd','#a78bfa']};
   const [lc1,lc2]=levelColors[level.lvl]||['#c4b5fd','#a78bfa'];
@@ -1408,7 +1417,7 @@ function buildCertificateHTML(){
     return`<div style="display:flex;align-items:center;gap:10px;padding:6px 0"><div style="width:10px;height:10px;border-radius:50%;background:${dimColors2[i]}"></div><div style="flex:1;font-size:13px;color:#c0c8dd">${d.label}</div><div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:600;color:${dimColors2[i]}">${dimScores[d.key]}/${dimMax[d.key]}</div></div>`;
   }).join('');
 
-  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Certificate - ${participantName}</title>
+  return`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Certificate - ${esc(participantName)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box}
 body{background:#06080f;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;font-family:'Outfit',sans-serif}
@@ -1443,7 +1452,7 @@ body{background:#06080f;display:flex;align-items:center;justify-content:center;m
 </div>
 <div class="main">
 <div class="cert-title">Certificate of AI Intelligence</div>
-<div class="cert-name">${participantName}</div>
+<div class="cert-name">${esc(participantName)}</div>
 <div class="score-row">
 <div class="score-num">${total}</div>
 <div class="score-meta"><div class="score-of">out of 180</div><div class="score-level">${level.label}</div></div>
@@ -1614,10 +1623,31 @@ function startTimer(){
   if(score&&name){
     const banner=document.createElement('div');
     banner.style.cssText='text-align:center;padding:12px 16px;margin-bottom:8px;border-radius:var(--radius-sm);background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2);font-size:.85rem;color:var(--text)';
-    banner.innerHTML=`<strong>${name}</strong> scored <strong>${score}/180</strong>${level?' — '+level:''}. Can you beat it?`;
+    banner.innerHTML=`<strong>${esc(name)}</strong> scored <strong>${esc(score)}/180</strong>${level?' — '+esc(level):''}. Can you beat it?`;
     const landing=document.getElementById('screen-landing');
     landing.querySelector('.landing-wrap').prepend(banner);
   }
+})();
+
+// Show previous result on landing page if available
+(function(){
+  try{
+    const keys=Object.keys(localStorage).filter(k=>k.startsWith('ai_iq_'));
+    if(!keys.length)return;
+    // Find most recent
+    let latest=null;
+    keys.forEach(k=>{
+      try{
+        const d=JSON.parse(localStorage.getItem(k));
+        if(!latest||d.timestamp>latest.timestamp)latest=d;
+      }catch(e){}
+    });
+    if(!latest||!latest.total_score)return;
+    const prev=document.createElement('div');
+    prev.style.cssText='text-align:center;padding:10px 16px;margin-top:8px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:.8rem;color:var(--text-dim)';
+    prev.innerHTML=`Previous result: <strong style="color:var(--primary-light)">${latest.total_score}/180</strong> (${latest.level})${latest.participant_name?' — '+latest.participant_name:''}`;
+    document.querySelector('#screen-landing .landing-stats').after(prev);
+  }catch(e){}
 })();
 
 console.log(`${QUESTIONS.length} questions loaded (inline)`);
