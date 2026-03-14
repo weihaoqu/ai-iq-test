@@ -46,8 +46,8 @@
     "img": "images/scenarios/f04.svg",
     "choices": [
       {"letter": "A", "text": "That's impressive — I should invest based on this AI.", "score": 1},
-      {"letter": "B", "text": "I wonder what time period, dataset, and benchmark it was tested against.", "score": 4},
-      {"letter": "C", "text": "It probably used historical data with backtesting, which often overfits to past patterns and doesn't guarantee future results in volatile markets.", "score": 3},
+      {"letter": "B", "text": "I wonder what time period, dataset, and benchmark it was tested against.", "score": 3},
+      {"letter": "C", "text": "Backtesting on historical data almost always overfits — the model learned past patterns, not future market behavior. 94% accuracy in-sample tells you nothing about real-world performance.", "score": 4},
       {"letter": "D", "text": "AI is getting too powerful if it can beat Wall Street.", "score": 2}
     ]
   },
@@ -61,7 +61,7 @@
       {"letter": "A", "text": "Agree — we should all learn to live without working.", "score": 1},
       {"letter": "B", "text": "Some tasks will be automated, but most jobs will evolve rather than vanish entirely.", "score": 3},
       {"letter": "C", "text": "Disagree completely — AI can't do anything a human can do.", "score": 2},
-      {"letter": "D", "text": "The evidence shows AI automates specific tasks; job transformation depends on role, sector, and timeline.", "score": 4}
+      {"letter": "D", "text": "Current AI excels at pattern-based tasks like text generation and data analysis, but struggles with physical dexterity, multi-step causal reasoning, and novel social judgment — so displacement risk varies sharply by role type.", "score": 4}
     ]
   },
   {
@@ -133,13 +133,13 @@
     "id": "t01",
     "dim": "toolSelection",
     "dimLabel": "Tool Selection",
-    "q": "You need a professional logo for your startup. What's the best approach?",
+    "q": "You used Midjourney to generate 20 logo variants and love one. You want to use it as your startup's official logo on all products and marketing. What's the critical concern?",
     "img": "images/scenarios/t01.svg",
     "choices": [
-      {"letter": "A", "text": "Use Midjourney or DALL-E to generate logos, then refine the best in Figma or with a designer.", "score": 4},
-      {"letter": "B", "text": "Ask ChatGPT to describe what your logo should look like.", "score": 1},
-      {"letter": "C", "text": "Use Canva's free logo maker.", "score": 2},
-      {"letter": "D", "text": "Use an AI image generator and pick the first result you like.", "score": 3}
+      {"letter": "A", "text": "AI images are always free to use commercially — that's the whole point of generating them.", "score": 1},
+      {"letter": "B", "text": "AI image generators output raster images, not scalable vector files — plus commercial rights depend on your subscription tier and the platform's terms of service.", "score": 4},
+      {"letter": "C", "text": "The main concern is that AI logos look generic — you should add your company name on top and it's fine.", "score": 2},
+      {"letter": "D", "text": "AI-generated logos are legally risky because the AI copies existing logos from its database, so you could get sued for trademark infringement.", "score": 3}
     ]
   },
   {
@@ -484,13 +484,13 @@
     "id": "v03",
     "dim": "vibeCoding",
     "dimLabel": "Vibe Coding & AI Creation",
-    "q": "You built a working app with AI assistance. How do you actually deploy it online?",
+    "q": "You vibe-coded a working web app that uses the OpenAI API. It works on your laptop. You deploy it to a public website. Within hours, you get a $200 bill from OpenAI. What went wrong?",
     "img": "images/scenarios/v03.svg",
     "choices": [
-      {"letter": "A", "text": "Ask AI to deploy it for you.", "score": 1},
-      {"letter": "B", "text": "Email the code files to a web hosting company.", "score": 2},
-      {"letter": "C", "text": "Push the code to GitHub and connect the repo to Vercel, Netlify, or Railway for automatic deployment.", "score": 4},
-      {"letter": "D", "text": "Upload the files via FTP to a shared hosting provider.", "score": 3}
+      {"letter": "A", "text": "OpenAI charges more for production websites than for development testing.", "score": 1},
+      {"letter": "B", "text": "Your API key was in the client-side JavaScript code, so anyone who visited your site could see it and make unlimited API calls at your expense.", "score": 4},
+      {"letter": "C", "text": "The hosting provider added extra charges for API traffic going through their servers.", "score": 2},
+      {"letter": "D", "text": "AI APIs are expensive — you should have used a free alternative like Hugging Face.", "score": 3}
     ]
   },
   {
@@ -536,13 +536,13 @@
     "id": "x02",
     "dim": "criticalEvaluation",
     "dimLabel": "Critical Evaluation",
-    "q": "Two AI models both claim 95% accuracy on a task. Model A was tested on 10,000 diverse real-world examples. Model B was tested on 500 examples from a single source. Which is more trustworthy?",
+    "q": "A company claims their LLM scores 95% on a popular benchmark. You later discover that text from this benchmark appeared in the model's training data. Why is this a critical problem?",
     "img": "images/scenarios/x02.svg",
     "choices": [
-      {"letter": "A", "text": "Both are equally trustworthy — 95% is 95%.", "score": 1},
-      {"letter": "B", "text": "Model A, because more data points always means better results regardless of methodology.", "score": 2},
-      {"letter": "C", "text": "Model A — larger, diverse test sets reduce the risk of inflated accuracy from narrow or unrepresentative benchmarks.", "score": 4},
-      {"letter": "D", "text": "Model B might actually be more trustworthy because a focused test set with carefully controlled conditions, consistent labeling criteria, and domain-specific examples can provide more reliable measurements than a large but potentially noisy dataset.", "score": 3}
+      {"letter": "A", "text": "It's not a problem — more training data always improves the model, and benchmark text is high-quality data worth including.", "score": 1},
+      {"letter": "B", "text": "This is benchmark contamination: the model likely memorized specific input-output pairs from the test set. When LLMs encounter familiar sequences, they reproduce them from memory rather than reasoning — so 95% measures recall, not capability.", "score": 4},
+      {"letter": "C", "text": "The bigger issue is that benchmarks are too easy — the company should create harder tests to challenge the model.", "score": 2},
+      {"letter": "D", "text": "It's concerning but not critical — a well-designed model will generalize from any training data, so exposure to benchmark examples shouldn't significantly inflate scores if the architecture is sound.", "score": 3}
     ]
   },
   {
