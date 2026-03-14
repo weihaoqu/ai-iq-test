@@ -372,7 +372,7 @@
     "choices": [
       {"letter": "A", "text": "Chatbot A — the specific dates, names, and vote counts indicate deeper knowledge. Anyone can give a vague overview, but specific facts require real information.", "score": 1},
       {"letter": "B", "text": "Chatbot A is more trustworthy because specific, verifiable claims are inherently more accountable — the AI is putting forward concrete facts that can be checked, which shows confidence in their accuracy.", "score": 2},
-      {"letter": "C", "text": "Neither is inherently more trustworthy. LLMs generate convincing specifics — exact dates, official names, vote tallies, direct quotes — as easily as vague summaries. Specific-sounding fabrications are MORE dangerous because they look authoritative. Verify both against primary sources.", "score": 4},
+      {"letter": "C", "text": "Neither — LLMs hallucinate specific details (dates, names, quotes) with the same confidence as real facts because they generate text token-by-token based on plausibility, not by retrieving verified data. Specific fabrications are MORE dangerous because they resist casual detection.", "score": 4},
       {"letter": "D", "text": "Chatbot B is actually more trustworthy — an AI that gives vaguer answers may be showing appropriate uncertainty, while Chatbot A's excessive specificity is a red flag for overconfident confabulation.", "score": 3}
     ]
   },
