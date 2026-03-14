@@ -1,0 +1,16 @@
+{
+  "name": "AI IQ Test",
+  "short_name": "AI IQ",
+  "description": "45 real-world scenarios. 8 dimensions. Discover your AI mastery level.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06080f",
+  "theme_color": "#06080f",
+  "icons": [
+    {
+      "src": "og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png"
+    }
+  ]
+}
