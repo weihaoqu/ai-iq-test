@@ -30,7 +30,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#2563eb;--primary-light:#60a5fa;--primary-dark:#1d4ed8;
-  --accent:#f59e0b;--accent-glow:rgba(245,158,11,.3);
+  --accent:#f59e0b;--accent-light:#fbbf24;--accent-glow:rgba(245,158,11,.3);
   --cyan:#22d3ee;--cyan-glow:rgba(34,211,238,.25);
   --bg:#06080f;--bg-elevated:#0c1222;--bg-card:rgba(12,18,40,.65);
   --surface:rgba(255,255,255,.04);--surface-hover:rgba(255,255,255,.07);
@@ -85,7 +85,7 @@ body::after{
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(167,139,250,.15)}50%{box-shadow:0 0 40px rgba(167,139,250,.3)}}
+@keyframes glowPulse{0%{box-shadow:0 0 20px rgba(37,99,235,.15)}33%{box-shadow:0 0 35px rgba(37,99,235,.3)}66%{box-shadow:0 0 35px rgba(245,158,11,.2)}100%{box-shadow:0 0 20px rgba(37,99,235,.15)}}
 @keyframes slideInStagger{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
 @keyframes fadeInQuestion{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .q-animate{animation:fadeInQuestion .3s ease-out}
@@ -271,12 +271,12 @@ p{line-height:1.6}
   animation:orbFloat 8s ease-in-out infinite;
 }
 .orb-1{width:120px;height:120px;background:var(--primary-dark);top:20px;left:10px;animation-delay:0s}
-.orb-2{width:90px;height:90px;background:var(--cyan);top:50px;right:10px;animation-delay:-3s}
-.orb-3{width:70px;height:70px;background:var(--accent);bottom:20px;left:50px;animation-delay:-5s}
+.orb-2{width:100px;height:100px;background:var(--accent);top:50px;right:10px;animation-delay:-3s;opacity:.7}
+.orb-3{width:80px;height:80px;background:var(--cyan);bottom:20px;left:50px;animation-delay:-5s}
 
 .iq-badge-big{
   display:inline-flex;align-items:center;gap:10px;padding:10px 28px;border-radius:99px;
-  background:rgba(124,58,237,.15);border:1.5px solid rgba(167,139,250,.3);
+  background:rgba(29,78,216,.15);border:1.5px solid rgba(96,165,250,.3);
   color:var(--primary-light);font-size:1rem;font-weight:800;letter-spacing:2px;
   font-family:'Space Mono',monospace;
   animation:glowPulse 3s ease-in-out infinite;
@@ -310,13 +310,13 @@ p{line-height:1.6}
 .iq-score-wrap{text-align:center;padding:32px 0 16px;position:relative}
 .iq-score-wrap::before{
   content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle,rgba(124,58,237,.2),transparent 70%);
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,158,11,.15),rgba(29,78,216,.1) 50%,transparent 70%);
   pointer-events:none;
 }
 .iq-score-num{
   font-size:5rem;font-weight:900;line-height:1;
-  background:linear-gradient(135deg,var(--primary-light),var(--cyan),var(--accent));
+  background:linear-gradient(135deg,var(--accent),var(--accent-light),var(--primary-light),var(--cyan));
   background-size:200% 200%;animation:popIn .6s ease, gradientShift 4s ease infinite;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   position:relative;
@@ -331,7 +331,7 @@ p{line-height:1.6}
 .iq-level-1{background:rgba(251,113,133,.12);color:#fb7185;border-color:rgba(251,113,133,.25)}
 .iq-level-2{background:rgba(251,191,36,.12);color:#fbbf24;border-color:rgba(251,191,36,.25)}
 .iq-level-3{background:rgba(52,211,153,.12);color:#34d399;border-color:rgba(52,211,153,.25)}
-.iq-level-4{background:rgba(167,139,250,.12);color:var(--primary-light);border-color:rgba(167,139,250,.25)}
+.iq-level-4{background:rgba(96,165,250,.12);color:var(--primary-light);border-color:rgba(96,165,250,.25)}
 
 /* ── Score Gauge ── */
 .score-gauge{margin:8px 0 4px;padding:0 12px}
@@ -485,14 +485,14 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <p class="subtitle" style="margin-top:10px">45 real-world scenarios. ~10 minutes.<br>Discover your AI mastery level.</p>
       </div>
       <div class="dim-pills">
-        <span class="dim-pill" style="background:rgba(129,140,248,.15);color:var(--dim-foundations);border-color:rgba(129,140,248,.25)">Foundations</span>
+        <span class="dim-pill" style="background:rgba(96,165,250,.15);color:#60a5fa;border-color:rgba(96,165,250,.25)">Foundations</span>
         <span class="dim-pill" style="background:rgba(244,114,182,.15);color:var(--dim-problem);border-color:rgba(244,114,182,.25)">Problem Framing</span>
-        <span class="dim-pill" style="background:rgba(251,191,36,.15);color:var(--dim-tool);border-color:rgba(251,191,36,.25)">Tool Selection</span>
+        <span class="dim-pill" style="background:rgba(245,158,11,.15);color:#f59e0b;border-color:rgba(245,158,11,.25)">Tool Selection</span>
         <span class="dim-pill" style="background:rgba(52,211,153,.15);color:var(--dim-prompt);border-color:rgba(52,211,153,.25)">Prompting</span>
-        <span class="dim-pill" style="background:rgba(251,113,133,.15);color:var(--dim-critical);border-color:rgba(251,113,133,.25)">Critical Eval</span>
-        <span class="dim-pill" style="background:rgba(192,132,252,.15);color:var(--dim-ethics);border-color:rgba(192,132,252,.25)">Ethics & Safety</span>
+        <span class="dim-pill" style="background:rgba(251,146,60,.15);color:#fb923c;border-color:rgba(251,146,60,.25)">Critical Eval</span>
+        <span class="dim-pill" style="background:rgba(167,139,250,.15);color:#a78bfa;border-color:rgba(167,139,250,.25)">Ethics & Safety</span>
         <span class="dim-pill" style="background:rgba(56,189,248,.15);color:var(--dim-collab);border-color:rgba(56,189,248,.25)">Collaboration</span>
-        <span class="dim-pill" style="background:rgba(251,146,60,.15);color:var(--dim-vibe);border-color:rgba(251,146,60,.25)">Vibe Coding</span>
+        <span class="dim-pill" style="background:rgba(249,115,22,.15);color:#f97316;border-color:rgba(249,115,22,.25)">Vibe Coding</span>
       </div>
       <button class="btn btn-primary btn-full btn-lg" id="btn-start" onclick="startTest()">
         <span id="btn-start-text">Start Test</span>
