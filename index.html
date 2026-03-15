@@ -712,12 +712,36 @@ const LEVELS = [
   {min:160,max:180, label:'AI Master',       lvl:4, cls:'iq-level-4'}
 ];
 
+// ─── Test Mode ──────────────────────────────────────────────────────────
+let testMode='full'; // 'quick' or 'full'
+
+const QUICK_LEVELS=[
+  {min:25,max:66,label:'AI Novice',lvl:1,cls:'iq-level-1'},
+  {min:67,max:77,label:'AI Apprentice',lvl:2,cls:'iq-level-2'},
+  {min:78,max:88,label:'AI Practitioner',lvl:3,cls:'iq-level-3'},
+  {min:89,max:100,label:'AI Master',lvl:4,cls:'iq-level-4'}
+];
+
+function selectQuickQuestions(){
+  const picked=[];
+  DIMS.forEach(d=>{
+    const pool=QUESTIONS.filter(q=>q.dim===d.key);
+    picked.push(pool[Math.floor(Math.random()*pool.length)]);
+  });
+  for(let i=picked.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [picked[i],picked[j]]=[picked[j],picked[i]];
+  }
+  return picked;
+}
+
 // Precompute max scores per dimension (avoids repeated filter calls)
 const DIM_MAX={};
 DIMS.forEach(d=>{DIM_MAX[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
 
 // ─── State ──────────────────────────────────────────────────────────────
 let currentQ = 0;
+let activeQuestions = QUESTIONS;
 let answers = [];
 let shuffledChoices = [];
 let participantId = '';
