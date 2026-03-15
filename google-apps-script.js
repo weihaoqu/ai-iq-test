@@ -44,7 +44,7 @@ function doPost(e) {
       sheet = ss.insertSheet('Responses');
       var headers = [
         'participant_id', 'participant_name', 'timestamp', 'date', 'ai_experience',
-        'total_score', 'level', 'duration_seconds',
+        'total_score', 'level', 'duration_seconds', 'test_mode', 'percentage',
         'dim_foundations', 'dim_problemFraming', 'dim_toolSelection',
         'dim_promptEngineering', 'dim_criticalEvaluation', 'dim_ethicsSafety',
         'dim_humanCollab', 'dim_vibeCoding'
@@ -76,7 +76,9 @@ function doPost(e) {
       data.ai_experience || '',
       data.total_score || 0,
       data.level || '',
-      data.duration_seconds || 0
+      data.duration_seconds || 0,
+      data.test_mode || 'full',
+      data.percentage || 0
     ];
 
     // Dimension scores
