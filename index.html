@@ -677,6 +677,11 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <button class="btn btn-share" style="flex:1;min-width:90px" onclick="shareResults()">&#128279; Copy</button>
       </div>
       <button class="btn btn-outline btn-full" style="margin-top:6px;opacity:.7" onclick="retakeQuiz()">&#8635; Retake Quiz</button>
+      <div class="card" id="upsell-card" style="display:none;text-align:center;border-color:rgba(37,99,235,.2)">
+        <h3 style="color:var(--primary-light);margin-bottom:8px">Want deeper insights?</h3>
+        <p class="subtitle">Take the full 45-question assessment for detailed analysis, downloadable report, and certificate.</p>
+        <button class="btn btn-primary btn-full" style="margin-top:14px" onclick="startTest('full')">Take Full Assessment</button>
+      </div>
     </div>
 
     <!-- Review -->
@@ -935,7 +940,8 @@ function goNext(){
     }
     buildResults();showScreen('screen-results');
     const finalScore=answers.reduce((s,a)=>s+a.score,0);
-    if(finalScore>=120)launchConfetti();
+    const finalPct=Math.round((finalScore/(activeQuestions.length*4))*100);
+    if(testMode==='quick'?finalPct>=67:finalScore>=120)launchConfetti();
     else{
       // Subtle glow pulse on score wrapper for lower scores — still rewarding for completing
       const scoreWrap=document.querySelector('.iq-score-wrap');
@@ -948,11 +954,25 @@ function goNext(){
 function buildResults(){
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
   const total=answers.reduce((s,a)=>s+a.score,0);
-  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  const maxScore=activeQuestions.length*4;
+  const pct=Math.round((total/maxScore)*100);
+  let level;
+  if(testMode==='quick'){
+    level=QUICK_LEVELS.find(l=>pct>=l.min&&pct<=l.max)||QUICK_LEVELS[QUICK_LEVELS.length-1];
+  } else {
+    level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  }
 
   const iqEl=document.getElementById('res-iq');
-  animateCount(iqEl,total,1400);
-  document.getElementById('res-pct').textContent=`(${Math.round((total/180)*100)}%)`;
+  if(testMode==='quick'){
+    animateCount(iqEl,pct,1400);
+    iqEl.dataset.suffix='%';
+    document.getElementById('res-pct').textContent='';
+  } else {
+    animateCount(iqEl,total,1400);
+    iqEl.dataset.suffix='';
+    document.getElementById('res-pct').textContent=`(${Math.round((total/180)*100)}%)`;
+  }
 
   const lvlEl=document.getElementById('res-level');
   lvlEl.textContent=level.label;
@@ -967,8 +987,13 @@ function buildResults(){
   document.getElementById('res-level-desc').textContent=levelDescs[level.lvl]||'';
 
   // Animate gauge marker
-  const gaugePct=((total-45)/(180-45))*100;
-  setTimeout(()=>{document.getElementById('gauge-marker').style.left=`calc(${gaugePct}% - 2px)`;},300);
+  if(testMode==='quick'){
+    document.querySelector('.score-gauge').style.display='none';
+  } else {
+    document.querySelector('.score-gauge').style.display='';
+    const gaugePct=((total-45)/(180-45))*100;
+    setTimeout(()=>{document.getElementById('gauge-marker').style.left=`calc(${gaugePct}% - 2px)`;},300);
+  }
 
   // Show duration
   if(quizStartTime){
@@ -980,9 +1005,9 @@ function buildResults(){
 
   const dimScores={};
   DIMS.forEach(d=>{dimScores[d.key]=0;});
-  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
+  activeQuestions.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
 
-  const dimMax=DIM_MAX;
+  const dimMax=testMode==='quick'?Object.fromEntries(DIMS.map(d=>[d.key,4])):DIM_MAX;
   const dimsEl=document.getElementById('res-dims');
   dimsEl.innerHTML=DIMS.map((d,idx)=>{
     const score=dimScores[d.key];
@@ -1010,13 +1035,13 @@ function buildResults(){
   const analysis=generateAnalysis(total,level,dimScores);
   document.getElementById('res-analysis').innerHTML=analysis.html;
 
-  document.getElementById('share-iq').textContent=total;
+  document.getElementById('share-iq').textContent=testMode==='quick'?pct+'%':total;
   document.getElementById('share-level').textContent=level.label;
   const shareDims=document.getElementById('share-dims');
   shareDims.innerHTML=DIMS.map(d=>`<span class="share-dim">${d.label}: ${dimScores[d.key]}/${dimMax[d.key]}</span>`).join('');
 
   const revEl=document.getElementById('review-items');
-  revEl.innerHTML=QUESTIONS.map((q,i)=>{
+  revEl.innerHTML=activeQuestions.map((q,i)=>{
     const ans=answers[i];
     const best=q.choices.find(c=>c.score===4);
     const yours=q.choices.find(c=>c.letter===ans.origLetter);
@@ -1035,6 +1060,17 @@ function buildResults(){
   filtersEl.innerHTML=`<button class="dim-filter active" data-dim="all" onclick="filterReview('all')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:var(--primary);color:#fff;cursor:pointer;font-family:'Outfit',sans-serif">All</button>`+
     DIMS.map((d,i)=>`<button class="dim-filter" data-dim="${d.key}" onclick="filterReview('${d.key}')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid ${dimColors2[i]}40;background:transparent;color:var(--text-dim);cursor:pointer;font-family:'Outfit',sans-serif">${d.label.split(' ')[0]}</button>`).join('');
 
+  document.getElementById('review-toggle').innerHTML=`<span class="arrow">&#9654;</span> Review All ${activeQuestions.length} Answers`;
+
+  // Mode-specific visibility
+  const isQuick=testMode==='quick';
+  document.getElementById('res-analysis').style.display=isQuick?'none':'';
+  document.getElementById('upsell-card').style.display=isQuick?'block':'none';
+  // Hide report/cert buttons in quick mode
+  document.querySelectorAll('[onclick*="downloadReport"],[onclick*="downloadCertificate"],[onclick*="downloadReportPDF"],[onclick*="downloadCertificatePDF"]').forEach(btn=>{
+    btn.closest('div').style.display=isQuick?'none':'';
+  });
+
   submitData(total,level,dimScores,analysis.plain);
 }
 
@@ -1043,7 +1079,7 @@ function animateCount(el,target,duration){
   function tick(now){
     const t=Math.min((now-start)/duration,1);
     const ease=1-Math.pow(1-t,3);
-    el.textContent=Math.round(ease*target);
+    el.textContent=Math.round(ease*target)+(el.dataset.suffix||'');
     if(t<1)requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
