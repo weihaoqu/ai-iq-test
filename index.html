@@ -1267,10 +1267,15 @@ function generateAnalysis(total,level,dimScores){
 // ─── Share as Image ─────────────────────────────────────────────────────
 function shareAsImage(){
   const total=answers.reduce((s,a)=>s+a.score,0);
-  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const dimScores={},dimMax=DIM_MAX;
+  let level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
+  const dimScores={};
   DIMS.forEach(d=>{dimScores[d.key]=0;});
-  QUESTIONS.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
+  activeQuestions.forEach((q,i)=>{dimScores[q.dim]+=(answers[i]?.score||0);});
+  const maxScore=activeQuestions.length*4;
+  const pct=Math.round((total/maxScore)*100);
+  if(testMode==='quick'){
+    level=QUICK_LEVELS.find(l=>pct>=l.min&&pct<=l.max)||QUICK_LEVELS[QUICK_LEVELS.length-1];
+  }
 
   const W=600,H=400;
   const c=document.createElement('canvas');c.width=W;c.height=H;
@@ -1303,7 +1308,7 @@ function shareAsImage(){
   const scoreGrad=ctx.createLinearGradient(W/2-60,80,W/2+60,160);
   scoreGrad.addColorStop(0,'#f59e0b');scoreGrad.addColorStop(0.5,'#fbbf24');scoreGrad.addColorStop(1,'#60a5fa');
   ctx.fillStyle=scoreGrad;
-  ctx.fillText(String(total),W/2,150);
+  ctx.fillText(testMode==='quick'?pct+'%':String(total),W/2,150);
 
   // Level badge
   const levelColors={1:'#fb7185',2:'#fbbf24',3:'#34d399',4:'#60a5fa'};
@@ -1325,7 +1330,8 @@ function shareAsImage(){
   });
 
   // Data
-  const values=DIMS.map(d=>dimScores[d.key]/dimMax[d.key]);
+  const dimMax=testMode==='quick'?Object.fromEntries(DIMS.map(d=>[d.key,4])):DIM_MAX;
+  const values=DIMS.map(d=>dimScores[d.key]/(dimMax[d.key]||1));
   ctx.beginPath();
   values.forEach((v,i)=>{const a=startAngle+i*angleStep;const x=cx+Math.cos(a)*maxR*v;const y=cy+Math.sin(a)*maxR*v;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
   ctx.closePath();
@@ -1374,17 +1380,19 @@ function submitData(total,level,dimScores,analysis){
     ai_experience:bg,
     total_score:total,
     level:level.label,
-    duration_seconds:quizStartTime?Math.round((Date.now()-quizStartTime)/1000):0
+    duration_seconds:quizStartTime?Math.round((Date.now()-quizStartTime)/1000):0,
+    test_mode:testMode,
+    percentage:Math.round((total/(activeQuestions.length*4))*100)
   };
   DIMS.forEach(d=>{payload['dim_'+d.key]=dimScores[d.key];});
-  QUESTIONS.forEach((q,i)=>{
-    payload[q.id+'_score']=answers[i].score;
-    payload[q.id+'_choice']=answers[i].origLetter.toLowerCase();
+  activeQuestions.forEach((q,i)=>{
+    payload[q.id+'_score']=answers[i]?.score||0;
+    payload[q.id+'_choice']=answers[i]?.origLetter||'';
   });
   payload.analysis=analysis;
 
   // Always backup locally first
-  const backupKey=`ai_iq_${participantId}`;
+  const backupKey=`ai_iq_${testMode}_${participantId}`;
   try{localStorage.setItem(backupKey,JSON.stringify(payload));}catch(e){}
 
   const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwSnBFnM8Q29m7hoRbpHmhYo85_ZXkTR1qcp1n7Q_kXOLBzJClWw0qgHAyrrK017TVJPQ/exec';
@@ -1632,9 +1640,21 @@ function downloadCertificatePDF(){
 // ─── Share via Email ────────────────────────────────────────────────────
 function getShareUrl(){
   const total=answers.reduce((s,a)=>s+a.score,0);
-  const level=LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1];
-  const baseUrl=location.href.split('?')[0].split('#')[0];
-  return{total,level,url:`${baseUrl}?score=${total}&level=${encodeURIComponent(level.label)}&name=${encodeURIComponent(participantName)}`};
+  const maxScore=activeQuestions.length*4;
+  const pct=Math.round((total/maxScore)*100);
+  const level=testMode==='quick'?
+    (QUICK_LEVELS.find(l=>pct>=l.min&&pct<=l.max)||QUICK_LEVELS[QUICK_LEVELS.length-1]):
+    (LEVELS.find(l=>total>=l.min&&total<=l.max)||LEVELS[LEVELS.length-1]);
+  const url=new URL(window.location.href.split('?')[0]);
+  url.searchParams.set('mode',testMode);
+  if(testMode==='quick'){
+    url.searchParams.set('score',pct+'%');
+  } else {
+    url.searchParams.set('score',total+'/180');
+  }
+  url.searchParams.set('level',level.label);
+  url.searchParams.set('name',participantName);
+  return{total,pct,level,url:url.toString()};
 }
 
 function shareViaEmail(){
@@ -1751,30 +1771,40 @@ function startTimer(){
   if(score&&name){
     const banner=document.createElement('div');
     banner.style.cssText='text-align:center;padding:12px 16px;margin-bottom:8px;border-radius:var(--radius-sm);background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.2);font-size:.85rem;color:var(--text)';
-    banner.innerHTML=`<strong>${esc(name)}</strong> scored <strong>${esc(score)}/180</strong>${level?' — '+esc(level):''}. Can you beat it?`;
+    banner.innerHTML=`<strong>${esc(name)}</strong> scored <strong>${esc(score)}</strong>${level?' — '+esc(level):''}. Can you beat it?`;
     const landing=document.getElementById('screen-landing');
     landing.querySelector('.landing-wrap').prepend(banner);
   }
 })();
 
-// Show previous result on landing page if available
+// Show previous results per mode
 (function(){
   try{
-    const keys=Object.keys(localStorage).filter(k=>k.startsWith('ai_iq_'));
-    if(!keys.length)return;
-    // Find most recent
-    let latest=null;
-    keys.forEach(k=>{
-      try{
-        const d=JSON.parse(localStorage.getItem(k));
-        if(!latest||d.timestamp>latest.timestamp)latest=d;
-      }catch(e){}
+    ['quick','full'].forEach(mode=>{
+      const prefix='ai_iq_'+mode+'_';
+      const keys=Object.keys(localStorage).filter(k=>k.startsWith(prefix));
+      if(!keys.length){
+        // Check legacy keys (no mode prefix) for 'full' mode
+        if(mode==='full'){
+          const legacyKeys=Object.keys(localStorage).filter(k=>k.startsWith('ai_iq_')&&!k.startsWith('ai_iq_quick_')&&!k.startsWith('ai_iq_full_'));
+          if(legacyKeys.length) keys.push(...legacyKeys);
+        }
+        if(!keys.length) return;
+      }
+      let latest=null;
+      keys.forEach(k=>{
+        try{
+          const d=JSON.parse(localStorage.getItem(k));
+          if(!latest||d.timestamp>latest.timestamp) latest=d;
+        }catch(e){}
+      });
+      if(!latest) return;
+      const scoreText=mode==='quick'?(latest.percentage||0)+'%':`${latest.total_score}/180`;
+      const div=document.createElement('div');
+      div.style.cssText='margin-top:8px;padding:8px 14px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:.75rem;color:var(--text-dim);text-align:center';
+      div.innerHTML=`Previous ${mode} result: <strong style="color:var(--text)">${scoreText}</strong> (${latest.level}) — ${latest.participant_name||'Anonymous'}`;
+      document.querySelector('.landing-stats').after(div);
     });
-    if(!latest||!latest.total_score)return;
-    const prev=document.createElement('div');
-    prev.style.cssText='text-align:center;padding:10px 16px;margin-top:8px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:.8rem;color:var(--text-dim)';
-    prev.innerHTML=`Previous result: <strong style="color:var(--primary-light)">${latest.total_score}/180</strong> (${latest.level})${latest.participant_name?' — '+latest.participant_name:''}`;
-    document.querySelector('#screen-landing .landing-stats').after(prev);
   }catch(e){}
 })();
 
