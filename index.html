@@ -823,9 +823,9 @@ function showScreen(id){
   if(focusable)setTimeout(()=>focusable.focus({preventScroll:true}),100);
 }
 
-function startTest(){
+function startTest(mode){
+  testMode=mode||'full';
   showScreen('screen-welcome');
-  // Preload first 3 question images while user fills in their info
   for(let i=0;i<Math.min(3,QUESTIONS.length);i++){const img=new Image();img.src=QUESTIONS[i].img;}
 }
 
@@ -835,19 +835,20 @@ function beginQuiz(){
   participantName=document.getElementById('inp-name').value.trim()||'Anonymous';
   participantId='AIQ'+Date.now();
   quizStartTime=Date.now();
+  activeQuestions=testMode==='quick'?selectQuickQuestions():QUESTIONS;
   startTimer();
-  shuffledChoices=QUESTIONS.map(q=>shuffle(q.choices));
+  shuffledChoices=activeQuestions.map(q=>shuffle(q.choices));
   currentQ=0;
-  answers=new Array(QUESTIONS.length).fill(null);
+  answers=new Array(activeQuestions.length).fill(null);
   renderQuestion();
   showScreen('screen-question');
 }
 
 // ─── Question ───────────────────────────────────────────────────────────
 function renderQuestion(){
-  const q=QUESTIONS[currentQ];
+  const q=activeQuestions[currentQ];
   const sc=shuffledChoices[currentQ];
-  const total=QUESTIONS.length;
+  const total=activeQuestions.length;
   const dim=DIMS.find(d=>d.key===q.dim);
 
   const num=String(currentQ+1).padStart(2,'0');
@@ -882,7 +883,7 @@ function renderQuestion(){
   img.alt=`${dim.label} scenario illustration`;
 
   // Preload next question's image
-  if(currentQ<QUESTIONS.length-1){const nx=new Image();nx.src=QUESTIONS[currentQ+1].img;}
+  if(currentQ<activeQuestions.length-1){const nx=new Image();nx.src=activeQuestions[currentQ+1].img;}
 
   document.getElementById('q-text').textContent=q.q;
   document.getElementById('q-text').classList.remove('q-animate');
@@ -922,7 +923,7 @@ function goBack(){
 
 function goNext(){
   if(!answers[currentQ])return;
-  if(currentQ<QUESTIONS.length-1){currentQ++;renderQuestion();}
+  if(currentQ<activeQuestions.length-1){currentQ++;renderQuestion();}
   else{
     // Check for unanswered questions
     const unanswered=answers.findIndex(a=>a===null);
