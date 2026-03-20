@@ -13,12 +13,12 @@
       },
       {
         "letter": "B",
-        "text": "The model uses a temperature setting that introduces randomness into output generation.",
+        "text": "A temperature setting introduces randomness into output generation.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "It's a bug — AI should always give the same answer.",
+        "text": "It's a bug — a deterministic system should always give the same answer to the same input.",
         "score": 1
       },
       {
@@ -42,12 +42,12 @@
       },
       {
         "letter": "B",
-        "text": "I'd want to know the full evaluation methodology — what time period it was tested on, which market segments, whether it was validated on a held-out dataset or just in-sample, and what benchmark strategy it's compared against.",
+        "text": "I'd want to know the evaluation methodology — time period, market segments, held-out validation, and benchmark comparison.",
         "score": 3
       },
       {
         "letter": "C",
-        "text": "Backtesting on historical data almost always overfits. 94% in-sample accuracy tells you nothing about real-world performance.",
+        "text": "Backtesting almost always overfits. 94% in-sample accuracy tells you nothing about real-world performance.",
         "score": 4
       },
       {
@@ -71,7 +71,7 @@
       },
       {
         "letter": "B",
-        "text": "Earlier messages fell out of the context window, so the model is generating new responses that contradict advice it can no longer see.",
+        "text": "Earlier messages left the context window, so it contradicts advice it can no longer see.",
         "score": 4
       },
       {
@@ -81,7 +81,7 @@
       },
       {
         "letter": "D",
-        "text": "AI models periodically reset their reasoning mid-conversation to explore alternative approaches and give you a broader range of perspectives.",
+        "text": "AI models periodically reset their reasoning mid-conversation to explore alternative approaches and give you broader perspectives on the problem.",
         "score": 3
       }
     ]
@@ -95,22 +95,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Build an AI agent that reads every email, drafts replies, and sends them automatically so staff can focus on other work.",
+        "text": "Build an AI agent that reads every email, drafts replies, and sends them automatically.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Tell your manager AI isn't reliable enough for email and suggest hiring another part-time assistant instead.",
+        "text": "Tell your manager AI isn't reliable enough for email and suggest hiring another assistant.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "Sort emails by category using AI, auto-draft replies for routine questions, but flag complaints and financial questions for human review before sending.",
+        "text": "Use AI to sort emails by category and auto-draft routine replies, but flag complaints and financial questions for human review.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "Set up AI to handle only the most common question type first, run it for two weeks with full logging and daily accuracy reviews, gather staff feedback, iterate on the prompt templates, then gradually expand to additional categories once metrics stabilize.",
+        "text": "Start with only the most common question type, run it for two weeks with logging and accuracy reviews, then expand gradually once metrics stabilize.",
         "score": 3
       }
     ]
@@ -124,22 +124,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "AI can't read code — it only works well with natural language descriptions.",
+        "text": "AI can't read code — it only works well with natural language.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "The model's attention degrades over long inputs — it may miss details or silently ignore sections it can't fully process.",
+        "text": "The model's attention degrades over long inputs — it may miss details or silently ignore sections.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "It's fine — providing more context always produces better AI responses regardless of input length.",
+        "text": "It's fine — more context always produces better AI responses.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "The main risk is that AI will store all your proprietary code and potentially expose it to other users who ask similar coding questions in the future.",
+        "text": "AI will store your proprietary code and could expose it to other users asking similar questions.",
         "score": 3
       }
     ]
@@ -153,22 +153,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The AI's academic database is outdated and those papers were recently retracted from their journals.",
+        "text": "The AI's academic database is outdated and those papers were recently retracted.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "LLMs generate citations by pattern-matching author names, journal formats, and topics from training data — they don't look up real papers, so fabricated references look completely authentic.",
+        "text": "LLMs fabricate citations by pattern-matching — they don't look up real papers. Check every reference independently.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The AI copied citations from unreliable websites that had fake references listed.",
+        "text": "The AI copied citations from unreliable websites with fake references.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "You didn't explicitly request 'verified real citations only,' so the AI filled in gaps with plausible-sounding ones to complete your request — it's trying to be helpful by providing the number you asked for.",
+        "text": "You didn't request 'verified real citations only,' so the AI filled gaps with plausible-sounding ones to complete your request.",
         "score": 3
       }
     ]
@@ -182,22 +182,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "AI images are always free to use commercially — that's the whole point of generating them.",
+        "text": "AI images are always free to use commercially — that's the whole point.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "AI image generators output raster images, not scalable vector files — plus commercial rights depend on your subscription tier and the platform's terms of service.",
+        "text": "AI outputs raster images, not scalable vectors — and commercial rights depend on your subscription tier.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The main concern is that AI logos look generic — you should add your company name on top and it's fine.",
+        "text": "AI logos look generic — just add your company name on top and it's fine.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "AI-generated logos are legally risky because the AI copies existing logos from its database, so you could get sued for trademark infringement.",
+        "text": "AI-generated logos are legally risky because the AI copies existing logos, so you could get sued for trademark infringement.",
         "score": 3
       }
     ]
@@ -221,12 +221,12 @@
       },
       {
         "letter": "C",
-        "text": "Reject the AI's output and debug manually by reading Flask documentation from the beginning.",
+        "text": "Reject the AI's output and debug manually by reading Flask documentation.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "Apply the fix to see if the 404 goes away. If it works, run your test suite, check for regressions across all auth-related routes, verify the session handling didn't change, and then commit once everything passes.",
+        "text": "Apply the fix to see if the 404 goes away. If it works, run your test suite and check for regressions before committing.",
         "score": 3
       }
     ]
@@ -255,7 +255,7 @@
       },
       {
         "letter": "D",
-        "text": "Use a vibe-coding tool like Bolt or Lovable with AI prompting, then deploy on Netlify.",
+        "text": "Use a vibe-coding tool like Bolt or Lovable, then deploy on Netlify.",
         "score": 4
       }
     ]
@@ -269,22 +269,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Switching to a more powerful model — GPT-4 handles structured data much better than GPT-3.5.",
+        "text": "Switching to a more powerful model — GPT-4 handles structured data better.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Providing 3-4 few-shot examples showing exact input-to-output mappings and requesting JSON format. Examples anchor parsing patterns more reliably than verbal instructions.",
+        "text": "Providing 3-4 few-shot examples showing exact input-to-output mappings in JSON format.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Writing an exhaustive prompt explaining every field in detail: 'Street means the house number and street name only, never include unit numbers; City means the municipality or township, not the county or metro area; State must be the two-letter USPS abbreviation...' with thorough definitions, explicit rules, and edge case handling for each field.",
+        "text": "Write exhaustive definitions for every field with detailed rules and edge case handling for each one.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "Adding 'You are an expert data parser with 20 years of experience' — role-based prompting activates specialized knowledge for data extraction tasks.",
+        "text": "Adding 'You are an expert data parser' — role-based prompting activates specialized knowledge.",
         "score": 2
       }
     ]
@@ -298,22 +298,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Keep regenerating until you get the format you want — eventually it will match.",
+        "text": "Keep regenerating until you get the format you want.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Provide an explicit output template with a concrete example, and use lower temperature for consistency.",
+        "text": "Provide an explicit output template with a concrete example, and use lower temperature.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Tell the AI to 'please be consistent with formatting' — explicit instructions about consistency solve most formatting issues.",
+        "text": "Tell the AI to 'please be consistent with formatting.'",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "Always request JSON output — structured data formats like JSON are inherently more consistent and reliable across repeated runs than free-form text or markdown tables.",
+        "text": "Always request JSON — structured formats are inherently more consistent than free-form text or markdown tables.",
         "score": 3
       }
     ]
@@ -327,22 +327,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The AI found a genuine improvement your testing missed — edge cases are notoriously tricky and the AI's version is probably more robust even if both pass your tests.",
+        "text": "The AI found a genuine improvement your testing missed — the AI's version is probably more robust.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "LLMs exhibit 'sycophancy' — when you frame something as a bug ('my coworker found a bug'), the model treats that as an instruction to find and fix one, even fabricating a problem in correct code. Your framing predetermined the response.",
+        "text": "LLMs exhibit sycophancy — framing something as a bug instructs the model to find one, even in correct code.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The AI wasn't being sycophantic — it was just confused by ambiguous phrasing. Rephrase as a neutral question: 'Does this function handle empty strings correctly?' and it will give the accurate answer.",
+        "text": "The AI was confused by ambiguous phrasing. Ask neutrally: 'Does this function handle empty strings correctly?' for an accurate answer.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "The AI has more comprehensive testing capabilities than manual tests, so there may actually be an obscure edge case that your tests didn't cover.",
+        "text": "The AI has more comprehensive testing capabilities, so there may be an obscure edge case your tests didn't cover.",
         "score": 2
       }
     ]
@@ -356,22 +356,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Keep iterating — describe the error even more precisely with a step-by-step trace showing exactly where the logic goes wrong.",
+        "text": "Keep iterating — describe the error more precisely with a step-by-step trace showing where the logic fails.",
         "score": 3
       },
       {
         "letter": "B",
-        "text": "Start a fresh conversation. Paste only the requirements and the specific failing test case. Long conversations accumulate context noise — the model weights its own failed attempts as heavily as your corrections, reinforcing the error pattern.",
+        "text": "Start a fresh chat with just the requirements and failing test case. Long conversations reinforce error patterns.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Try a completely different AI model — some models are better at algorithms than others.",
+        "text": "Try a different AI model — some models are better at algorithms.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "The AI clearly can't solve this — write the algorithm manually instead.",
+        "text": "The AI clearly can't solve this — write the algorithm manually.",
         "score": 1
       }
     ]
@@ -385,22 +385,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Provide even more data and context so the AI has everything it needs to reach the correct answer this time.",
+        "text": "Provide even more data and context so the AI has everything it needs.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "Break the analysis into explicit steps and verify each intermediate result before proceeding. LLMs make fewer reasoning errors when forced to show their work.",
+        "text": "Break the analysis into steps and verify each intermediate result. LLMs make fewer errors when forced to show work.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "AI clearly can't handle this type of analysis — export the data to Excel or a statistics tool instead.",
+        "text": "AI can't handle this analysis — export the data to Excel or a statistics tool.",
         "score": 1
       },
       {
         "letter": "D",
-        "text": "Ask the AI to first list all its assumptions about the data, then perform the analysis — this way you can catch flawed assumptions upfront, though it won't help if the reasoning steps themselves are wrong.",
+        "text": "Ask the AI to list all its assumptions first, then perform the analysis — you can catch flawed assumptions upfront.",
         "score": 3
       }
     ]
@@ -414,22 +414,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The citations prove the content is well-researched — AI wouldn't fabricate full academic references complete with DOI numbers.",
+        "text": "The citations prove the content is well-researched — AI wouldn't fabricate full academic references with DOIs.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Asking for sources was a smart verification step. Now spot-check one or two of the citations to confirm they're real.",
+        "text": "Asking for sources was smart. Now spot-check one or two citations to confirm they're real.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "AI generates fake citations just as fluently as real text. Asking it for sources provided zero verification — check every claim against Google Scholar independently.",
+        "text": "AI fabricates citations as fluently as real text. Asking it for sources provides zero verification — check claims independently.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "DOIs are standardized unique identifiers managed by the International DOI Foundation, so they're extremely difficult to randomly fabricate — if the DOI format looks valid and structured, the papers almost certainly exist.",
+        "text": "DOIs are standardized unique identifiers, so they're hard to randomly fabricate — if the format looks valid, the papers likely exist.",
         "score": 3
       }
     ]
@@ -443,22 +443,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Three separate sessions all confirming the same answer is strong evidence — like polling three independent experts who all agree.",
+        "text": "Three sessions confirming the same answer is strong evidence — like polling three independent experts.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "The consistency strongly suggests accuracy. It's worth one external check to be thorough, but three matching responses is a very positive sign.",
+        "text": "The consistency suggests accuracy. One external check to be thorough, but three matches is a positive sign.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "Nothing — the same model with the same training data and weights will tend to produce similar outputs. Consistency from one model is not independent verification. Only external, non-AI sources can actually confirm the claim.",
+        "text": "Nothing. The same model with the same training data will produce similar outputs. Only external, non-AI sources can confirm the claim.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "If all three responses are nearly word-for-word identical, it means the AI is retrieving from a cached or memorized answer rather than generating, which is actually more likely to be a verified fact from its training data.",
+        "text": "Word-for-word identical responses mean the AI is retrieving a cached answer, which is more likely to be a verified fact from training data.",
         "score": 3
       }
     ]
@@ -477,17 +477,17 @@
       },
       {
         "letter": "B",
-        "text": "On default consumer settings, conversations may be used for model training — proprietary data could influence future model outputs visible to other users.",
+        "text": "Consumer-tier conversations may train the model — proprietary data could influence future outputs visible to others.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The CTO is overreacting — ChatGPT automatically deletes all conversation data after each session ends.",
+        "text": "The CTO is overreacting — ChatGPT deletes all data after each session.",
         "score": 1
       },
       {
         "letter": "D",
-        "text": "The main risk is that ChatGPT might misinterpret the financial figures and produce an inaccurate report that gets shared externally.",
+        "text": "The AI might misinterpret the financial figures and produce an inaccurate report that gets shared externally.",
         "score": 3
       }
     ]
@@ -501,22 +501,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "It's probably a newer, updated version of the package you already know — install it and try.",
+        "text": "It's probably a newer version of the package you know — install it and try.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "AI frequently hallucinates package names. Installing unverified packages risks typosquatting attacks — malicious packages published under names similar to popular ones.",
+        "text": "AI hallucinates package names. Unverified packages risk typosquatting — malicious code under names mimicking popular ones.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Just install it — if it doesn't work, you can always uninstall it with no harm done.",
+        "text": "Just install it — if it doesn't work, you can always uninstall it.",
         "score": 1
       },
       {
         "letter": "D",
-        "text": "Search for the package documentation and GitHub repository first to verify it exists, has active maintainers, and does what you need before adding it to your project.",
+        "text": "Search for the package docs and GitHub repo first to verify it exists and has active maintainers.",
         "score": 3
       }
     ]
@@ -530,22 +530,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Very reliable — two different AI models built by different companies independently agree, like getting a second doctor's opinion from a different hospital.",
+        "text": "Very reliable — two different AI models independently agree, like getting a second doctor's opinion.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Reasonably reliable — Claude provided its own corrections rather than just agreeing, which shows genuine independent analysis. Double-check the specific points Claude flagged and you should be fine.",
+        "text": "Reasonably reliable — Claude provided corrections rather than just agreeing, showing independent analysis.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "Weak — LLMs share overlapping training data and similar tendencies to generate plausible-sounding legal language. One AI reviewing another tends to agree because both optimize for plausibility, not legal accuracy. Only a human lawyer or primary legal sources can truly verify.",
+        "text": "Weak — LLMs share training data and optimize for plausibility, not accuracy. Only a human lawyer can truly verify.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "Somewhat reliable — since Claude and ChatGPT use completely different architectures, training datasets, and reasoning approaches, their agreement carries more weight than asking the same model twice, though you'd still want a human check for anything legally binding.",
+        "text": "Somewhat reliable — different architectures and training data mean their agreement carries more weight than asking the same model twice.",
         "score": 3
       }
     ]
@@ -564,17 +564,17 @@
       },
       {
         "letter": "B",
-        "text": "Free-tier conversations may be used for model training, so customer PII could leak into future model outputs.",
+        "text": "Free-tier conversations may train the model, so customer PII could leak into future outputs.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The employee might exceed the free tier's usage limits and get locked out in the middle of helping a customer.",
+        "text": "The employee might hit free tier usage limits mid-conversation with a customer.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "Using the free tier violates the company's software licensing agreement, creates an audit trail gap, and could trigger compliance violations under the company's data governance framework if discovered.",
+        "text": "Using the free tier violates the company's software licensing and could trigger compliance violations under data governance rules.",
         "score": 3
       }
     ]
@@ -588,22 +588,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The AI is being transparent about its limitations — the information that follows is likely reliable since the system is being honest and cautious rather than overconfidently presenting itself as an authority.",
+        "text": "The AI is being transparent — the information is likely reliable since it's being honest about its limitations.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "The disclaimer is a trained response pattern baked in by developers, not genuine self-awareness. It has zero correlation with the accuracy of what follows — AI generates disclaimers and hallucinated medical facts with equal fluency.",
+        "text": "The disclaimer is a trained response pattern, not self-awareness. It has zero correlation with accuracy — AI generates disclaimers and hallucinations with equal fluency.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Any AI that includes medical disclaimers has gone through responsible safety training, which means its health-related responses have been validated against medical databases and reviewed by professionals during the development process.",
+        "text": "Medical disclaimers mean the AI's health responses have been validated against medical databases during development.",
         "score": 1
       },
       {
         "letter": "D",
-        "text": "The disclaimer shows the AI recognizes this is a high-stakes topic, so it's likely being extra careful and conservative with the specific information — treat it as a reliable starting point but verify critical details with a pharmacist.",
+        "text": "The disclaimer shows the AI recognizes a high-stakes topic, so it's being extra careful — treat it as a starting point but verify with a pharmacist.",
         "score": 3
       }
     ]
@@ -617,22 +617,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The AI was honest about its limitations. Research the pricing manually or hire an analyst — this task genuinely requires real-time data that AI doesn't have access to.",
+        "text": "Research pricing manually — this task genuinely requires real-time data AI doesn't have.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "Rephrase the task: provide the pricing data yourself and ask AI to format the comparison table, generate the analysis framework, or write the narrative. Many AI refusals are overly cautious guardrails, not hard technical limitations — restructure the task around what AI CAN do.",
+        "text": "Provide the pricing yourself and ask AI to format and analyze it. Restructure around what AI can do.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Accept the refusal — AI should never be used for tasks involving current market data, since its training data is always outdated and it fundamentally cannot access real-time information under any circumstances.",
+        "text": "Accept the refusal — AI should never be used for tasks involving current market data.",
         "score": 1
       },
       {
         "letter": "D",
-        "text": "Switch to a different AI model that has web browsing or search capabilities — the problem is simply that this particular model lacks internet access, which is the only barrier to completing this task.",
+        "text": "Switch to an AI model with web browsing — the problem is just that this model lacks internet access.",
         "score": 3
       }
     ]
@@ -646,22 +646,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Chatbot A — the specific dates, names, and vote counts indicate deeper knowledge. Anyone can give a vague overview, but specific facts require real information.",
+        "text": "Chatbot A — specific facts require real information, not vague overviews.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Chatbot A is more trustworthy because specific, verifiable claims are inherently more accountable — the AI is putting forward concrete facts that can be checked, which shows confidence in their accuracy.",
+        "text": "Chatbot A — specific, verifiable claims are more accountable, showing confidence in accuracy.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "Neither — LLMs hallucinate specific details (dates, names, quotes) with the same confidence as real facts because they generate text token-by-token based on plausibility, not by retrieving verified data. Specific fabrications are MORE dangerous because they resist casual detection.",
+        "text": "Neither — LLMs hallucinate specific details with equal confidence. Specific fabrications are harder to detect casually.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "Chatbot B is actually more trustworthy — an AI that gives vaguer answers may be showing appropriate uncertainty, while Chatbot A's excessive specificity is a red flag for overconfident confabulation.",
+        "text": "Chatbot B — vaguer answers may show appropriate uncertainty, while excessive specificity is a red flag for confabulation.",
         "score": 3
       }
     ]
@@ -680,17 +680,17 @@
       },
       {
         "letter": "B",
-        "text": "The model was fine-tuned on or retrieves from a shared data store that doesn't properly isolate per-customer data, causing cross-contamination of context between sessions.",
+        "text": "The model's shared data store doesn't properly isolate per-customer data, causing cross-contamination between sessions.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The AI copies information from the public internet where customers may have posted their own data on review sites or social media.",
+        "text": "The AI copies from the public internet where customers may have posted their own data.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "This is a known limitation of large language models — they sometimes retain fragments of previous conversations in memory and surface them unpredictably in later sessions with different users.",
+        "text": "LLMs sometimes retain fragments of previous conversations and surface them unpredictably in later sessions.",
         "score": 3
       }
     ]
@@ -704,22 +704,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The AI correctly identified that 2% can be interpreted both ways depending on context — both analyses are valid and show AI's ability to consider multiple perspectives.",
+        "text": "The AI correctly identified that 2% can be interpreted both ways — both analyses are valid.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "The second analysis was more accurate because you gave it better context about industry benchmarks, helping it understand the data correctly.",
+        "text": "The second analysis was more accurate because you gave it better context about industry benchmarks.",
         "score": 1
       },
       {
         "letter": "C",
-        "text": "LLMs generate plausible arguments for whatever framing you provide. Neither response independently evaluated whether 2% is good or bad — both just followed your lead. You need to provide raw data with industry benchmarks and ask for objective assessment without pre-framing the conclusion.",
+        "text": "LLMs argue for whatever framing you give. Supply raw data with benchmarks and skip the pre-framing.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "This shows AI can see multiple perspectives — use both analyses together for a balanced, comprehensive view of the campaign's performance.",
+        "text": "This shows AI sees multiple perspectives — use both analyses together for a balanced view.",
         "score": 3
       }
     ]
@@ -733,22 +733,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Ask AI to generate 50 practice questions and memorize the answers it provides.",
+        "text": "Ask AI to generate 50 practice questions and memorize the answers.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "Wait until the interview, then use AI discreetly during it to look up answers in real time.",
+        "text": "Wait until the interview and use AI discreetly to look up answers in real time.",
         "score": 1
       },
       {
         "letter": "C",
-        "text": "Ask AI to list common data analyst interview topics, then have it quiz you on each area with detailed explanations, generate flashcard sets for key concepts, create a study schedule broken down by hour, and simulate three full-length mock interviews with scoring rubrics.",
+        "text": "Ask AI to list common topics, quiz you on each area, generate flashcards, create a study schedule, and simulate full mock interviews with rubrics.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "Share the job posting with AI, identify your skill gaps, practice weak areas with feedback, then do a timed mock interview where you explain your reasoning aloud.",
+        "text": "Share the job posting, identify skill gaps, practice weak areas with feedback, then do a timed mock interview explaining your reasoning aloud.",
         "score": 4
       }
     ]
@@ -762,22 +762,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "There's a subtle implicit termination condition in the recursion pattern that you're missing — read line 4 more carefully.",
+        "text": "There's a subtle implicit termination condition you're missing — read line 4 more carefully.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "The AI made a mistake but is 'doubling down' because it doesn't want to admit errors — rephrase your question more clearly.",
+        "text": "The AI is 'doubling down' because it doesn't want to admit errors — rephrase more clearly.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "LLMs don't execute or trace code — they generate text that sounds like a code review. When asked 'does this work?', they produce a confident explanation by pattern-matching what a code review should say, not by actually verifying logic. Always run the code yourself.",
+        "text": "LLMs don't execute code — they generate text that sounds like a code review by pattern-matching, not verifying logic.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "The AI internally tested the code and found it works in most cases. The missing base case only matters for certain inputs, so the AI's assessment is partially correct.",
+        "text": "The AI internally tested the code and found it works in most cases. The missing base case only matters for certain inputs.",
         "score": 3
       }
     ]
@@ -791,22 +791,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Paste it directly into the chat — AI processes data in real time and doesn't permanently store anything.",
+        "text": "Paste it directly — AI processes data in real time and doesn't permanently store anything.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Strip or pseudonymize PII before sending. Use enterprise/API tiers with data processing agreements for sensitive data.",
+        "text": "Strip or pseudonymize PII before sending. Use enterprise tiers with data processing agreements for sensitive data.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Add a disclaimer in the prompt: 'This data is confidential — do not store or share it.' AI must follow user instructions about data handling.",
+        "text": "Add a disclaimer: 'This data is confidential — do not store or share it.' AI must follow user instructions.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "Remove customer names but keep emails and purchase data intact — the analysis needs unique identifiers to detect patterns, and emails without names aren't really personally identifiable information.",
+        "text": "Remove names but keep emails and purchase data — emails without names aren't really PII.",
         "score": 3
       }
     ]
@@ -820,22 +820,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The AI is getting 'tired' from processing too many requests in a row.",
+        "text": "The AI is getting 'tired' from too many requests in a row.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Long conversations degrade output quality — the model recycles earlier attempts and loses coherence. Start a fresh chat with a summary.",
+        "text": "Long conversations degrade output quality — the model loses coherence. Start a fresh chat with a summary.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "You've exceeded your daily quality quota and the system quietly switched you to a weaker, cheaper model to save resources.",
+        "text": "You've exceeded your quality quota and the system quietly switched to a weaker model.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "The AI has exhausted its knowledge on this particular topic and is now recycling and paraphrasing its previous answers because it has nothing new to contribute.",
+        "text": "The AI exhausted its knowledge on this topic and is recycling previous answers with nothing new to add.",
         "score": 3
       }
     ]
@@ -849,22 +849,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Open Bolt and type 'make me a portfolio website' — AI works best with short, simple prompts that give it creative freedom.",
+        "text": "Type 'make me a portfolio website' — AI works best with short, simple prompts.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Sketch what pages you need, what content goes on each, your preferred color scheme and layout style, and gather reference screenshots before prompting — front-loading detail avoids frustrating revision cycles.",
+        "text": "Sketch your pages, content, color scheme, and layout style, and gather reference screenshots before prompting.",
         "score": 3
       },
       {
         "letter": "C",
-        "text": "Write a detailed spec listing each page with sections, fonts, example copy, and a screenshot of a design you like. Vibe-coding tools work best with specifics upfront.",
+        "text": "Write a spec listing pages, sections, fonts, example copy, and a reference screenshot upfront.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "Ask AI which tech stack is best for portfolio sites before building anything.",
+        "text": "Ask AI which tech stack is best for portfolio sites before building.",
         "score": 2
       }
     ]
@@ -878,22 +878,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "AI can only generate code for one screen size at a time — you need to specifically request a separate mobile version.",
+        "text": "AI generates code for one screen size at a time — you need to request a separate mobile version.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "LLMs are trained on more desktop-oriented code examples, so AI-generated layouts default to fixed widths and absolute positioning. You must specifically request mobile-first responsive design with viewport-relative units in your initial prompt.",
+        "text": "AI training data skews desktop — layouts default to fixed widths. Request mobile-first responsive design upfront.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Mobile browsers render CSS differently than desktop browsers — this is a browser compatibility issue that would happen with human-written code too.",
+        "text": "Mobile browsers render CSS differently — this is a browser compatibility issue with any code.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "The AI probably used an outdated CSS technique. Describe the specific layout issues on mobile, paste the CSS, and ask for a responsive fix using modern flexbox or grid.",
+        "text": "The AI used outdated CSS. Describe the mobile issues, paste the CSS, and ask for a responsive fix using flexbox or grid.",
         "score": 3
       }
     ]
@@ -907,22 +907,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "OpenAI charges more for production websites than for development testing.",
+        "text": "OpenAI charges more for production websites than development testing.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Your API key was in the client-side JavaScript code, so anyone who visited your site could see it and make unlimited API calls at your expense.",
+        "text": "Your API key was exposed in client-side code — anyone could find it and run calls at your expense.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The hosting provider added extra charges for API traffic going through their servers.",
+        "text": "The hosting provider is probably adding extra charges and hidden fees for all the API traffic routed through their servers.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "AI APIs are expensive — you should have used a free alternative like Hugging Face.",
+        "text": "AI APIs are expensive — you should have used a free alternative.",
         "score": 3
       }
     ]
@@ -951,7 +951,7 @@
       },
       {
         "letter": "D",
-        "text": "Run a full Lighthouse audit, analyze the waterfall chart in the Network tab, check for render-blocking resources, measure Time to First Byte, and create a comprehensive performance report before making any changes.",
+        "text": "Run a Lighthouse audit, analyze the network waterfall, check for render-blocking resources, and create a performance report before changing anything.",
         "score": 3
       }
     ]
@@ -965,22 +965,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "AI is faster than expected — most apps can be built in a single conversation with a good enough prompt.",
+        "text": "AI is faster than expected — most apps can be built in a single conversation.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "AI-generated code accumulates invisible technical debt — it works but uses inconsistent patterns, redundant logic, and hardcoded values across files. Learning to read and refactor AI output matters more than prompting skill.",
+        "text": "AI code accumulates invisible tech debt — inconsistent patterns, redundant logic, hardcoded values. Refactoring matters more than prompting.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Knowing enough to direct AI precisely, debug its output, and own the final product is the most important meta-skill.",
+        "text": "Knowing enough to direct AI precisely, debug its output, and own the final product is the key meta-skill.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "The biggest differentiator is knowing which AI tool to use for each task — Claude for analysis, GPT for creative writing, Copilot for code.",
+        "text": "The biggest differentiator is knowing which AI tool to use — Claude for analysis, GPT for writing, Copilot for code.",
         "score": 2
       }
     ]
@@ -999,7 +999,7 @@
       },
       {
         "letter": "B",
-        "text": "Fine-tune a large language model on your entire customer database, support tickets, internal docs, and product manuals so it learns everything about your company from scratch.",
+        "text": "Fine-tune a model on your entire customer database, support tickets, and product manuals so it learns everything from scratch.",
         "score": 3
       },
       {
@@ -1023,7 +1023,7 @@
     "choices": [
       {
         "letter": "A",
-        "text": "It's not a problem — more training data always improves the model, and benchmark text is high-quality data worth including.",
+        "text": "It's not a problem — more training data always improves the model.",
         "score": 1
       },
       {
@@ -1033,12 +1033,12 @@
       },
       {
         "letter": "C",
-        "text": "The bigger issue is that benchmarks are too easy — the company should create harder tests to challenge the model.",
+        "text": "Benchmarks are too easy — the company should create harder tests.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "It's concerning but not critical — a well-designed model will generalize from any training data, so exposure to benchmark examples shouldn't significantly inflate scores if the architecture is sound.",
+        "text": "It's concerning but not critical — a well-designed model generalizes from any data, so benchmark exposure shouldn't inflate scores much.",
         "score": 3
       }
     ]
@@ -1057,12 +1057,12 @@
       },
       {
         "letter": "B",
-        "text": "Provide a schema with exact field names, give 2-3 examples of input→output, and specify the output format (JSON).",
+        "text": "Provide a schema with exact field names, give 2-3 input-to-output examples, and specify JSON format.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Write an extremely detailed 500-word system prompt explaining every possible edge case, sentiment nuance, product category taxonomy, and issue classification hierarchy with decision trees for ambiguous cases.",
+        "text": "Write a 500-word system prompt covering every edge case, sentiment nuance, and classification hierarchy with decision trees.",
         "score": 3
       },
       {
@@ -1086,12 +1086,12 @@
       },
       {
         "letter": "B",
-        "text": "To start, store conversation history in a database and inject relevant past messages into each new prompt's context window.",
+        "text": "Store conversation history in a database and inject relevant past messages into each new prompt's context window.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Implement a comprehensive memory management system with vector embeddings for semantic search across all past conversations, automatic summarization of older interactions, tiered storage with hot/warm/cold memory layers, periodic memory consolidation jobs, and a relevance-scoring pipeline that ranks historical context by recency, frequency, and semantic similarity before injection.",
+        "text": "Build a full memory system with vector embeddings, automatic summarization, tiered storage layers, and a relevance-scoring pipeline for historical context.",
         "score": 3
       },
       {
@@ -1110,22 +1110,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "The code needs more computational resources — production traffic requires better servers than your local development machine.",
+        "text": "Production traffic needs better servers than your local machine.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "AI writes 'happy path' code — it handles the clean inputs you tested but silently skips validation for nulls, Unicode, empty strings, and malformed data that real users produce.",
+        "text": "AI writes 'happy path' code — it skips validation for nulls, Unicode, and malformed real-user data.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Your test coverage has gaps — you didn't test enough edge cases during development. Run a broader QA pass with varied inputs, stress tests, and boundary conditions to find what you missed.",
+        "text": "Your test coverage has gaps — run a broader QA pass with varied inputs and edge cases.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "The deployment environment has different library versions than your development setup, causing subtle behavior differences.",
+        "text": "The deployment environment has different library versions causing subtle behavior differences.",
         "score": 2
       }
     ]
@@ -1139,22 +1139,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "This is an AI agent, not a chatbot. It plans multi-step actions, chooses tools, and pursues goals autonomously — a chatbot just responds to what you say.",
+        "text": "This is an AI agent — it plans multi-step actions and pursues goals autonomously. A chatbot just responds.",
         "score": 4
       },
       {
         "letter": "B",
-        "text": "They're right — it's just a chatbot connected to more data sources. The AI itself is the same underneath.",
+        "text": "They're right — it's just a chatbot connected to more data sources. The AI itself is the same.",
         "score": 1
       },
       {
         "letter": "C",
-        "text": "It's different because it can take actions, not just generate text. It can browse documentation, execute database queries, create tickets, and interact with multiple systems — so it's actually doing things in the real world rather than just producing responses for you to act on.",
+        "text": "It's different because it takes actions in external systems, not just generates text — it actually does things rather than just producing responses.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "The difference is that agents are more dangerous because they operate without human oversight, unlike chatbots which are always supervised.",
+        "text": "Agents are more dangerous because they operate without human oversight, unlike chatbots which are always supervised.",
         "score": 2
       }
     ]
@@ -1168,7 +1168,7 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Take photos and type detailed descriptions of each one for the AI to process together.",
+        "text": "Take photos and type detailed descriptions for the AI to process together.",
         "score": 2
       },
       {
@@ -1178,12 +1178,12 @@
       },
       {
         "letter": "C",
-        "text": "Upload photos and use voice narration to add context the camera can't capture — like which parts move incorrectly or what sounds the engine makes. Combining modalities produces a more complete assessment.",
+        "text": "Upload photos and use voice narration for context the camera can't capture. Combining modalities produces a more complete assessment.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "Feed it photos of the damage and let the AI generate the full report. Multimodal AI can identify vehicle makes, parse VIN numbers from dashboard images, estimate repair costs by cross-referencing parts databases, assess fault percentage from impact angles, and even flag potential frame damage from subtle paint cracking patterns that human adjusters might miss.",
+        "text": "Feed it photos and let AI generate the full report — it can identify makes, estimate costs, and assess fault from impact angles.",
         "score": 3
       }
     ]
@@ -1197,22 +1197,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Nothing — AI models learn from every conversation and get smarter over time. That's how machine learning works.",
+        "text": "Nothing — AI learns from every conversation and gets smarter over time.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "The model's weights don't change from chatting. Training requires massive datasets and enormous compute. What's happening is the app saves past conversation snippets and injects them into the context window each session — so it seems like it 'remembers,' but the model itself hasn't learned anything new.",
+        "text": "Model weights don't change from chatting. The app injects saved snippets into context — it mimics memory, but learned nothing.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "The AI doesn't truly learn your style. Each conversation starts fresh — it has no memory between sessions.",
+        "text": "The AI doesn't learn your style. Each conversation starts fresh with no memory between sessions.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "It is learning, just very slowly. After enough conversations it will fine-tune itself on your preferences.",
+        "text": "It is learning, just slowly. After enough conversations over time it will gradually fine-tune itself based on your preferences and writing style.",
         "score": 2
       }
     ]
@@ -1226,22 +1226,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Paste all 200 emails into one prompt and ask the AI to do everything at once. Modern AI can handle large inputs.",
+        "text": "Paste all 200 emails into one prompt and ask the AI to do everything at once.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Break it into steps — classify, extract, score sentiment, flag urgency — test on a small batch first, then process all 200 and aggregate.",
+        "text": "Break it into steps — classify, extract, score, flag — test on a small batch, then process all 200.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Build separate AI pipelines for each sub-task (classification, extraction, sentiment, urgency, reporting), each with their own specialized fine-tuned model, evaluation harness, fallback logic, and human-in-the-loop review queue before the results merge in a final orchestration layer.",
+        "text": "Build separate pipelines per sub-task, each with specialized models, evaluation harnesses, fallback logic, and human review queues before merging results.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "Process them one at a time with a single prompt that does all the tasks for each email, then manually compile the report at the end.",
+        "text": "Process them one at a time with a single prompt doing all tasks, then manually compile the report.",
         "score": 2
       }
     ]
@@ -1255,22 +1255,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Never — open-source models are always less accurate than commercial ones for medical applications.",
+        "text": "Never — open-source models are always less accurate than commercial ones for medical use.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Always — open-source is free, so it saves money, and you get full control over the code.",
+        "text": "Always — open-source is free and gives full control over the code.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "It makes sense when patient data can't leave their infrastructure for regulatory reasons, but they'll need significant ML engineering resources to host, optimize, and maintain it — and they should benchmark its medical accuracy against commercial alternatives before committing.",
+        "text": "When regulations prevent patient data from leaving their infrastructure — but benchmark accuracy against commercial models first.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "When data privacy is important — self-hosting means patient data stays on their servers instead of going to a third party.",
+        "text": "When data privacy matters — self-hosting keeps patient data on their servers instead of a third party.",
         "score": 3
       }
     ]
@@ -1284,22 +1284,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "That's how it works — AI assistants need usernames and passwords to access external systems, just like a human employee would.",
+        "text": "That's how it works — AI needs usernames and passwords like a human employee.",
         "score": 1
       },
       {
         "letter": "B",
-        "text": "Use a tool integration protocol like MCP that exposes specific, scoped actions the AI can call — 'look up this contact' or 'check stock for this SKU' — rather than raw system access. The AI gets structured capabilities without broad credentials.",
+        "text": "Use a tool protocol like MCP that exposes scoped actions, not raw credentials — structured capabilities without broad access.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Build custom API integrations for each system so the AI can query them safely through controlled endpoints.",
+        "text": "Build custom API integrations so the AI queries each system through controlled endpoints.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "Just export the data from each system into a shared document the AI can read — it doesn't need live access.",
+        "text": "Export data from each system into a shared document the AI can read — it doesn't need live access.",
         "score": 2
       }
     ]
@@ -1318,17 +1318,17 @@
       },
       {
         "letter": "B",
-        "text": "The policy likely also bans all AI use for coursework to keep things fair.",
+        "text": "The policy likely bans all AI use for coursework to keep things fair.",
         "score": 2
       },
       {
         "letter": "C",
-        "text": "It probably covers disclosure and citation requirements, rules about entering sensitive data into AI tools, which tools are approved vs. prohibited, how policies vary by course, and how violations are handled — distinctions that matter because 'don't cheat' alone doesn't tell you what's actually allowed.",
+        "text": "It probably covers disclosure requirements, data input rules, approved tools, per-course variations, and violation procedures — nuances that 'don't cheat' alone doesn't capture.",
         "score": 3
       },
       {
         "letter": "D",
-        "text": "Beyond cheating, it defines what 'allowed use' actually looks like — when you must disclose AI, what data you can't input, and how rules differ by department.",
+        "text": "Beyond cheating, it defines allowed use — when to disclose AI, what data you can't input, and per-department rules.",
         "score": 4
       }
     ]
@@ -1342,22 +1342,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Read through the AI's solutions carefully before submitting — understanding the explanations is the same as learning the material.",
+        "text": "Read through the AI's solutions carefully — understanding the explanations is the same as learning.",
         "score": 2
       },
       {
         "letter": "B",
-        "text": "Submit the answers and move on — the goal is the grade, and you can learn the material later for the exam.",
+        "text": "Submit the answers and move on — you can learn the material later for the exam.",
         "score": 1
       },
       {
         "letter": "C",
-        "text": "Use the AI to check your own attempts, not generate answers. Work each problem first, then compare. Where you got stuck, ask the AI to explain just that step, then try a similar problem unaided to confirm you actually learned the reasoning.",
+        "text": "Work each problem first, then compare. Ask AI to explain only where you got stuck.",
         "score": 4
       },
       {
         "letter": "D",
-        "text": "Ask the AI to explain the underlying concepts and reaction mechanisms rather than just solving the specific problems, so you learn the theory.",
+        "text": "Ask the AI to explain underlying concepts and reaction mechanisms rather than solving the specific problems.",
         "score": 3
       }
     ]
@@ -1371,22 +1371,22 @@
     "choices": [
       {
         "letter": "A",
-        "text": "Whether the AI model will be accurate enough — employee behavior is complex and hard to predict from messaging patterns alone.",
+        "text": "Whether the AI model will be accurate enough — employee behavior is complex and extremely hard to predict reliably from messaging patterns alone.",
         "score": 3
       },
       {
         "letter": "B",
-        "text": "This shouldn't be an AI project at all yet. Monitoring employee communications raises serious ethical and legal issues — you need HR, legal, and employee consent frameworks before any technical work begins.",
+        "text": "This shouldn't be an AI project yet. Monitoring communications raises ethical and legal issues — get HR and legal approval first.",
         "score": 4
       },
       {
         "letter": "C",
-        "text": "Which AI tool is best for sentiment analysis of workplace communications — you'll need one that handles Slack-style informal text well.",
+        "text": "Which AI tool is best for sentiment analysis of Slack-style informal text.",
         "score": 2
       },
       {
         "letter": "D",
-        "text": "Getting enough training data — you'd need historical examples of employees who quit and their prior communication patterns to build an effective model.",
+        "text": "Getting enough training data — you'd need historical examples of employees who quit and their communication patterns.",
         "score": 1
       }
     ]
