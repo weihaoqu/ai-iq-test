@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <filter id="glow1">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Background particles -->
+  <circle cx="100" cy="80" r="1.5" fill="#818cf8" opacity="0.2"/>
+  <circle cx="700" cy="60" r="1" fill="#818cf8" opacity="0.15"/>
+  <circle cx="650" cy="420" r="1.5" fill="#818cf8" opacity="0.2"/>
+  <circle cx="150" cy="440" r="1" fill="#818cf8" opacity="0.15"/>
+  <circle cx="350" cy="50" r="1" fill="#818cf8" opacity="0.1"/>
+  <circle cx="500" cy="460" r="1.5" fill="#818cf8" opacity="0.15"/>
+
+  <!-- Image/Camera circle (left) -->
+  <circle cx="260" cy="200" r="85" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="260" cy="200" r="85" fill="#6366f1" opacity="0.04"/>
+  <!-- Camera lens shape -->
+  <circle cx="260" cy="195" r="28" fill="none" stroke="#818cf8" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="260" cy="195" r="18" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.35"/>
+  <circle cx="260" cy="195" r="8" fill="#6366f1" opacity="0.4"/>
+  <rect x="235" y="170" width="50" height="5" rx="2" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+
+  <!-- Audio/Microphone circle (right) -->
+  <circle cx="540" cy="200" r="85" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="540" cy="200" r="85" fill="#6366f1" opacity="0.04"/>
+  <!-- Microphone shape -->
+  <rect x="530" y="175" width="20" height="35" rx="10" fill="none" stroke="#818cf8" stroke-width="1.5" opacity="0.6"/>
+  <path d="M520,200 Q520,220 540,225 Q560,220 560,200" fill="none" stroke="#818cf8" stroke-width="1.2" opacity="0.5"/>
+  <line x1="540" y1="225" x2="540" y2="238" stroke="#818cf8" stroke-width="1.2" opacity="0.5"/>
+  <line x1="530" y1="238" x2="550" y2="238" stroke="#818cf8" stroke-width="1.2" opacity="0.5"/>
+  <!-- Sound waves -->
+  <path d="M565,190 Q572,200 565,210" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.3"/>
+  <path d="M572,185 Q582,200 572,215" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.2"/>
+
+  <!-- Text/Keyboard circle (center-bottom) -->
+  <circle cx="400" cy="320" r="85" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="400" cy="320" r="85" fill="#6366f1" opacity="0.04"/>
+  <!-- Text lines / keyboard hint -->
+  <line x1="370" y1="300" x2="430" y2="300" stroke="#818cf8" stroke-width="1.5" opacity="0.5"/>
+  <line x1="375" y1="312" x2="425" y2="312" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="380" y1="324" x2="420" y2="324" stroke="#818cf8" stroke-width="1.5" opacity="0.3"/>
+  <!-- Cursor blink -->
+  <rect x="432" y="296" width="2" height="14" fill="#818cf8" opacity="0.6"/>
+  <!-- Keyboard keys -->
+  <rect x="375" y="338" width="12" height="10" rx="2" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.3"/>
+  <rect x="391" y="338" width="12" height="10" rx="2" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.3"/>
+  <rect x="407" y="338" width="12" height="10" rx="2" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Overlap regions — glowing intersections -->
+  <!-- Left-Right overlap area -->
+  <path d="M330,160 Q400,200 330,240" fill="none" stroke="#818cf8" stroke-width="0.5" opacity="0.15"/>
+  <path d="M470,160 Q400,200 470,240" fill="none" stroke="#818cf8" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- Convergence point -->
+  <circle cx="400" cy="230" r="20" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.2" filter="url(#glow1)"/>
+  <circle cx="400" cy="230" r="8" fill="#6366f1" opacity="0.3"/>
+
+  <!-- Flow lines from each circle to convergence -->
+  <path d="M300,230 Q350,230 392,230" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.3" stroke-dasharray="3,3"/>
+  <path d="M500,230 Q450,230 408,230" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.3" stroke-dasharray="3,3"/>
+  <path d="M400,280 Q400,260 400,242" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.3" stroke-dasharray="3,3"/>
+
+  <!-- Output flow downward -->
+  <line x1="400" y1="250" x2="400" y2="430" stroke="url(#g1)" stroke-width="1.5" opacity="0.3"/>
+  <polygon points="400,435 394,420 406,420" fill="#818cf8" opacity="0.5"/>
+
+  <!-- Output node -->
+  <circle cx="400" cy="450" r="15" fill="none" stroke="#818cf8" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="400" cy="450" r="6" fill="#6366f1" opacity="0.5"/>
+
+  <!-- Decorative corner elements -->
+  <path d="M30,30 L70,30 M30,30 L30,70" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M770,30 L730,30 M770,30 L770,70" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M30,470 L70,470 M30,470 L30,430" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M770,470 L730,470 M770,470 L770,430" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+</svg>

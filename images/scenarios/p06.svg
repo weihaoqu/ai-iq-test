@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <filter id="glow1">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Background grid -->
+  <line x1="0" y1="250" x2="800" y2="250" stroke="#6366f1" stroke-width="0.3" opacity="0.08"/>
+  <line x1="100" y1="0" x2="100" y2="500" stroke="#6366f1" stroke-width="0.3" opacity="0.06"/>
+  <line x1="250" y1="0" x2="250" y2="500" stroke="#6366f1" stroke-width="0.3" opacity="0.06"/>
+  <line x1="400" y1="0" x2="400" y2="500" stroke="#6366f1" stroke-width="0.3" opacity="0.06"/>
+  <line x1="550" y1="0" x2="550" y2="500" stroke="#6366f1" stroke-width="0.3" opacity="0.06"/>
+  <line x1="700" y1="0" x2="700" y2="500" stroke="#6366f1" stroke-width="0.3" opacity="0.06"/>
+
+  <!-- === MAIN PIPELINE (horizontal) === -->
+
+  <!-- Step 1: Input -->
+  <rect x="60" y="215" width="70" height="70" rx="8" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.6"/>
+  <rect x="60" y="215" width="70" height="70" rx="8" fill="#6366f1" opacity="0.05"/>
+  <circle cx="95" cy="250" r="15" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.4"/>
+  <circle cx="95" cy="250" r="5" fill="#6366f1" opacity="0.4"/>
+
+  <!-- Arrow 1→2 -->
+  <line x1="135" y1="250" x2="195" y2="250" stroke="url(#g1)" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="198,250 190,245 190,255" fill="#818cf8" opacity="0.5"/>
+
+  <!-- Step 2: Process -->
+  <rect x="200" y="215" width="70" height="70" rx="8" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.6"/>
+  <rect x="200" y="215" width="70" height="70" rx="8" fill="#6366f1" opacity="0.05"/>
+  <!-- Gear shape -->
+  <circle cx="235" cy="250" r="14" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.4"/>
+  <circle cx="235" cy="250" r="7" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="235" y1="234" x2="235" y2="240" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="235" y1="260" x2="235" y2="266" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="219" y1="250" x2="225" y2="250" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="245" y1="250" x2="251" y2="250" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Arrow 2→3 -->
+  <line x1="275" y1="250" x2="335" y2="250" stroke="url(#g1)" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="338,250 330,245 330,255" fill="#818cf8" opacity="0.5"/>
+
+  <!-- Step 3: Decision / Branch point -->
+  <path d="M375,215 L410,250 L375,285 L340,250 Z" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.7"/>
+  <path d="M375,215 L410,250 L375,285 L340,250 Z" fill="#6366f1" opacity="0.06"/>
+  <circle cx="375" cy="250" r="8" fill="#6366f1" opacity="0.3"/>
+
+  <!-- === BRANCH A (upper path) === -->
+  <!-- Arrow up from diamond -->
+  <line x1="390" y1="230" x2="430" y2="170" stroke="#818cf8" stroke-width="1.2" opacity="0.4"/>
+  <polygon points="432,168 425,174 430,178" fill="#818cf8" opacity="0.45"/>
+
+  <!-- Step 4A -->
+  <rect x="435" y="135" width="65" height="60" rx="6" fill="none" stroke="#818cf8" stroke-width="1.2" opacity="0.5"/>
+  <rect x="435" y="135" width="65" height="60" rx="6" fill="#6366f1" opacity="0.04"/>
+  <line x1="450" y1="158" x2="485" y2="158" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="450" y1="168" x2="478" y2="168" stroke="#818cf8" stroke-width="1" opacity="0.25"/>
+  <line x1="450" y1="178" x2="482" y2="178" stroke="#818cf8" stroke-width="1" opacity="0.2"/>
+
+  <!-- Arrow from 4A to merge -->
+  <line x1="505" y1="165" x2="560" y2="220" stroke="#818cf8" stroke-width="1.2" opacity="0.4"/>
+  <polygon points="562,222 556,216 554,224" fill="#818cf8" opacity="0.45"/>
+
+  <!-- === BRANCH B (lower path) === -->
+  <!-- Arrow down from diamond -->
+  <line x1="390" y1="270" x2="430" y2="330" stroke="#818cf8" stroke-width="1.2" opacity="0.4"/>
+  <polygon points="432,332 425,326 430,322" fill="#818cf8" opacity="0.45"/>
+
+  <!-- Step 4B -->
+  <rect x="435" y="310" width="65" height="60" rx="6" fill="none" stroke="#818cf8" stroke-width="1.2" opacity="0.5"/>
+  <rect x="435" y="310" width="65" height="60" rx="6" fill="#6366f1" opacity="0.04"/>
+  <circle cx="467" cy="340" r="12" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <circle cx="467" cy="340" r="5" fill="#818cf8" opacity="0.15"/>
+
+  <!-- Arrow from 4B to merge -->
+  <line x1="505" y1="340" x2="560" y2="278" stroke="#818cf8" stroke-width="1.2" opacity="0.4"/>
+  <polygon points="562,276 556,282 554,274" fill="#818cf8" opacity="0.45"/>
+
+  <!-- === MERGE POINT === -->
+  <circle cx="575" cy="250" r="16" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.6"/>
+  <circle cx="575" cy="250" r="6" fill="#6366f1" opacity="0.35"/>
+
+  <!-- Arrow merge→output -->
+  <line x1="595" y1="250" x2="650" y2="250" stroke="url(#g1)" stroke-width="1.5" opacity="0.5"/>
+  <polygon points="653,250 645,245 645,255" fill="#818cf8" opacity="0.5"/>
+
+  <!-- Step 5: Output -->
+  <rect x="660" y="215" width="80" height="70" rx="8" fill="none" stroke="url(#g1)" stroke-width="2" opacity="0.7"/>
+  <rect x="660" y="215" width="80" height="70" rx="8" fill="#6366f1" opacity="0.06"/>
+  <!-- Checkmark -->
+  <path d="M688,250 L696,260 L712,238" fill="none" stroke="#818cf8" stroke-width="2" opacity="0.6"/>
+
+  <!-- Flow particles along pipeline -->
+  <circle cx="165" cy="250" r="2" fill="#818cf8" opacity="0.4"/>
+  <circle cx="310" cy="250" r="2" fill="#818cf8" opacity="0.35"/>
+  <circle cx="625" cy="250" r="2" fill="#818cf8" opacity="0.3"/>
+
+  <!-- Decorative corner elements -->
+  <path d="M30,30 L70,30 M30,30 L30,70" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M770,30 L730,30 M770,30 L770,70" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M30,470 L70,470 M30,470 L30,430" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M770,470 L730,470 M770,470 L770,430" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+</svg>

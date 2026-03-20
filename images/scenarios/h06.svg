@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <radialGradient id="glowH" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#818cf8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow1">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+
+  <!-- Background particles -->
+  <circle cx="120" cy="80" r="1" fill="#818cf8" opacity="0.15"/>
+  <circle cx="680" cy="70" r="1.5" fill="#818cf8" opacity="0.12"/>
+  <circle cx="90" cy="420" r="1" fill="#818cf8" opacity="0.1"/>
+  <circle cx="710" cy="430" r="1.5" fill="#818cf8" opacity="0.12"/>
+  <circle cx="400" cy="40" r="1" fill="#818cf8" opacity="0.1"/>
+
+  <!-- === HUMAN FIGURE (left, larger and more prominent) === -->
+  <!-- Human glow -->
+  <circle cx="300" cy="250" r="110" fill="url(#glowH)"/>
+
+  <!-- Head -->
+  <circle cx="300" cy="175" r="30" fill="none" stroke="#818cf8" stroke-width="2.5" opacity="0.7"/>
+  <circle cx="300" cy="175" r="30" fill="#6366f1" opacity="0.06"/>
+
+  <!-- Body (torso) -->
+  <line x1="300" y1="205" x2="300" y2="300" stroke="#818cf8" stroke-width="2.5" opacity="0.65"/>
+
+  <!-- Arms -->
+  <line x1="300" y1="230" x2="255" y2="270" stroke="#818cf8" stroke-width="2" opacity="0.55"/>
+  <line x1="300" y1="230" x2="345" y2="260" stroke="#818cf8" stroke-width="2" opacity="0.55"/>
+  <!-- Right hand reaching toward AI -->
+  <circle cx="348" cy="262" r="4" fill="#818cf8" opacity="0.35"/>
+
+  <!-- Legs -->
+  <line x1="300" y1="300" x2="270" y2="370" stroke="#818cf8" stroke-width="2" opacity="0.55"/>
+  <line x1="300" y1="300" x2="330" y2="370" stroke="#818cf8" stroke-width="2" opacity="0.55"/>
+
+  <!-- Human emphasis — outer aura -->
+  <circle cx="300" cy="250" r="90" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.1"/>
+  <circle cx="300" cy="250" r="105" fill="none" stroke="#818cf8" stroke-width="0.5" opacity="0.06"/>
+
+  <!-- Lightbulb / learning indicator above human head -->
+  <path d="M290,130 Q300,115 310,130" fill="none" stroke="#818cf8" stroke-width="1.2" opacity="0.4"/>
+  <line x1="300" y1="115" x2="300" y2="105" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="288" y1="120" x2="282" y2="112" stroke="#818cf8" stroke-width="0.8" opacity="0.2"/>
+  <line x1="312" y1="120" x2="318" y2="112" stroke="#818cf8" stroke-width="0.8" opacity="0.2"/>
+
+  <!-- === AI NODE (right, smaller) === -->
+  <circle cx="530" cy="250" r="40" fill="none" stroke="url(#g1)" stroke-width="2" opacity="0.55"/>
+  <circle cx="530" cy="250" r="25" fill="none" stroke="#818cf8" stroke-width="1" opacity="0.25"/>
+  <circle cx="530" cy="250" r="12" fill="#6366f1" opacity="0.4"/>
+
+  <!-- AI inner circuit pattern -->
+  <line x1="530" y1="225" x2="530" y2="238" stroke="#818cf8" stroke-width="0.5" opacity="0.2"/>
+  <line x1="530" y1="262" x2="530" y2="275" stroke="#818cf8" stroke-width="0.5" opacity="0.2"/>
+  <line x1="505" y1="250" x2="518" y2="250" stroke="#818cf8" stroke-width="0.5" opacity="0.2"/>
+  <line x1="542" y1="250" x2="555" y2="250" stroke="#818cf8" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- AI orbiting dots -->
+  <circle cx="530" cy="205" r="3" fill="#818cf8" opacity="0.25"/>
+  <circle cx="575" cy="250" r="3" fill="#818cf8" opacity="0.25"/>
+  <circle cx="530" cy="295" r="3" fill="#818cf8" opacity="0.25"/>
+
+  <!-- === BIDIRECTIONAL ARROWS (human ← → AI) === -->
+  <!-- Arrow Human → AI (upper, thicker — human driving) -->
+  <line x1="360" y1="230" x2="485" y2="238" stroke="url(#g1)" stroke-width="2" opacity="0.5"/>
+  <polygon points="488,238 478,233 479,243" fill="#818cf8" opacity="0.55"/>
+
+  <!-- Arrow AI → Human (lower, thinner — AI assisting) -->
+  <line x1="485" y1="265" x2="360" y2="272" stroke="#818cf8" stroke-width="1.2" opacity="0.3" stroke-dasharray="5,4"/>
+  <polygon points="358,272 368,267 367,277" fill="#818cf8" opacity="0.35"/>
+
+  <!-- Knowledge flow particles along arrows -->
+  <circle cx="400" cy="232" r="2.5" fill="#818cf8" opacity="0.35"/>
+  <circle cx="430" cy="234" r="2" fill="#818cf8" opacity="0.3"/>
+  <circle cx="460" cy="236" r="2" fill="#818cf8" opacity="0.25"/>
+
+  <circle cx="450" cy="267" r="1.5" fill="#818cf8" opacity="0.2"/>
+  <circle cx="420" cy="269" r="1.5" fill="#818cf8" opacity="0.18"/>
+  <circle cx="390" cy="271" r="1.5" fill="#818cf8" opacity="0.15"/>
+
+  <!-- Growth/progress indicators around human -->
+  <!-- Rising steps -->
+  <rect x="200" y="400" width="18" height="20" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.15"/>
+  <rect x="222" y="390" width="18" height="30" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.18"/>
+  <rect x="244" y="378" width="18" height="42" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.22"/>
+  <rect x="266" y="364" width="18" height="56" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.25"/>
+
+  <!-- Book/learning icon near human -->
+  <rect x="160" y="280" width="22" height="28" rx="2" fill="none" stroke="#818cf8" stroke-width="0.8" opacity="0.2"/>
+  <line x1="171" y1="280" x2="171" y2="308" stroke="#818cf8" stroke-width="0.5" opacity="0.15"/>
+  <line x1="164" y1="288" x2="178" y2="288" stroke="#818cf8" stroke-width="0.5" opacity="0.12"/>
+  <line x1="164" y1="296" x2="178" y2="296" stroke="#818cf8" stroke-width="0.5" opacity="0.12"/>
+
+  <!-- Decorative corner elements -->
+  <path d="M30,30 L70,30 M30,30 L30,70" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M770,30 L730,30 M770,30 L770,70" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M30,470 L70,470 M30,470 L30,430" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  <path d="M770,470 L730,470 M770,470 L770,430" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+</svg>
