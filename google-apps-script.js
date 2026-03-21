@@ -38,6 +38,29 @@ function doPost(e) {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
     var date = data.timestamp ? String(data.timestamp).substring(0, 10) : '';
 
+    // Handle feedback submissions
+    if (data.feedback_type) {
+      var fbSheet = ss.getSheetByName('Feedback');
+      if (!fbSheet) {
+        fbSheet = ss.insertSheet('Feedback');
+        fbSheet.appendRow(['participant_id', 'participant_name', 'timestamp', 'feedback_type', 'feedback_rating', 'feedback_comment', 'test_mode']);
+        fbSheet.getRange(1, 1, 1, 7).setFontWeight('bold');
+        fbSheet.setFrozenRows(1);
+      }
+      fbSheet.appendRow([
+        data.participant_id || '',
+        data.participant_name || '',
+        data.timestamp || '',
+        data.feedback_type || '',
+        data.feedback_rating || '',
+        data.feedback_comment || '',
+        data.test_mode || ''
+      ]);
+      return ContentService
+        .createTextOutput(JSON.stringify({ status: 'success', type: 'feedback' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
     // Get or create Responses sheet
     var sheet = ss.getSheetByName('Responses');
     if (!sheet) {

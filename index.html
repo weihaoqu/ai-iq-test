@@ -488,6 +488,79 @@ canvas#radarChart{max-width:340px;max-height:340px}
 .mode-card--quick .mode-card__btn{background:linear-gradient(135deg,#d97706,var(--accent));color:#0c1222}
 .mode-card--full .mode-card__btn{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff}
 @media(max-width:420px){.mode-cards{flex-direction:column}}
+/* ── Feedback Screen ── */
+.feedback-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:24px;
+  padding:32px 20px;border-radius:var(--radius);
+  transition:background-color .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-face{display:flex;flex-direction:column;align-items:center;gap:4px}
+.feedback-eyes{display:flex;gap:32px;align-items:center;justify-content:center;height:120px}
+.feedback-eye{
+  background:#000;border-radius:50%;
+  transition:all .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-mouth{
+  width:56px;height:56px;display:flex;align-items:center;justify-content:center;
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-mouth svg path{transition:stroke .5s cubic-bezier(.16,1,.3,1)}
+.feedback-label{
+  font-size:3rem;font-weight:900;letter-spacing:2px;
+  transition:color .5s cubic-bezier(.16,1,.3,1);
+  text-align:center;
+}
+.feedback-track{
+  position:relative;width:100%;max-width:300px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0;
+}
+.feedback-track-line{
+  position:absolute;top:50%;left:0;right:0;height:4px;border-radius:2px;
+  transform:translateY(-50%);
+  transition:background-color .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-dot{
+  width:24px;height:24px;border-radius:50%;border:none;cursor:pointer;
+  position:relative;z-index:2;
+  transition:background-color .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-indicator{
+  position:absolute;z-index:3;width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  top:50%;transform:translate(-50%,-50%);
+  transition:all .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-indicator svg path{transition:stroke .5s cubic-bezier(.16,1,.3,1)}
+.feedback-labels{
+  display:flex;justify-content:space-between;width:100%;max-width:300px;
+  font-size:.85rem;font-weight:600;
+  transition:color .5s cubic-bezier(.16,1,.3,1);
+}
+.feedback-labels span{
+  flex:1;text-align:center;transition:opacity .3s;
+}
+.feedback-comment{
+  width:100%;max-width:400px;padding:14px 18px;
+  border:1.5px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif;font-size:.95rem;
+  background:rgba(0,0,0,.2);color:#fff;resize:vertical;min-height:80px;
+  transition:border-color .3s;outline:none;
+}
+.feedback-comment::placeholder{color:rgba(255,255,255,.4)}
+.feedback-comment:focus{border-color:rgba(255,255,255,.4)}
+.feedback-submit{
+  padding:14px 40px;border:none;border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:all .3s cubic-bezier(.16,1,.3,1);
+  color:#fff;
+}
+.feedback-submit:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.feedback-skip{
+  background:none;border:none;color:rgba(255,255,255,.5);
+  font-family:'Outfit',sans-serif;font-size:.85rem;cursor:pointer;
+  text-decoration:underline;
+}
 </style>
 </head>
 <body>
@@ -674,6 +747,7 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <button class="btn btn-share" style="flex:1;min-width:90px" onclick="shareViaSMS()">&#128172; Text</button>
         <button class="btn btn-share" style="flex:1;min-width:90px" onclick="shareResults()">&#128279; Copy</button>
       </div>
+      <button class="btn btn-outline btn-full" style="margin-top:6px" onclick="showFeedbackScreen()">&#128172; Rate This Test</button>
       <button class="btn btn-outline btn-full" style="margin-top:6px;opacity:.7" onclick="retakeQuiz()">&#8635; Retake Quiz</button>
       <div class="card" id="upsell-card" style="display:none;text-align:center;border-color:rgba(37,99,235,.2)">
         <h3 style="color:var(--primary-light);margin-bottom:8px">Want deeper insights?</h3>
@@ -700,6 +774,42 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <div style="font-size:.78rem;color:var(--text-dim)">Practice your AI skills with interactive challenges</div>
       </div>
     </a>
+  </div>
+
+  <!-- SCREEN: Feedback -->
+  <div class="screen" id="screen-feedback" role="main" aria-label="Feedback">
+    <div class="feedback-wrap" id="feedback-wrap">
+      <h2 style="color:inherit;margin-bottom:0">How was this test?</h2>
+      <div class="feedback-face">
+        <div class="feedback-eyes">
+          <div class="feedback-eye" id="fb-eye-l"></div>
+          <div class="feedback-eye" id="fb-eye-r"></div>
+        </div>
+        <div class="feedback-mouth" id="fb-mouth">
+          <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
+            <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-mouth-path"/>
+          </svg>
+        </div>
+      </div>
+      <div class="feedback-label" id="fb-label">NOT BAD</div>
+      <div class="feedback-track">
+        <div class="feedback-track-line" id="fb-track-line"></div>
+        <button class="feedback-dot" onclick="setFeedback(0)"></button>
+        <button class="feedback-dot" onclick="setFeedback(1)"></button>
+        <button class="feedback-dot" onclick="setFeedback(2)"></button>
+        <div class="feedback-indicator" id="fb-indicator">
+          <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
+            <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-ind-path"/>
+          </svg>
+        </div>
+      </div>
+      <div class="feedback-labels" id="fb-labels">
+        <span>Bad</span><span>Not Bad</span><span>Good</span>
+      </div>
+      <textarea class="feedback-comment" id="fb-comment" placeholder="Any comments? (optional)" rows="3"></textarea>
+      <button class="feedback-submit" id="fb-submit" onclick="submitFeedback()">Submit Feedback</button>
+      <button class="feedback-skip" onclick="skipFeedback()">Skip</button>
+    </div>
   </div>
 
   <footer class="app-footer">&copy; 2026 LearnAI Team &middot; <a href="https://lainow.com" target="_blank">lainow.com</a></footer>
@@ -1889,6 +1999,92 @@ console.log(`${QUESTIONS.length} questions loaded (inline)`);
     console.warn('Shader init failed:',e);
   }
 })();
+
+// ─── Feedback Screen ──────────────────────────────────────────────────
+const FB_STATES=[
+  {bg:'#fc7359',indicator:'#790b02',path:'#fc7359',face:'#790b02',title:'#790b02',
+   track:'#fc5b3e',eyeW:28,eyeH:28,eyeR:'50%',mouthRot:180,indRot:180,
+   label:'BAD',labelColor:'#e33719',indLeft:'0%'},
+  {bg:'#dfa342',indicator:'#482103',path:'#dfa342',face:'#482103',title:'#482103',
+   track:'#b07615',eyeW:50,eyeH:12,eyeR:'36px',mouthRot:180,indRot:180,
+   label:'NOT BAD',labelColor:'#b37716',indLeft:'50%'},
+  {bg:'#9fbe59',indicator:'#0b2b03',path:'#9fbe59',face:'#0b2b03',title:'#0b2b03',
+   track:'#698b1b',eyeW:60,eyeH:60,eyeR:'50%',mouthRot:0,indRot:0,
+   label:'GOOD',labelColor:'#6e901d',indLeft:'100%'}
+];
+let fbIndex=1; // default to "Not Bad"
+
+function setFeedback(i){
+  fbIndex=i;
+  const s=FB_STATES[i];
+  const wrap=document.getElementById('feedback-wrap');
+  wrap.style.backgroundColor=s.bg;
+  document.getElementById('fb-eye-l').style.cssText=`width:${s.eyeW}px;height:${s.eyeH}px;border-radius:${s.eyeR};background:${s.face}`;
+  document.getElementById('fb-eye-r').style.cssText=`width:${s.eyeW}px;height:${s.eyeH}px;border-radius:${s.eyeR};background:${s.face}`;
+  document.getElementById('fb-mouth').style.transform=`rotate(${s.mouthRot}deg)`;
+  document.getElementById('fb-mouth-path').setAttribute('stroke',s.face);
+  document.getElementById('fb-label').textContent=s.label;
+  document.getElementById('fb-label').style.color=s.labelColor;
+  document.getElementById('fb-track-line').style.backgroundColor=s.track;
+  document.querySelectorAll('.feedback-dot').forEach(d=>d.style.backgroundColor=s.track);
+  const ind=document.getElementById('fb-indicator');
+  ind.style.left=s.indLeft;
+  ind.style.backgroundColor=s.indicator;
+  ind.style.transform=`translate(-50%,-50%) rotate(${s.indRot}deg)`;
+  document.getElementById('fb-ind-path').setAttribute('stroke',s.path);
+  document.querySelectorAll('.feedback-labels span').forEach((sp,j)=>{
+    sp.style.color=s.title;
+    sp.style.opacity=j===i?'1':'0.5';
+  });
+  document.getElementById('fb-submit').style.backgroundColor=s.indicator;
+  document.getElementById('fb-comment').style.borderColor=s.track;
+}
+
+function showFeedbackScreen(){
+  showScreen('screen-feedback');
+  setFeedback(1); // reset to "Not Bad"
+}
+
+function submitFeedback(){
+  const rating=['bad','not_bad','good'][fbIndex];
+  const comment=document.getElementById('fb-comment').value.trim();
+
+  // Submit to Google Sheets
+  const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwSnBFnM8Q29m7hoRbpHmhYo85_ZXkTR1qcp1n7Q_kXOLBzJClWw0qgHAyrrK017TVJPQ/exec';
+  const payload={
+    participant_id:participantId,
+    participant_name:participantName,
+    timestamp:new Date().toISOString(),
+    feedback_type:'post_test',
+    feedback_rating:rating,
+    feedback_comment:comment,
+    test_mode:testMode
+  };
+
+  let iframe=document.getElementById('_fb_frame');
+  if(!iframe){
+    iframe=document.createElement('iframe');
+    iframe.id='_fb_frame';iframe.name='_fb_frame';
+    iframe.style.display='none';
+    document.body.appendChild(iframe);
+  }
+  const form=document.createElement('form');
+  form.method='POST';form.action=SCRIPT_URL;
+  form.target='_fb_frame';form.style.display='none';
+  const input=document.createElement('input');
+  input.type='hidden';input.name='payload';input.value=JSON.stringify(payload);
+  form.appendChild(input);
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(()=>form.remove(),2000);
+
+  showToast('Thanks for your feedback!');
+  showScreen('screen-results');
+}
+
+function skipFeedback(){
+  showScreen('screen-results');
+}
 </script>
 </body>
 </html>
