@@ -96,6 +96,32 @@
             <feBlend in="p1" in2="p2" mode="color-dodge" result="cn"/>
             <feDisplacementMap in="SourceGraphic" in2="cn" scale="30" xChannelSelector="R" yChannelSelector="B"/>
           </filter>
+          <filter id="ec-swirl-a" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n1" seed="5"/>
+            <feOffset in="n1" result="o1"><animate attributeName="dy" values="700;0" dur="8s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n2" seed="5"/>
+            <feOffset in="n2" result="o2"><animate attributeName="dy" values="0;-700" dur="8s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n3" seed="6"/>
+            <feOffset in="n3" result="o3"><animate attributeName="dx" values="490;0" dur="8s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n4" seed="6"/>
+            <feOffset in="n4" result="o4"><animate attributeName="dx" values="0;-490" dur="8s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feComposite in="o1" in2="o2" result="p1"/><feComposite in="o3" in2="o4" result="p2"/>
+            <feBlend in="p1" in2="p2" mode="color-dodge" result="cn"/>
+            <feDisplacementMap in="SourceGraphic" in2="cn" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+          </filter>
+          <filter id="ec-swirl-b" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n1" seed="7"/>
+            <feOffset in="n1" result="o1"><animate attributeName="dy" values="700;0" dur="9s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n2" seed="7"/>
+            <feOffset in="n2" result="o2"><animate attributeName="dy" values="0;-700" dur="9s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n3" seed="8"/>
+            <feOffset in="n3" result="o3"><animate attributeName="dx" values="490;0" dur="9s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n4" seed="8"/>
+            <feOffset in="n4" result="o4"><animate attributeName="dx" values="0;-490" dur="9s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feComposite in="o1" in2="o2" result="p1"/><feComposite in="o3" in2="o4" result="p2"/>
+            <feBlend in="p1" in2="p2" mode="color-dodge" result="cn"/>
+            <feDisplacementMap in="SourceGraphic" in2="cn" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+          </filter>
         </defs>
       </svg>
       <div class="mode-cards">
@@ -133,6 +159,45 @@
                 <hr class="ec-divider">
                 <div class="ec-desc">48 questions &middot; ~10 minutes<br>Full analysis + report &amp; certificate</div>
                 <button class="ec-btn">Start Full</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ec-wrap ec-wrap--adaptive" onclick="location.href='level1.html'">
+          <div class="ec-card">
+            <div class="ec-inner">
+              <div class="ec-border"><div class="ec-main"></div></div>
+              <div class="ec-glow1"></div><div class="ec-glow2"></div>
+            </div>
+            <div class="ec-overlay1"></div><div class="ec-overlay2"></div>
+            <div class="ec-bg-glow"></div>
+            <div class="ec-content">
+              <div><div class="ec-badge">NEW</div></div>
+              <div>
+                <div class="ec-title" style="color:#22d3ee">Adaptive</div>
+                <hr class="ec-divider">
+                <div class="ec-desc">3 levels that adapt to your skills.<br>Unlock the Boss Challenge.</div>
+                <div class="level-dots-mini">L1 &#9675; &rarr; L2 &#9675; &rarr; L3 &#9675;</div>
+                <button class="ec-btn">Begin Level 1 &rarr;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ec-wrap ec-wrap--boss locked" id="boss-card">
+          <div class="ec-card">
+            <div class="ec-inner">
+              <div class="ec-border"><div class="ec-main"></div></div>
+              <div class="ec-glow1"></div><div class="ec-glow2"></div>
+            </div>
+            <div class="ec-overlay1"></div><div class="ec-overlay2"></div>
+            <div class="ec-bg-glow"></div>
+            <div class="ec-content">
+              <div><div class="ec-badge" id="boss-badge">&#128274; Locked</div></div>
+              <div>
+                <div class="ec-title" style="color:#f59e0b">Boss Challenge</div>
+                <hr class="ec-divider">
+                <div class="ec-desc" id="boss-desc">&#128274; Complete Adaptive Assessment at Practitioner level to unlock</div>
+                <button class="ec-btn">Accept Challenge &rarr;</button>
               </div>
             </div>
           </div>
@@ -1223,6 +1288,22 @@ document.addEventListener('keydown',function(e){
 })();
 
 // Previous results banner removed — clean landing page
+
+// ─── Boss Challenge unlock check ────────────────────────────────────────
+(function checkBossUnlock() {
+  var session = (typeof getAdaptiveSession === 'function') ? getAdaptiveSession() : {};
+  var card = document.getElementById('boss-card');
+  if (!card) return;
+  if (session.level3Unlocked) {
+    card.classList.remove('locked');
+    card.classList.add('unlocked');
+    card.onclick = function() { location.href = 'level3.html'; };
+    var badge = document.getElementById('boss-badge');
+    if (badge) badge.textContent = 'UNLOCKED';
+    var desc = document.getElementById('boss-desc');
+    if (desc) desc.innerHTML = 'Multi-step case study. Pass/fail.<br>Earn your badge.';
+  }
+})();
 
 console.log(`${QUESTIONS.length} questions loaded (inline)`);
 

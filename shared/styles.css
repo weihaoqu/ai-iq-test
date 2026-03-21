@@ -530,8 +530,9 @@ canvas#radarChart{max-width:340px;max-height:340px}
   h1{font-size:1.5rem}
 }
 /* ── Mode Cards ── */
-.mode-cards{display:flex;gap:14px;width:100%}
-@media(max-width:420px){.mode-cards{flex-direction:column}}
+.mode-cards{display:flex;flex-wrap:wrap;gap:14px;width:100%}
+.mode-cards .ec-wrap{flex:1 1 calc(50% - 7px);min-width:0}
+@media(max-width:420px){.mode-cards{flex-direction:column}.mode-cards .ec-wrap{flex:1 1 100%}}
 
 /* ── Electric Card Mode Cards ── */
 .ec-wrap{position:relative;display:inline-block;flex:1;min-width:0;cursor:pointer}
@@ -605,6 +606,38 @@ canvas#radarChart{max-width:340px;max-height:340px}
 .ec-wrap--full .ec-glow2{border:2px solid #60a5fa}
 .ec-wrap--full .ec-bg-glow{background:linear-gradient(-30deg,#60a5fa,transparent,#2563eb)}
 .ec-wrap--full .ec-btn{background:linear-gradient(135deg,#1d4ed8,#2563eb)}
+
+/* Adaptive = cyan-to-amber gradient */
+.ec-wrap--adaptive .ec-card{
+  background:linear-gradient(-30deg,rgba(34,211,238,.4),transparent,rgba(245,158,11,.4)),linear-gradient(to bottom,oklch(0.185 0 0),oklch(0.185 0 0));
+}
+.ec-wrap--adaptive .ec-border{border:2px solid rgba(34,211,238,.5)}
+.ec-wrap--adaptive .ec-main{border:2px solid #22d3ee;filter:url(#ec-swirl-a)}
+.ec-wrap--adaptive .ec-glow1{border:2px solid rgba(34,211,238,.6)}
+.ec-wrap--adaptive .ec-glow2{border:2px solid #22d3ee}
+.ec-wrap--adaptive .ec-bg-glow{background:linear-gradient(-30deg,#22d3ee,transparent,#f59e0b)}
+.ec-wrap--adaptive .ec-btn{background:linear-gradient(135deg,#0891b2,#22d3ee);color:#fff}
+
+/* Boss Challenge card */
+.ec-wrap--boss.locked{opacity:0.4;pointer-events:none;filter:grayscale(0.5)}
+.ec-wrap--boss.locked .ec-btn{display:none}
+.ec-wrap--boss.unlocked .ec-card{
+  background:linear-gradient(-30deg,rgba(245,158,11,.4),transparent,rgba(245,158,11,.4)),linear-gradient(to bottom,oklch(0.185 0 0),oklch(0.185 0 0));
+}
+.ec-wrap--boss.unlocked .ec-border{border:2px solid rgba(245,158,11,.5)}
+.ec-wrap--boss.unlocked .ec-main{border:2px solid #f59e0b;filter:url(#ec-swirl-b)}
+.ec-wrap--boss.unlocked .ec-glow1{border:2px solid rgba(245,158,11,.6)}
+.ec-wrap--boss.unlocked .ec-glow2{border:2px solid #f59e0b}
+.ec-wrap--boss.unlocked .ec-bg-glow{background:linear-gradient(-30deg,#f59e0b,transparent,#dd8448)}
+.ec-wrap--boss.unlocked .ec-btn{background:linear-gradient(135deg,#d97706,#f59e0b);color:#0c1222}
+
+/* Level dots for adaptive card */
+.level-dots-mini{
+  display:flex;align-items:center;gap:4px;
+  font-size:.65rem;color:rgba(255,255,255,.5);
+  margin-top:6px;
+}
+
 /* ── Feedback Modal ── */
 .fb-modal-overlay{
   display:none;position:fixed;inset:0;z-index:100;
