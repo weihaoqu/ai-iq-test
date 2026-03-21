@@ -25,6 +25,8 @@
 <link rel="preload" href="images/scenarios/f02.svg" as="image">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+<script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -477,12 +479,59 @@ canvas#radarChart{max-width:340px;max-height:340px}
 .review-item .ri-best{font-size:.82rem;color:#34d399;font-weight:600;margin-top:4px}
 
 /* ── Footer ── */
-.app-footer{
-  margin-top:auto;padding:20px 0 12px;text-align:center;
-  font-size:.75rem;color:var(--text-muted);
+/* ── Tutors Section ── */
+.tutors-section{
+  text-align:center;padding:20px 0 10px;margin-top:20px;margin-bottom:10px;
   border-top:1px solid var(--border);
 }
-.app-footer a{color:var(--primary-light);text-decoration:none;font-weight:600}
+.tutors-title{
+  font-size:.8rem;font-weight:600;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;
+}
+.tutors-row{
+  display:flex;justify-content:center;gap:24px;
+}
+.tutor-card{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.tutor-card:hover{transform:translateY(-6px) scale(1.05)}
+.tutor-avatar{
+  width:110px;height:110px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(96,165,250,.2);
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  animation:float 4s ease-in-out infinite;
+}
+.tutor-card:nth-child(2) .tutor-avatar{animation-delay:-1.3s}
+.tutor-card:nth-child(3) .tutor-avatar{animation-delay:-2.6s}
+.tutor-card:hover .tutor-avatar{
+  border-color:rgba(96,165,250,.5);
+  box-shadow:0 8px 30px rgba(37,99,235,.2);
+}
+.tutor-avatar img{width:100%;height:100%;object-fit:cover}
+.tutor-3d{
+  border:none;box-shadow:none;border-radius:0;overflow:visible;
+  background:transparent;position:relative;
+}
+.tutor-3d canvas{
+  width:100%;height:100%;display:block;
+  cursor:grab;
+}
+.tutor-name-top{
+  position:absolute;top:8%;left:50%;transform:translateX(-50%);
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;
+  color:var(--text);pointer-events:none;white-space:nowrap;
+  text-shadow:0 2px 8px rgba(0,0,0,.5);z-index:2;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+.app-footer{
+  padding:16px 0;text-align:center;
+  font-size:.75rem;color:var(--text-muted);
+  position:relative;z-index:10;
+}
+.app-footer a{color:var(--accent);text-decoration:none;font-weight:600}
 .app-footer a:hover{text-decoration:underline}
 
 /* ── Confetti Canvas ── */
@@ -515,28 +564,104 @@ canvas#radarChart{max-width:340px;max-height:340px}
 }
 /* ── Mode Cards ── */
 .mode-cards{display:flex;gap:14px;width:100%}
-.mode-card{
-  flex:1;padding:20px 16px;border-radius:var(--radius);
-  background:var(--bg-card);backdrop-filter:var(--glass-blur);
-  border:1.5px solid var(--border);cursor:pointer;
-  transition:all .35s cubic-bezier(.16,1,.3,1);
-  text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;
-}
-.mode-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.3),0 0 30px rgba(37,99,235,.1)}
-.mode-card--quick:hover{border-color:rgba(245,158,11,.4);box-shadow:0 4px 25px rgba(245,158,11,.15)}
-.mode-card--full:hover{border-color:rgba(37,99,235,.4);box-shadow:0 4px 25px rgba(37,99,235,.15)}
-.mode-card__icon{width:48px;height:48px}
-.mode-card__title{font-size:1rem;font-weight:700}
-.mode-card__details{font-size:.75rem;color:var(--text-dim);line-height:1.5}
-.mode-card__btn{
-  margin-top:auto;padding:10px 20px;border-radius:var(--radius-sm);
-  font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;
-  border:none;cursor:pointer;width:100%;transition:all .2s;
-}
-.mode-card--quick .mode-card__btn{background:linear-gradient(135deg,#d97706,var(--accent));color:#0c1222}
-.mode-card--full .mode-card__btn{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff}
 @media(max-width:420px){.mode-cards{flex-direction:column}}
-/* ── Feedback Screen ── */
+
+/* ── Electric Card Mode Cards ── */
+.ec-wrap{position:relative;display:inline-block;flex:1;min-width:0;cursor:pointer}
+.ec-wrap .svg-defs{position:absolute;width:0;height:0;overflow:hidden}
+.ec-card{
+  padding:2px;border-radius:1.5em;position:relative;color:#f0f0f0;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.ec-card:hover{transform:translateY(-6px)}
+.ec-inner{position:relative}
+.ec-border{border-radius:1.5em;padding-right:0.15em;padding-bottom:0.15em}
+.ec-main{
+  width:100%;aspect-ratio:7/10;border-radius:1.5em;
+  margin-top:-4px;margin-left:-4px;background:oklch(0.145 0 0);
+}
+.ec-glow1,.ec-glow2,.ec-overlay1,.ec-overlay2,.ec-bg-glow{
+  border-radius:1.5em;position:absolute;inset:0;
+}
+.ec-glow1{filter:blur(1px)}
+.ec-glow2{filter:blur(4px)}
+.ec-overlay1,.ec-overlay2{
+  mix-blend-mode:overlay;transform:scale(1.1);filter:blur(16px);
+  background:linear-gradient(-30deg,white,transparent 30%,transparent 70%,white);
+}
+.ec-overlay1{opacity:1}.ec-overlay2{opacity:.5}
+.ec-bg-glow{filter:blur(32px);transform:scale(1.1);opacity:.3;z-index:-1}
+.ec-content{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:24px 20px;justify-content:space-between;
+}
+.ec-badge{
+  background:radial-gradient(47% 50% at 50% 88%,rgba(255,255,255,.12) 0%,rgba(255,255,255,0) 100%),rgba(255,255,255,.04);
+  border-radius:14px;width:fit-content;padding:.4em .8em;
+  text-transform:uppercase;font-weight:700;font-size:.7em;
+  color:rgba(255,255,255,.8);position:relative;
+}
+.ec-badge::before{
+  content:'';position:absolute;inset:0;padding:1px;border-radius:inherit;
+  background:linear-gradient(150deg,rgba(255,255,255,.48) 17%,rgba(255,255,255,.08) 30%,rgba(255,255,255,.08) 68%,rgba(255,255,255,.6) 82%);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask-composite:exclude;-webkit-mask-composite:xor;pointer-events:none;
+}
+.ec-title{font-size:1.4em;font-weight:700;margin-top:auto}
+.ec-divider{border:none;height:1px;background:currentColor;opacity:.1;
+  mask-image:linear-gradient(to right,transparent,black,transparent);-webkit-mask-image:linear-gradient(to right,transparent,black,transparent)}
+.ec-desc{font-size:.75em;opacity:.6;line-height:1.5}
+.ec-btn{
+  margin-top:8px;padding:10px 20px;border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif;font-size:.85rem;font-weight:600;
+  border:none;cursor:pointer;width:100%;transition:all .2s;color:#fff;
+}
+
+/* Quick = orange */
+.ec-wrap--quick .ec-card{
+  background:linear-gradient(-30deg,rgba(217,119,6,.4),transparent,rgba(217,119,6,.4)),linear-gradient(to bottom,oklch(0.185 0 0),oklch(0.185 0 0));
+}
+.ec-wrap--quick .ec-border{border:2px solid rgba(245,158,11,.5)}
+.ec-wrap--quick .ec-main{border:2px solid #f59e0b;filter:url(#ec-swirl-q)}
+.ec-wrap--quick .ec-glow1{border:2px solid rgba(245,158,11,.6)}
+.ec-wrap--quick .ec-glow2{border:2px solid #f59e0b}
+.ec-wrap--quick .ec-bg-glow{background:linear-gradient(-30deg,#f59e0b,transparent,#dd8448)}
+.ec-wrap--quick .ec-btn{background:linear-gradient(135deg,#d97706,#f59e0b);color:#0c1222}
+
+/* Full = blue */
+.ec-wrap--full .ec-card{
+  background:linear-gradient(-30deg,rgba(37,99,235,.4),transparent,rgba(37,99,235,.4)),linear-gradient(to bottom,oklch(0.185 0 0),oklch(0.185 0 0));
+}
+.ec-wrap--full .ec-border{border:2px solid rgba(96,165,250,.5)}
+.ec-wrap--full .ec-main{border:2px solid #60a5fa;filter:url(#ec-swirl-f)}
+.ec-wrap--full .ec-glow1{border:2px solid rgba(96,165,250,.6)}
+.ec-wrap--full .ec-glow2{border:2px solid #60a5fa}
+.ec-wrap--full .ec-bg-glow{background:linear-gradient(-30deg,#60a5fa,transparent,#2563eb)}
+.ec-wrap--full .ec-btn{background:linear-gradient(135deg,#1d4ed8,#2563eb)}
+/* ── Feedback Modal ── */
+.fb-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:100;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+  animation:fadeUp .3s ease-out;
+}
+.fb-modal-overlay.active{display:flex}
+.fb-modal{
+  position:relative;max-width:380px;width:90%;
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+  overflow:hidden;
+  animation:popIn .35s cubic-bezier(.16,1,.3,1);
+}
+.fb-modal-close{
+  position:absolute;top:12px;right:14px;z-index:2;
+  background:none;border:none;color:rgba(255,255,255,.5);
+  font-size:1.5rem;cursor:pointer;line-height:1;
+  transition:color .2s;
+}
+.fb-modal-close:hover{color:#fff}
+/* ── Feedback Content ── */
 .feedback-wrap{
   display:flex;flex-direction:column;align-items:center;gap:24px;
   padding:32px 20px;border-radius:var(--radius);
@@ -642,38 +767,75 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <span class="dim-pill" style="background:rgba(56,189,248,.15);color:var(--dim-collab);border-color:rgba(56,189,248,.25)">Collaboration</span>
         <span class="dim-pill" style="background:rgba(249,115,22,.15);color:#f97316;border-color:rgba(249,115,22,.25)">AI Building</span>
       </div>
+      <!-- SVG filter defs for electric cards -->
+      <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+        <defs>
+          <filter id="ec-swirl-q" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n1" seed="1"/>
+            <feOffset in="n1" result="o1"><animate attributeName="dy" values="700;0" dur="6s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n2" seed="1"/>
+            <feOffset in="n2" result="o2"><animate attributeName="dy" values="0;-700" dur="6s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n3" seed="2"/>
+            <feOffset in="n3" result="o3"><animate attributeName="dx" values="490;0" dur="6s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n4" seed="2"/>
+            <feOffset in="n4" result="o4"><animate attributeName="dx" values="0;-490" dur="6s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feComposite in="o1" in2="o2" result="p1"/><feComposite in="o3" in2="o4" result="p2"/>
+            <feBlend in="p1" in2="p2" mode="color-dodge" result="cn"/>
+            <feDisplacementMap in="SourceGraphic" in2="cn" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+          </filter>
+          <filter id="ec-swirl-f" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n1" seed="3"/>
+            <feOffset in="n1" result="o1"><animate attributeName="dy" values="700;0" dur="7s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n2" seed="3"/>
+            <feOffset in="n2" result="o2"><animate attributeName="dy" values="0;-700" dur="7s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n3" seed="4"/>
+            <feOffset in="n3" result="o3"><animate attributeName="dx" values="490;0" dur="7s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="n4" seed="4"/>
+            <feOffset in="n4" result="o4"><animate attributeName="dx" values="0;-490" dur="7s" repeatCount="indefinite" calcMode="linear"/></feOffset>
+            <feComposite in="o1" in2="o2" result="p1"/><feComposite in="o3" in2="o4" result="p2"/>
+            <feBlend in="p1" in2="p2" mode="color-dodge" result="cn"/>
+            <feDisplacementMap in="SourceGraphic" in2="cn" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+          </filter>
+        </defs>
+      </svg>
       <div class="mode-cards">
-        <div class="mode-card mode-card--quick" onclick="startTest('quick')">
-          <svg class="mode-card__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="20" stroke="#f59e0b" stroke-width="2.5" opacity=".2"/>
-            <circle cx="24" cy="24" r="20" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="94.25 31.42" stroke-linecap="round"/>
-            <path d="M24 14v10l7 4" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="24" cy="24" r="3" fill="#f59e0b"/>
-          </svg>
-          <div class="mode-card__title" style="color:var(--accent)">Quick</div>
-          <div class="mode-card__details">
-            16 questions<br>~4 minutes<br>Score + radar chart
+        <div class="ec-wrap ec-wrap--quick" onclick="startTest('quick')">
+          <div class="ec-card">
+            <div class="ec-inner">
+              <div class="ec-border"><div class="ec-main"></div></div>
+              <div class="ec-glow1"></div><div class="ec-glow2"></div>
+            </div>
+            <div class="ec-overlay1"></div><div class="ec-overlay2"></div>
+            <div class="ec-bg-glow"></div>
+            <div class="ec-content">
+              <div><div class="ec-badge">Quick Scan</div></div>
+              <div>
+                <div class="ec-title" style="color:#fbbf24">Quick</div>
+                <hr class="ec-divider">
+                <div class="ec-desc">16 questions &middot; ~4 minutes<br>Score + radar chart</div>
+                <button class="ec-btn">Start Quick</button>
+              </div>
+            </div>
           </div>
-          <button class="mode-card__btn">Start Quick</button>
         </div>
-        <div class="mode-card mode-card--full" onclick="startTest('full')">
-          <svg class="mode-card__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="24" cy="24" r="20" stroke="#2563eb" stroke-width="1" opacity=".15"/>
-            <circle cx="24" cy="24" r="13" stroke="#2563eb" stroke-width="1" opacity=".15"/>
-            <circle cx="24" cy="24" r="6" stroke="#2563eb" stroke-width="1" opacity=".15"/>
-            <polygon points="24,4 28.5,17 42,17 31,26 35,40 24,31 13,40 17,26 6,17 19.5,17" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linejoin="round" opacity=".8"/>
-            <circle cx="24" cy="4" r="2.5" fill="#60a5fa"/>
-            <circle cx="42" cy="17" r="2" fill="#38bdf8"/>
-            <circle cx="35" cy="40" r="2" fill="#2563eb"/>
-            <circle cx="13" cy="40" r="2" fill="#38bdf8"/>
-            <circle cx="6" cy="17" r="2" fill="#60a5fa"/>
-            <circle cx="24" cy="24" r="3" fill="#2563eb"/>
-          </svg>
-          <div class="mode-card__title" style="color:var(--primary-light)">Full</div>
-          <div class="mode-card__details">
-            48 questions<br>~10 minutes<br>Full analysis + report<br>&amp; certificate
+        <div class="ec-wrap ec-wrap--full" onclick="startTest('full')">
+          <div class="ec-card">
+            <div class="ec-inner">
+              <div class="ec-border"><div class="ec-main"></div></div>
+              <div class="ec-glow1"></div><div class="ec-glow2"></div>
+            </div>
+            <div class="ec-overlay1"></div><div class="ec-overlay2"></div>
+            <div class="ec-bg-glow"></div>
+            <div class="ec-content">
+              <div><div class="ec-badge">Full Assessment</div></div>
+              <div>
+                <div class="ec-title" style="color:#60a5fa">Full</div>
+                <hr class="ec-divider">
+                <div class="ec-desc">48 questions &middot; ~10 minutes<br>Full analysis + report &amp; certificate</div>
+                <button class="ec-btn">Start Full</button>
+              </div>
+            </div>
           </div>
-          <button class="mode-card__btn">Start Full</button>
         </div>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;width:100%;text-align:left;margin-top:4px">
@@ -802,7 +964,6 @@ canvas#radarChart{max-width:340px;max-height:340px}
         <button class="btn btn-share" style="flex:1;min-width:90px" onclick="shareViaSMS()">&#128172; Text</button>
         <button class="btn btn-share" style="flex:1;min-width:90px" onclick="shareResults()">&#128279; Copy</button>
       </div>
-      <button class="btn btn-outline btn-full" style="margin-top:6px" onclick="showFeedbackScreen()">&#128172; Rate This Test</button>
       <button class="btn btn-outline btn-full" style="margin-top:6px;opacity:.7" onclick="retakeQuiz()">&#8635; Retake Quiz</button>
       <div class="card" id="upsell-card" style="display:none;text-align:center;border-color:rgba(37,99,235,.2)">
         <h3 style="color:var(--primary-light);margin-bottom:8px">Want deeper insights?</h3>
@@ -831,42 +992,68 @@ canvas#radarChart{max-width:340px;max-height:340px}
     </a>
   </div>
 
-  <!-- SCREEN: Feedback -->
-  <div class="screen" id="screen-feedback" role="main" aria-label="Feedback">
-    <div class="feedback-wrap" id="feedback-wrap">
-      <h2 style="color:inherit;margin-bottom:0">How was this test?</h2>
-      <div class="feedback-face">
-        <div class="feedback-eyes">
-          <div class="feedback-eye" id="fb-eye-l"></div>
-          <div class="feedback-eye" id="fb-eye-r"></div>
+  <!-- Feedback Modal -->
+  <div class="fb-modal-overlay" id="fb-modal" onclick="if(event.target===this)closeFeedbackModal()">
+    <div class="fb-modal">
+      <button class="fb-modal-close" onclick="closeFeedbackModal()">&times;</button>
+      <div class="feedback-wrap" id="feedback-wrap">
+        <h2 style="color:inherit;margin-bottom:0;font-size:1.2rem">How was this test?</h2>
+        <div class="feedback-face">
+          <div class="feedback-eyes">
+            <div class="feedback-eye" id="fb-eye-l"></div>
+            <div class="feedback-eye" id="fb-eye-r"></div>
+          </div>
+          <div class="feedback-mouth" id="fb-mouth">
+            <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
+              <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-mouth-path"/>
+            </svg>
+          </div>
         </div>
-        <div class="feedback-mouth" id="fb-mouth">
-          <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
-            <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-mouth-path"/>
-          </svg>
+        <div class="feedback-label" id="fb-label">NOT BAD</div>
+        <div class="feedback-track">
+          <div class="feedback-track-line" id="fb-track-line"></div>
+          <button class="feedback-dot" onclick="setFeedback(0)"></button>
+          <button class="feedback-dot" onclick="setFeedback(1)"></button>
+          <button class="feedback-dot" onclick="setFeedback(2)"></button>
+          <div class="feedback-indicator" id="fb-indicator">
+            <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
+              <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-ind-path"/>
+            </svg>
+          </div>
         </div>
-      </div>
-      <div class="feedback-label" id="fb-label">NOT BAD</div>
-      <div class="feedback-track">
-        <div class="feedback-track-line" id="fb-track-line"></div>
-        <button class="feedback-dot" onclick="setFeedback(0)"></button>
-        <button class="feedback-dot" onclick="setFeedback(1)"></button>
-        <button class="feedback-dot" onclick="setFeedback(2)"></button>
-        <div class="feedback-indicator" id="fb-indicator">
-          <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
-            <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-ind-path"/>
-          </svg>
+        <div class="feedback-labels" id="fb-labels">
+          <span>Bad</span><span>Not Bad</span><span>Good</span>
         </div>
+        <textarea class="feedback-comment" id="fb-comment" placeholder="Any comments? (optional)" rows="3"></textarea>
+        <button class="feedback-submit" id="fb-submit" onclick="submitFeedback()">Submit Feedback</button>
+        <button class="feedback-skip" onclick="closeFeedbackModal()">Skip</button>
       </div>
-      <div class="feedback-labels" id="fb-labels">
-        <span>Bad</span><span>Not Bad</span><span>Good</span>
-      </div>
-      <textarea class="feedback-comment" id="fb-comment" placeholder="Any comments? (optional)" rows="3"></textarea>
-      <button class="feedback-submit" id="fb-submit" onclick="submitFeedback()">Submit Feedback</button>
-      <button class="feedback-skip" onclick="skipFeedback()">Skip</button>
     </div>
   </div>
 
+  <div class="tutors-section">
+    <div class="tutors-title">Your AI Tutors</div>
+    <div class="tutors-row">
+      <a class="tutor-card" href="https://lainow.com" target="_blank">
+        <div class="tutor-avatar tutor-3d">
+          <span class="tutor-name-top">Danny</span>
+          <canvas id="tutor-danny" width="200" height="200"></canvas>
+        </div>
+      </a>
+      <a class="tutor-card" href="https://lainow.com" target="_blank">
+        <div class="tutor-avatar tutor-3d">
+          <span class="tutor-name-top">Chris</span>
+          <canvas id="tutor-chris" width="200" height="200"></canvas>
+        </div>
+      </a>
+      <a class="tutor-card" href="https://lainow.com" target="_blank">
+        <div class="tutor-avatar tutor-3d">
+          <span class="tutor-name-top">KG</span>
+          <canvas id="tutor-kg" width="200" height="200"></canvas>
+        </div>
+      </a>
+    </div>
+  </div>
   <footer class="app-footer">&copy; 2026 LearnAI Team &middot; <a href="https://lainow.com" target="_blank">lainow.com</a></footer>
 </div>
 
@@ -1013,15 +1200,10 @@ function updateRobotPosition(screenId){
   if(screenId==='screen-landing'){
     robot.classList.add('robot-landing');
     robot.style.position='relative';
+    robot.style.display='';
     if(slot)slot.appendChild(robot);
-  } else if(screenId==='screen-results'||screenId==='screen-feedback'){
-    robot.classList.add('robot-results');
-    robot.style.position='fixed';
-    document.body.appendChild(robot);
   } else {
-    robot.classList.add('robot-small');
-    robot.style.position='fixed';
-    document.body.appendChild(robot);
+    robot.style.display='none';
   }
 }
 
@@ -1136,6 +1318,8 @@ function goNext(){
       return;
     }
     buildResults();showScreen('screen-results');
+    // Show feedback modal after a short delay
+    setTimeout(showFeedbackModal,2000);
     const finalScore=answers.reduce((s,a)=>s+a.score,0);
     const finalPct=Math.round((finalScore/(activeQuestions.length*4))*100);
     if(testMode==='quick'?finalPct>=67:finalScore>=120)launchConfetti();
@@ -1974,36 +2158,7 @@ function startTimer(){
   }
 })();
 
-// Show previous results per mode
-(function(){
-  try{
-    ['quick','full'].forEach(mode=>{
-      const prefix='ai_iq_'+mode+'_';
-      const keys=Object.keys(localStorage).filter(k=>k.startsWith(prefix));
-      if(!keys.length){
-        // Check legacy keys (no mode prefix) for 'full' mode
-        if(mode==='full'){
-          const legacyKeys=Object.keys(localStorage).filter(k=>k.startsWith('ai_iq_')&&!k.startsWith('ai_iq_quick_')&&!k.startsWith('ai_iq_full_'));
-          if(legacyKeys.length) keys.push(...legacyKeys);
-        }
-        if(!keys.length) return;
-      }
-      let latest=null;
-      keys.forEach(k=>{
-        try{
-          const d=JSON.parse(localStorage.getItem(k));
-          if(!latest||d.timestamp>latest.timestamp) latest=d;
-        }catch(e){}
-      });
-      if(!latest) return;
-      const scoreText=mode==='quick'?(latest.percentage||0)+'%':`${latest.total_score}/192`;
-      const div=document.createElement('div');
-      div.style.cssText='margin-top:8px;padding:8px 14px;border-radius:var(--radius-xs);background:var(--surface);border:1px solid var(--border);font-size:.75rem;color:var(--text-dim);text-align:center';
-      div.innerHTML=`Previous ${mode} result: <strong style="color:var(--text)">${scoreText}</strong> (${latest.level}) — ${latest.participant_name||'Anonymous'}`;
-      document.querySelector('.landing-stats').after(div);
-    });
-  }catch(e){}
-})();
+// Previous results banner removed — clean landing page
 
 console.log(`${QUESTIONS.length} questions loaded (inline)`);
 
@@ -2120,9 +2275,12 @@ function setFeedback(i){
   document.getElementById('fb-comment').style.borderColor=s.track;
 }
 
-function showFeedbackScreen(){
-  showScreen('screen-feedback');
-  setFeedback(1); // reset to "Not Bad"
+function showFeedbackModal(){
+  setFeedback(1);
+  document.getElementById('fb-modal').classList.add('active');
+}
+function closeFeedbackModal(){
+  document.getElementById('fb-modal').classList.remove('active');
 }
 
 function submitFeedback(){
@@ -2159,12 +2317,232 @@ function submitFeedback(){
   setTimeout(()=>form.remove(),2000);
 
   showToast('Thanks for your feedback!');
-  showScreen('screen-results');
+  closeFeedbackModal();
 }
 
-function skipFeedback(){
-  showScreen('screen-results');
-}
+
+// ─── 3D Tutor Characters ──────────────────────────────────────────────
+(function initTutors(){
+  if(typeof Zdog==='undefined'||typeof TweenMax==='undefined'){
+    setTimeout(initTutors,200);return;
+  }
+
+  var PALETTES = {
+    danny: { dark:"#080000",light:"#fff",skin:"hsl(120,40%,80%)",skinHighlight:"hsl(120,40%,90%)",skinShadow:"hsl(120,30%,60%)",flesh:"hsl(120,50%,30%)",initial:"D" },
+    chris: { dark:"#080000",light:"#fff",skin:"hsl(25,60%,75%)",skinHighlight:"hsl(25,55%,85%)",skinShadow:"hsl(25,45%,55%)",flesh:"hsl(0,50%,35%)",initial:"C" },
+    kg:    { dark:"#080000",light:"#fff",skin:"hsl(140,35%,70%)",skinHighlight:"hsl(140,35%,82%)",skinShadow:"hsl(140,28%,50%)",flesh:"hsl(140,45%,28%)",initial:"K" }
+  };
+
+  function createTutorModel(illo, PALETTE, initial) {
+    var headAnchor = new Zdog.Anchor({ addTo: illo, translate: { y: -42 } });
+    new Zdog.Group({ addTo: headAnchor });
+    new Zdog.Shape({ addTo: headAnchor.children[0], stroke: 228, color: PALETTE.skinShadow, path: [{ x: -4.5 }, { x: 4.5 }] });
+    new Zdog.Shape({ addTo: headAnchor.children[0], stroke: 216, color: PALETTE.skin, translate: { x: -4.5 } });
+
+    var eyeAnchor = new Zdog.Anchor({ addTo: headAnchor, translate: { x: -66, y: -30, z: 84 }, rotate: { y: Zdog.TAU / 11 } });
+    var eyeGroup = new Zdog.Group({ addTo: eyeAnchor });
+    new Zdog.Shape({ addTo: eyeGroup, fill: true, stroke: 0, color: PALETTE.skinShadow, scale: 1.15, path: [ { x: 0, y: 0, z: 3 }, { bezier: [ { x: 24, y: 0, z: 3 }, { x: 36, y: 21, z: 0 }, { x: 36, y: 36, z: 0 } ] }, { bezier: [ { x: 36, y: 51, z: 0 }, { x: 24, y: 63, z: 3 }, { x: 0, y: 63, z: 3 } ] }, { bezier: [ { x: -24, y: 63, z: 3 }, { x: -36, y: 51, z: 0 }, { x: -36, y: 36, z: 0 } ] }, { bezier: [ { x: -36, y: 21, z: 0 }, { x: -24, y: 0, z: 3 }, { x: 0, y: 0, z: 3 } ] } ] });
+    var eye = new Zdog.Shape({addTo: eyeGroup, fill: true, stroke: 3, color: PALETTE.dark, translate: { y: 6 }, path: [{x:0,y:0,z:3},{bezier:[{x:24,y:0,z:3},{x:36,y:21,z:0},{x:36,y:36,z:0}]},{bezier:[{x:36,y:51,z:0},{x:24,y:63,z:3},{x:0,y:63,z:3}]},{bezier:[{x:-24,y:63,z:3},{x:-36,y:51,z:0},{x:-36,y:36,z:0}]},{bezier:[{x:-36,y:21,z:0},{x:-24,y:0,z:3},{x:0,y:0,z:3}]}]});
+    eye.copy({ addTo: eye, fill: true, color: PALETTE.light, scale: 0.4, translate: { x: -9, y: 9, z: 3 } });
+    // No tears - happy tutors!
+    var eyeLeft = eyeAnchor.copyGraph({ translate: { x: 66, y: -30, z: 84 }, rotate: { y: Zdog.TAU / -11 } });
+
+    // Smiling mouth
+    var mouthAnchor = new Zdog.Anchor({ addTo: headAnchor, translate: { y: 36, z: 96 }, rotate: { x: Zdog.TAU / -45 } });
+    var mouthGroup = new Zdog.Group({ addTo: mouthAnchor });
+    // Mouth shadow
+    new Zdog.Shape({ addTo: mouthGroup, stroke: 3, fill: true, color: PALETTE.skinShadow, scale: 1.1, translate: {y:-5}, path: [{x:0,y:0},{bezier:[{x:22,y:0,z:0},{x:35,y:10,z:-4},{x:35,y:15,z:-4}]},{bezier:[{x:35,y:30,z:-4},{x:20,y:40,z:-3},{x:0,y:40,z:-3}]},{bezier:[{x:-20,y:40,z:-3},{x:-35,y:30,z:-4},{x:-35,y:15,z:-4}]},{bezier:[{x:-35,y:10,z:-4},{x:-22,y:0,z:0},{x:0,y:0,z:0}]}] });
+    // Mouth fill
+    new Zdog.Shape({ addTo: mouthGroup, stroke: 0, fill: true, color: PALETTE.flesh, path: [{x:0,y:0},{bezier:[{x:22,y:0,z:0},{x:35,y:10,z:-4},{x:35,y:15,z:-4}]},{bezier:[{x:35,y:30,z:-4},{x:20,y:40,z:-3},{x:0,y:40,z:-3}]},{bezier:[{x:-20,y:40,z:-3},{x:-35,y:30,z:-4},{x:-35,y:15,z:-4}]},{bezier:[{x:-35,y:10,z:-4},{x:-22,y:0,z:0},{x:0,y:0,z:0}]}] });
+    // Teeth
+    new Zdog.Shape({ addTo: mouthGroup, stroke: 7, fill: false, color: PALETTE.light, translate: {y:10,z:-3}, path: [{x:-20,y:0,z:0},{bezier:[{x:-10,y:8,z:-2},{x:10,y:8,z:-2},{x:20,y:0,z:0}]}], closed: false });
+    // Smile curve (wider, upturned)
+    var lipGroup = new Zdog.Group({ addTo: mouthAnchor });
+    new Zdog.Shape({ addTo: lipGroup, stroke: 7, fill: false, translate: {y:2,z:-2}, color: PALETTE.skinShadow, path: [{x:-30,y:18,z:-4},{bezier:[{x:-30,y:30,z:-4},{x:-20,y:36,z:-3},{x:-15,y:36,z:-3}]}], closed: false });
+    new Zdog.Shape({ addTo: lipGroup, stroke: 7, fill: false, translate: {y:-2,z:0}, color: PALETTE.skinHighlight, path: [{x:-30,y:18,z:-4},{bezier:[{x:-30,y:30,z:-4},{x:-20,y:36,z:-3},{x:-15,y:36,z:-3}]}], closed: false });
+    var lipLeftGroup = lipGroup.copyGraph();
+    lipLeftGroup.children.forEach(function(lip){ lip.scale.x = -1; });
+
+    var bodyAnchor = new Zdog.Anchor({ addTo: illo, translate: { y: 81 } });
+    var bodyGroup = new Zdog.Group({ addTo: bodyAnchor });
+    var bodyUpperGroup = new Zdog.Group({ addTo: bodyGroup });
+    var bodyUpper = new Zdog.Shape({ addTo: bodyUpperGroup, stroke: 63, fill: true, color: PALETTE.skinShadow, translate: { y: 6 } });
+    bodyUpper.copy({ stroke: 57, color: PALETTE.skin, translate: { x: -3 } });
+
+    // Blue suit jacket (over body)
+    var jacketColor = 'hsl(220,55%,30%)';
+    var jacketLight = 'hsl(220,50%,38%)';
+    // Jacket body
+    new Zdog.Shape({ addTo: bodyUpperGroup, stroke: 58, fill: true, color: jacketColor, translate: { y: 8, z: 2 } });
+    new Zdog.Shape({ addTo: bodyUpperGroup, stroke: 52, fill: true, color: jacketLight, translate: { x: -2, y: 8, z: 4 } });
+    // Shirt/collar V shape
+    new Zdog.Shape({ addTo: bodyUpperGroup, stroke: 6, color: '#ddd', translate: {y:-8,z:30}, path: [{x:-12,y:0,z:0},{x:0,y:18,z:0},{x:12,y:0,z:0}], closed: false });
+    // Tie
+    new Zdog.Shape({ addTo: bodyUpperGroup, stroke: 5, color: 'hsl(220,60%,25%)', translate: {y:5,z:32}, path: [{x:0,y:0},{x:0,y:22}], closed: false });
+    // No badge on body - "LAI" text overlay handled in HTML
+
+    var armGroup = new Zdog.Group({ addTo: bodyAnchor, translate: { z: -6 }, rotate: { x: Zdog.TAU / 16 } });
+    // Suit sleeves (jacket colored arms)
+    var arm = new Zdog.Shape({ addTo: armGroup, stroke: 30, color: jacketColor, path: [{x:-35,y:-6,z:0},{bezier:[{x:-33,y:-6,z:0},{x:-45,y:-6,z:0},{x:-54,y:30,z:0}]}], closed: false });
+    arm.copy({ stroke: 27, color: jacketLight });
+    var armLeft = armGroup.copyGraph({ rotate: { x: Zdog.TAU / 16, y: Zdog.TAU / 2 } });
+    armLeft.children[1].stroke = 21;
+    armLeft.children[1].translate = { x: 1, y: 1 };
+
+    var bodyLowerGroup = new Zdog.Group({ addTo: bodyGroup, translate: { y: 30 } });
+    // Lower body also in jacket
+    new Zdog.Shape({ addTo: bodyLowerGroup, stroke: 69, fill: true, color: jacketColor, translate: {y:6}, path: [{x:-4.5},{x:4.5}] }).copy({ stroke: 66, color: jacketLight, translate: {x:-3,y:4.5}, path: [{x:-4.5},{x:4.5}] });
+
+    var legGroup = new Zdog.Group({ addTo: illo, translate: { y: 141, z: -3 } });
+    new Zdog.Shape({ addTo: legGroup, stroke: 28, color: PALETTE.skinShadow, translate: {y:6}, path: [{x:-21,y:-6,z:0},{bezier:[{x:-18,y:-6,z:0},{x:-24,y:-6,z:0},{x:-24,y:24,z:0}]}], closed: false }).copy({ stroke: 24, color: PALETTE.skin });
+    var footGroup = new Zdog.Group({ addTo: legGroup, translate: { x: -25, y: 42, z: 4 }, rotate: { x: Zdog.TAU / 4 } });
+    new Zdog.Hemisphere({ addTo: footGroup, stroke: 5, diameter: 23, color: PALETTE.skinShadow, backface: PALETTE.skinShadow }).copy({ diameter: 20, color: PALETTE.skin, backface: PALETTE.skin, translate: { y: -2, z: 2 } });
+    var legLeft = legGroup.copyGraph({ rotate: { y: Zdog.TAU / 2 } });
+    legLeft.children[1].stroke = 20;
+    legLeft.children[1].translate = { x: 1, y: 9 };
+    legLeft.children[2].translate = { x: -25, y: 42, z: -4 };
+
+    return { headAnchor: headAnchor, bodyAnchor: bodyAnchor, bodyUpper: bodyUpper, eyeRight: eye, eyeLeft: eyeLeft.children[0] };
+  }
+
+  var tutors = [];
+
+  function createTutor(canvasId, palette){
+    var canvas = document.getElementById(canvasId);
+    if(!canvas) return null;
+
+    var illo = new Zdog.Illustration({
+      element: canvas,
+      zoom: 0.45,
+      dragRotate: true,
+    });
+
+    var model = createTutorModel(illo, palette, palette.initial);
+
+    // Breathing animation
+    TweenMax.to(model.bodyUpper.scale, 0.5, { x:0.95, y:0.97, repeat:-1, yoyo:true, ease:Sine.easeInOut });
+
+    // Blinking
+    var blink = function(){
+      var delay = Math.random()*6+2;
+      TweenMax.to([model.eyeRight.scale, model.eyeLeft.scale], 0.07, { y:0, repeat:1, yoyo:true, delay:delay, onComplete:blink });
+    };
+    blink();
+
+    // Look around
+    var lookAround = function(){
+      var ry = (Math.random()*40-20)/360*Zdog.TAU;
+      var dur = Math.random()+0.5;
+      TweenLite.to(model.headAnchor.rotate, dur, { y:ry, ease:Sine.easeInOut });
+      TweenLite.to(model.bodyAnchor.rotate, dur, { y:ry/2, ease:Sine.easeInOut, onComplete:function(){
+        setTimeout(lookAround, Math.random()*2000+1000);
+      }});
+    };
+    lookAround();
+
+    // Render loop
+    var animate = function(){
+      illo.updateRenderGraph();
+      requestAnimationFrame(animate);
+    };
+    animate();
+
+    return { illo: illo, model: model };
+  }
+
+  // Hair styles
+  function addDannyHair(model){
+    // Short brown curly hair — small rounded bumps on top of head
+    var hairColor = 'hsl(30,40%,35%)';
+    var hairHighlight = 'hsl(30,35%,45%)';
+    var head = model.headAnchor;
+    var positions = [
+      {x:0,y:-115,z:20},{x:-30,y:-112,z:15},{x:30,y:-112,z:15},
+      {x:-55,y:-100,z:10},{x:55,y:-100,z:10},{x:-20,y:-118,z:30},
+      {x:20,y:-118,z:30},{x:0,y:-110,z:40},{x:-40,y:-108,z:25},
+      {x:40,y:-108,z:25},{x:-10,y:-120,z:5},{x:10,y:-120,z:5}
+    ];
+    positions.forEach(function(p,i){
+      var size = 22 + Math.random()*10;
+      new Zdog.Shape({ addTo: head, stroke: size, color: i%3===0?hairHighlight:hairColor, translate: p });
+    });
+  }
+
+  function addChrisHair(model){
+    // Fuller brown curly hair — more volume, bigger bumps, covering more of head
+    var hairColor = 'hsl(25,45%,30%)';
+    var hairHighlight = 'hsl(25,40%,40%)';
+    var head = model.headAnchor;
+    var positions = [
+      {x:0,y:-120,z:20},{x:-35,y:-118,z:15},{x:35,y:-118,z:15},
+      {x:-60,y:-108,z:10},{x:60,y:-108,z:10},{x:-25,y:-122,z:35},
+      {x:25,y:-122,z:35},{x:0,y:-115,z:45},{x:-50,y:-112,z:28},
+      {x:50,y:-112,z:28},{x:-15,y:-125,z:8},{x:15,y:-125,z:8},
+      {x:-70,y:-95,z:5},{x:70,y:-95,z:5},{x:-45,y:-115,z:40},
+      {x:45,y:-115,z:40},{x:0,y:-118,z:-10},{x:-30,y:-115,z:-5},
+      {x:30,y:-115,z:-5}
+    ];
+    positions.forEach(function(p,i){
+      var size = 26 + Math.random()*12;
+      new Zdog.Shape({ addTo: head, stroke: size, color: i%3===0?hairHighlight:hairColor, translate: p });
+    });
+  }
+
+  function addKGHair(model){
+    // Dark dreadlocks — long hanging strands from top of head
+    var hairColor = 'hsl(0,0%,18%)';
+    var hairHighlight = 'hsl(0,0%,28%)';
+    var head = model.headAnchor;
+    // Dread roots on top
+    var roots = [
+      {x:0,y:-115,z:20},{x:-35,y:-110,z:15},{x:35,y:-110,z:15},
+      {x:-55,y:-100,z:10},{x:55,y:-100,z:10},{x:-20,y:-115,z:35},
+      {x:20,y:-115,z:35},{x:-65,y:-90,z:0},{x:65,y:-90,z:0},
+      {x:-45,y:-105,z:30},{x:45,y:-105,z:30}
+    ];
+    roots.forEach(function(r,i){
+      // Each dread is a line hanging down
+      var endY = r.y + 60 + Math.random()*40;
+      var endX = r.x + (Math.random()*20-10);
+      var midX = r.x + (Math.random()*15-7);
+      var col = i%3===0?hairHighlight:hairColor;
+      new Zdog.Shape({ addTo: head, stroke: 14, color: col, path: [
+        {x:r.x, y:r.y, z:r.z},
+        {bezier:[{x:midX,y:r.y+25,z:r.z-5},{x:endX,y:endY-20,z:r.z-10},{x:endX,y:endY,z:r.z-8}]}
+      ], closed: false });
+      // Dread tip (rounded end)
+      new Zdog.Shape({ addTo: head, stroke: 16, color: col, translate: {x:endX,y:endY,z:r.z-8} });
+    });
+  }
+
+  // Initialize all 3
+  try {
+    var d = createTutor('tutor-danny', PALETTES.danny);
+    if(d) addDannyHair(d.model);
+    tutors.push(d);
+    var c = createTutor('tutor-chris', PALETTES.chris);
+    if(c) addChrisHair(c.model);
+    tutors.push(c);
+    var k = createTutor('tutor-kg', PALETTES.kg);
+    if(k) addKGHair(k.model);
+    tutors.push(k);
+  } catch(e) {
+    console.warn('Tutor 3D init failed:', e);
+  }
+
+  // Mouse tracking across all 3 tutors
+  document.body.addEventListener('mousemove', function(e) {
+    tutors.forEach(function(t) {
+      if(!t || !t.model) return;
+      var canvas = t.illo.element;
+      var rect = canvas.getBoundingClientRect();
+      var rx = (e.clientX - (rect.left + rect.width/2)) / Zdog.TAU;
+      var ry = -(e.clientY - (rect.top + rect.height/2)) / Zdog.TAU;
+      TweenMax.to(t.model.headAnchor.rotate, 0.5, { x:ry/100, y:-rx/100, ease:Sine.easeOut });
+      TweenMax.to(t.model.bodyAnchor.rotate, 0.5, { x:ry/200, y:-rx/200, ease:Sine.easeOut });
+    });
+  });
+})();
 </script>
 </body>
 </html>
