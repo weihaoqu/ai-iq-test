@@ -125,7 +125,7 @@
         </defs>
       </svg>
       <div class="mode-cards">
-        <div class="ec-wrap ec-wrap--quick" onclick="startTest('quick')">
+        <div class="ec-wrap ec-wrap--quick" onclick="startTest('quick')" style="display:none">
           <div class="ec-card">
             <div class="ec-inner">
               <div class="ec-border"><div class="ec-main"></div></div>
@@ -144,7 +144,7 @@
             </div>
           </div>
         </div>
-        <div class="ec-wrap ec-wrap--full" onclick="startTest('full')">
+        <div class="ec-wrap ec-wrap--full" onclick="startTest('full')" style="display:none">
           <div class="ec-card">
             <div class="ec-inner">
               <div class="ec-border"><div class="ec-main"></div></div>
@@ -495,9 +495,11 @@ function selectQuickQuestions(){
   return picked;
 }
 
-// Precompute max scores per dimension (avoids repeated filter calls)
-const DIM_MAX={};
-DIMS.forEach(d=>{DIM_MAX[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
+// Precompute max scores per dimension (deferred until engine.js loads)
+let DIM_MAX={};
+document.addEventListener('DOMContentLoaded',()=>{
+  DIMS.forEach(d=>{DIM_MAX[d.key]=QUESTIONS.filter(q=>q.dim===d.key).length*4;});
+});
 
 // ─── State ──────────────────────────────────────────────────────────────
 let currentQ = 0;
