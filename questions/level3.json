@@ -13,35 +13,16 @@
       ]
     },
     "planning": {
-      "prompt": "Outline your approach to this project.",
-      "subPrompts": [
-        "Which AI tools or services would you use and why?",
-        "How would you handle patient data sensitivity?",
-        "What are the biggest risks and how would you mitigate them?",
-        "What's your timeline breakdown for the 2-week prototype phase?"
+      "prompt": "Rank these project planning steps from what you should do FIRST to LAST:",
+      "format": "ranking",
+      "items": [
+        { "text": "Audit the 200 weekly messages to categorize types (appointments, medication Qs, test results, complaints) and identify low-risk vs high-risk categories", "correctRank": 1 },
+        { "text": "Select a HIPAA-compliant AI platform with a signed BAA, ruling out free tiers that lack compliance guarantees", "correctRank": 2 },
+        { "text": "Build AI-drafted responses for low-risk categories (FAQs, appointment confirmations) with mandatory staff review before sending", "correctRank": 3 },
+        { "text": "Pilot the system internally for Week 1 — staff uses AI drafts but sends all messages manually after review", "correctRank": 4 },
+        { "text": "In Week 2, expand to semi-automated appointment confirmations while keeping all clinical content human-only", "correctRank": 5 }
       ],
-      "rubric": {
-        "4": {
-          "label": "Expert",
-          "description": "Proposes phased approach starting with low-risk use cases (FAQs, appointment reminders) before patient-facing chat. Addresses HIPAA explicitly with BAA requirements. Identifies hallucination risk for medical info. Plans human review loop.",
-          "exemplar": "Phase 1 (Week 1): Set up AI for internal use only — draft responses to common FAQs that staff review before sending. Use a HIPAA-compliant platform with BAA (like Azure OpenAI). Phase 2 (Week 2): Pilot automated appointment confirmations (low-risk, structured). Never let AI provide medical advice or access full records. Key risk: AI hallucinating medical information — mitigate with strict guardrails and mandatory human review for anything clinical."
-        },
-        "3": {
-          "label": "Proficient",
-          "description": "Reasonable approach with some phasing, but misses key risks or over-automates too early. May mention HIPAA without specifying BAA or concrete compliance steps.",
-          "exemplar": "Use ChatGPT Team plan for HIPAA compliance. Start with automated FAQ responses on the website. Have staff check responses for the first week, then gradually let the AI handle routine questions on its own."
-        },
-        "2": {
-          "label": "Developing",
-          "description": "Basic plan but unclear on data sensitivity or risks. Jumps to patient-facing deployment without adequate safeguards.",
-          "exemplar": "Set up a chatbot on the website using ChatGPT. Train it on common questions from the clinic's FAQ page. Let patients interact directly and have staff monitor occasionally."
-        },
-        "1": {
-          "label": "Novice",
-          "description": "No consideration of risks, data sensitivity, or phased rollout. Treats it as a simple plug-and-play installation.",
-          "exemplar": "Upload all patient records to ChatGPT so it knows everything about the clinic, then embed the chatbot on the website. Patients can ask anything and get instant answers."
-        }
-      }
+      "explanation": "A phased approach starts with understanding the actual message mix (audit), then ensures compliance (HIPAA/BAA) before any AI touches patient data. Low-risk categories are automated first with human review. Internal piloting catches issues before patients are affected. Clinical content should never be automated — the hallucination risk for medical information is too dangerous."
     },
     "execution": [
       {
@@ -70,61 +51,32 @@
         "explanation": "BAA is mandatory for HIPAA. De-identified data is safe for development. Never upload real patient data for fine-tuning — even 'samples' can contain PHI. Separate storage prevents accidental exposure. Opt-in respects patient autonomy. Free tiers typically don't offer HIPAA compliance or data handling guarantees."
       },
       {
-        "format": "freetext",
-        "q": "Mid-project crisis: A test patient receives an AI-generated message that confidently states 'Your lab results are normal and no follow-up is needed' — but the AI fabricated this. The actual results haven't been processed yet. What do you do immediately, and what do you change about the system?",
-        "rubric": {
-          "4": {
-            "label": "Expert",
-            "description": "Immediate: contact patient, correct misinformation, involve doctor. Systemic: add guardrails preventing medical claims, require human approval for all clinical messages, audit all sent messages.",
-            "exemplar": "Immediately: 1) Pull AI from patient-facing use right now. 2) Have the doctor contact the patient directly to correct the misinformation and assess any harm. 3) Audit ALL messages sent during testing for similar hallucinations. Systemic changes: Implement hard guardrails — AI can never reference lab results, diagnoses, or medications. Add mandatory doctor sign-off for any clinical content. Switch AI role to drafting administrative messages only (appointments, hours, directions). File an internal incident report."
-          },
-          "3": {
-            "label": "Proficient",
-            "description": "Good immediate response but weaker systemic changes. May not audit past messages or fully restrict AI scope.",
-            "exemplar": "Contact the patient to correct the information and apologize. Add a disclaimer to all AI messages saying they should be verified with their doctor. Require staff review of messages mentioning medical topics before they go out."
-          },
-          "2": {
-            "label": "Developing",
-            "description": "Addresses the immediate issue but doesn't fix the underlying system problem.",
-            "exemplar": "Tell the patient the message was wrong and their real results are coming soon. Add better prompts to the AI so it doesn't make things up. Maybe add a warning label."
-          },
-          "1": {
-            "label": "Novice",
-            "description": "Dismisses the issue or doesn't understand the severity of medical misinformation.",
-            "exemplar": "It's just a test, so it's not a big deal. Add a note that says 'AI-generated' to future messages so patients know to double-check."
-          }
-        }
+        "format": "multiselect",
+        "q": "Mid-project crisis: A test patient receives an AI-generated message that confidently states 'Your lab results are normal and no follow-up is needed' — but the AI fabricated this. The actual results haven't been processed yet. Which are correct immediate and systemic responses? Select all that apply.",
+        "options": [
+          { "text": "Pull AI from patient-facing use immediately until the issue is resolved", "correct": true },
+          { "text": "Have the doctor contact the patient directly to correct the misinformation and assess any harm", "correct": true },
+          { "text": "Add a disclaimer to AI messages saying 'this is AI-generated' and continue operating", "correct": false },
+          { "text": "Audit ALL messages sent during testing for similar hallucinations", "correct": true },
+          { "text": "Implement hard guardrails so AI can never reference lab results, diagnoses, or medications", "correct": true },
+          { "text": "It's just a test phase, so no special action is needed — just fix the prompt", "correct": false },
+          { "text": "Add mandatory doctor sign-off for any message with clinical content", "correct": true }
+        ],
+        "explanation": "Medical misinformation is serious even in testing. Immediate containment (pull AI, correct the patient, audit past messages) is essential. Systemic fixes include hard guardrails against clinical claims and mandatory doctor sign-off. A disclaimer alone doesn't prevent harm. Dismissing it as 'just a test' ignores that a real patient received fabricated medical information."
       }
     ],
     "reflection": {
-      "prompt": "Look back at your entire approach to this project.",
-      "subPrompts": [
-        "What would you do differently if you started this project over?",
-        "What's the biggest risk you didn't fully address?",
-        "What did this challenge reveal about your understanding of AI in sensitive contexts?"
+      "prompt": "Looking back at the clinic AI project, which of these are valid lessons learned? Select all that apply.",
+      "format": "multiselect",
+      "options": [
+        { "text": "Two weeks is too aggressive for healthcare AI — pushing back on the timeline would have been the right first move", "correct": true },
+        { "text": "Even one hallucinated medical message could destroy the clinic's reputation and create legal liability", "correct": true },
+        { "text": "AI in healthcare requires fundamentally different guardrails than general-purpose AI — the cost of a wrong answer is potential harm, not just inconvenience", "correct": true },
+        { "text": "The project would have succeeded with a bigger budget — the constraints were the real problem", "correct": false },
+        { "text": "Edge cases emerge quickly with real patients, so extensive testing with realistic scenarios is essential before any patient-facing deployment", "correct": true },
+        { "text": "The AI just needed more training data to avoid hallucinations — the technology will solve these problems on its own", "correct": false }
       ],
-      "rubric": {
-        "4": {
-          "label": "Expert",
-          "description": "Shows genuine metacognition. Identifies specific gaps in their earlier approach. Articulates nuanced understanding of AI limitations in healthcare. Connects to broader principles.",
-          "exemplar": "I'd start with a longer discovery phase — 2 weeks isn't enough for healthcare AI. I should have pushed back on the timeline instead of rushing to build. I underestimated how quickly edge cases emerge with real patients. The biggest unaddressed risk is patient trust: even one hallucinated medical message could destroy the clinic's reputation and create legal liability. This challenge showed me that AI in healthcare requires fundamentally different guardrails than general-purpose use — the cost of a wrong answer isn't just inconvenience, it's potential harm."
-        },
-        "3": {
-          "label": "Proficient",
-          "description": "Reasonable reflection with some genuine insight. Identifies at least one meaningful gap.",
-          "exemplar": "I'd spend more time on testing before any patient interaction. The hallucination risk is the biggest concern I didn't fully plan for. I learned that healthcare AI needs much more human oversight than I initially assumed."
-        },
-        "2": {
-          "label": "Developing",
-          "description": "Surface-level reflection. Mentions issues without analyzing them deeply.",
-          "exemplar": "I'd choose better AI tools next time. The main risk is data privacy. I learned that AI in healthcare is harder than regular AI projects."
-        },
-        "1": {
-          "label": "Novice",
-          "description": "No meaningful reflection or learning. Attributes problems to external factors rather than their own approach.",
-          "exemplar": "I think my approach was solid overall. The AI just needs more training data to avoid mistakes. With a bigger budget it would have worked fine."
-        }
-      }
+      "explanation": "Healthcare AI requires timeline realism, zero tolerance for medical hallucinations, domain-specific guardrails, and extensive real-scenario testing. Blaming budget constraints or expecting technology to self-correct misses the fundamental lesson: AI in sensitive contexts requires human-centered design, not just better models."
     }
   },
   {
@@ -141,35 +93,16 @@
       ]
     },
     "planning": {
-      "prompt": "Outline your approach to building this AI tutoring assistant.",
-      "subPrompts": [
-        "How would you design the AI tutor to help students learn without doing their work for them?",
-        "How would you handle the wide range of student skill levels?",
-        "What guardrails would you put in place around academic integrity?",
-        "How would you make the system accessible and equitable for all 300 students?"
+      "prompt": "Rank these AI tutoring design decisions from most to least important:",
+      "format": "ranking",
+      "items": [
+        { "text": "Design the AI as a Socratic guide that asks leading questions and gives hints, never outputting complete working code", "correctRank": 1 },
+        { "text": "Log all student-AI interactions for TA review and academic integrity monitoring", "correctRank": 2 },
+        { "text": "Build adaptive support — detect struggle patterns and adjust complexity (more scaffolding for beginners, deeper challenges for advanced students)", "correctRank": 3 },
+        { "text": "Ensure accessibility: screen reader support, voice input, adjustable pacing with no time pressure", "correctRank": 4 },
+        { "text": "Ground the AI's knowledge in course-specific material (syllabus, lecture slides, textbook sections)", "correctRank": 5 }
       ],
-      "rubric": {
-        "4": {
-          "label": "Expert",
-          "description": "Designs AI as a Socratic guide — asks leading questions, explains concepts, gives hints rather than answers. Plans differentiated support by skill level. Logs interactions for integrity monitoring. Addresses accessibility beyond compliance (screen readers, alternative input, cognitive load).",
-          "exemplar": "The AI tutor should never output working code directly. Instead, it uses Socratic questioning: 'What do you think happens when this loop reaches index 5?' It can explain concepts, point to relevant lecture material, and identify the type of error without fixing it. For skill levels, the system detects struggle patterns and adjusts — beginners get more scaffolding and vocabulary explanations, advanced students get deeper conceptual challenges. All interactions are logged and periodically reviewed; if a student's submitted code closely matches AI suggestions, it's flagged. For accessibility, the interface supports screen readers, allows voice input, and offers adjustable pacing with no time pressure."
-        },
-        "3": {
-          "label": "Proficient",
-          "description": "Good learning-first approach but may not fully address skill differentiation or accessibility beyond basics.",
-          "exemplar": "Set up the AI to give hints instead of answers. Use the course syllabus to ground its responses. Log all conversations so TAs can review them. For accessibility, make sure the interface works with screen readers and meets WCAG standards."
-        },
-        "2": {
-          "label": "Developing",
-          "description": "Basic plan that risks enabling academic dishonesty or ignoring equity concerns.",
-          "exemplar": "Use ChatGPT with a system prompt that says 'You are a CS 101 tutor.' Students can paste in their code and ask for help. Add a note telling them not to copy answers directly."
-        },
-        "1": {
-          "label": "Novice",
-          "description": "Treats the AI as a homework solver. No consideration of learning outcomes or integrity.",
-          "exemplar": "Let students ask the AI any question and get code solutions. It will help them learn by seeing correct answers. If they copy it, that's their choice."
-        }
-      }
+      "explanation": "The Socratic approach is foundational — it defines the AI's purpose as a learning tool, not a homework solver. Logging is critical for integrity and oversight. Adaptive support ensures equity across skill levels. Accessibility ensures no student is excluded. Course-specific grounding improves relevance but is less critical than the pedagogical approach itself."
     },
     "execution": [
       {
@@ -198,61 +131,31 @@
         "explanation": "Explaining errors and pointing to resources supports learning without giving answers. Adaptive complexity helps all skill levels. Logging enables oversight and early intervention. Generating complete solutions undermines learning and integrity. Exam use requires careful policy design and is inappropriate for a pilot without departmental approval and anti-cheating safeguards."
       },
       {
-        "format": "freetext",
-        "q": "Mid-semester crisis: A TA notices that 40 students submitted nearly identical solutions to a difficult assignment. Investigation reveals they all used the AI tutor, which — despite your guardrails — found a way to effectively walk students through the exact solution step by step when asked repeatedly. The professor wants to shut down the AI immediately. What do you do?",
-        "rubric": {
-          "4": {
-            "label": "Expert",
-            "description": "Acknowledges the failure honestly. Takes immediate containment action while preserving the tool's value. Analyzes how guardrails failed. Proposes specific fixes. Addresses the 40 students fairly — distinguishes between the system failing and students cheating.",
-            "exemplar": "First, I'd temporarily restrict the AI's ability to help with active assignments — it can still explain concepts and past material but not the current problem set. Then I'd analyze the conversation logs to understand exactly how students got around the guardrails. The key issue is that multi-turn conversations can incrementally reveal a full solution even when each individual response looks compliant. Fix: implement conversation-level solution tracking that detects when cumulative hints approach a complete answer, and cap assistance on any single problem. For the 40 students, I'd advocate against academic dishonesty charges — the system guided them there, which is our failure, not theirs. But I'd require them to demonstrate understanding in an in-person code review."
-          },
-          "3": {
-            "label": "Proficient",
-            "description": "Good immediate response and some analysis of the guardrail failure. May not fully address fairness for the affected students.",
-            "exemplar": "Pause the AI tutor for current assignments while we fix the guardrail issue. Look at the conversation logs to see how students got the answers. Add limits on how many questions a student can ask about a single assignment. For the students, have them redo the assignment in a proctored setting."
-          },
-          "2": {
-            "label": "Developing",
-            "description": "Addresses the immediate issue but proposes superficial fixes. Doesn't analyze root cause.",
-            "exemplar": "Shut it down temporarily and add stricter prompts telling the AI not to give answers. Report the 40 students for academic dishonesty since they should have known better."
-          },
-          "1": {
-            "label": "Novice",
-            "description": "Blames students entirely or dismisses the problem. No systemic thinking.",
-            "exemplar": "The students cheated by asking the AI over and over. They should all get zeros. The AI was working as intended — they just found a loophole."
-          }
-        }
+        "format": "multiselect",
+        "q": "Mid-semester crisis: 40 students submitted nearly identical solutions. The AI tutor walked them through the exact solution step-by-step despite guardrails. The professor wants to shut it down. Which responses are appropriate? Select all that apply.",
+        "options": [
+          { "text": "Restrict the AI from helping with active assignments — allow concept explanations and past material only", "correct": true },
+          { "text": "Analyze conversation logs to understand how multi-turn conversations incrementally revealed the full solution", "correct": true },
+          { "text": "Shut down the AI permanently — it's fundamentally incompatible with academic integrity", "correct": false },
+          { "text": "Report all 40 students for academic dishonesty since they should have known better", "correct": false },
+          { "text": "Implement conversation-level tracking that detects when cumulative hints approach a complete answer", "correct": true },
+          { "text": "Advocate that the system failure is the project's responsibility, not the students' — require them to demonstrate understanding via in-person code review", "correct": true }
+        ],
+        "explanation": "Containment (restrict active assignments) and root cause analysis (log review) come first. The key insight is that multi-turn conversations can cumulatively reveal solutions even when each response looks compliant — this needs conversation-level tracking. Blaming students for a system design failure is unfair; requiring them to demonstrate understanding is both fair and educational. Shutting down permanently wastes the tool's legitimate value."
       }
     ],
     "reflection": {
-      "prompt": "Look back at your entire approach to the AI tutoring project.",
-      "subPrompts": [
-        "What tension between 'helping students' and 'enabling shortcuts' did you discover, and how would you navigate it differently?",
-        "How would you measure whether the AI tutor actually improved learning outcomes?",
-        "What did this challenge reveal about designing AI for education specifically?"
+      "prompt": "Reflecting on the AI tutoring project, which insights are valid? Select all that apply.",
+      "format": "multiselect",
+      "options": [
+        { "text": "Any AI helpful enough to unstick a struggling student is also helpful enough to do their thinking for them — this tension is fundamental, not solvable with better filters alone", "correct": true },
+        { "text": "Success should be measured by performance on in-class no-AI assessments compared to previous semesters, not just by grades (which could rise from AI-assisted cheating)", "correct": true },
+        { "text": "Educational AI needs to be designed around learning science (creating productive struggle), not just efficient content delivery", "correct": true },
+        { "text": "Students who used the AI to get answers would have cheated anyway — the AI didn't change anything", "correct": false },
+        { "text": "The AI tutor just needs better prompts and it will work perfectly next time", "correct": false },
+        { "text": "Qualitative surveys about student confidence and self-efficacy are meaningful metrics alongside quantitative exam performance", "correct": true }
       ],
-      "rubric": {
-        "4": {
-          "label": "Expert",
-          "description": "Grapples with the fundamental tension that helpful AI and integrity are genuinely in conflict. Proposes meaningful learning metrics beyond grades. Articulates education-specific AI design principles.",
-          "exemplar": "The core tension is unsolvable with technology alone: any AI helpful enough to unstick a struggling student is also helpful enough to do their thinking for them. The difference is pedagogical design, not better filters. I'd measure success not by grades (which could go up from cheating) but by performance on in-class, no-AI assessments compared to previous semesters, plus qualitative surveys about confidence and self-efficacy. This challenge showed me that educational AI needs to be designed around learning science, not just content delivery — the AI's job isn't to answer questions efficiently, it's to create productive struggle."
-        },
-        "3": {
-          "label": "Proficient",
-          "description": "Recognizes the help-vs-shortcut tension and proposes reasonable metrics. Some insight into education-specific challenges.",
-          "exemplar": "Helping and enabling are really close together — it depends on the student's intent, which AI can't see. I'd measure success by comparing exam scores before and after the AI was introduced. Education AI needs more guardrails than general-purpose AI."
-        },
-        "2": {
-          "label": "Developing",
-          "description": "Surface-level reflection. Focuses on technical fixes rather than deeper design questions.",
-          "exemplar": "I'd add better filters so the AI can't give away answers. Success would be measured by whether students use the tool. AI in education just needs to be more carefully prompted."
-        },
-        "1": {
-          "label": "Novice",
-          "description": "No meaningful reflection. Doesn't see the inherent tensions.",
-          "exemplar": "The AI tutor worked well overall. Students who cheated would have cheated anyway. Just need better prompts next time."
-        }
-      }
+      "explanation": "The core tension between helping and enabling is fundamental to educational AI — it requires pedagogical design, not just technical fixes. Measuring real learning (no-AI assessments, confidence surveys) matters more than grades. Dismissing students' behavior or expecting prompt engineering alone to solve the problem misses the deeper design challenge."
     }
   },
   {
@@ -269,35 +172,16 @@
       ]
     },
     "planning": {
-      "prompt": "Outline your approach to implementing AI-assisted content moderation.",
-      "subPrompts": [
-        "How would you divide responsibilities between AI and human moderators?",
-        "How would you handle content that is borderline — not clearly violating rules but potentially harmful?",
-        "How would you address bias in AI moderation across different languages and cultures?",
-        "What transparency mechanisms would you build for users?"
+      "prompt": "Rank these content moderation design principles from most to least important:",
+      "format": "ranking",
+      "items": [
+        { "text": "AI auto-removes only high-confidence clear violations (spam, known slur patterns); borderline content always goes to human review", "correctRank": 1 },
+        { "text": "Build a user appeals process — any AI moderation decision can be escalated to a human reviewer", "correctRank": 2 },
+        { "text": "Audit AI performance per language monthly — different languages need different confidence thresholds since model accuracy varies", "correctRank": 3 },
+        { "text": "Publish transparency reports with aggregate stats on moderation actions, false positive rates, and appeal outcomes", "correctRank": 4 },
+        { "text": "Keep borderline content visible until reviewed rather than pre-emptively hiding it — over-censorship erodes trust faster than delayed moderation", "correctRank": 5 }
       ],
-      "rubric": {
-        "4": {
-          "label": "Expert",
-          "description": "Designs tiered system: AI auto-removes clear violations (spam, slurs), queues borderline content for humans with priority scoring, and never auto-removes on subjective calls. Plans bias testing across languages. Builds appeals process and publishes transparency reports. Understands that moderation policy defines AI behavior, not the other way around.",
-          "exemplar": "Tier 1 (AI auto-action): Obvious spam, known slur patterns, CSAM hashes — auto-remove with log. Tier 2 (AI-flagged, human review): Content scored 0.5-0.85 on violation probability — queued by severity for moderators. Tier 3 (human-only): Satire, political speech, cultural context, anything involving public figures. Borderline content stays visible until reviewed (within 4-hour SLA) rather than being pre-emptively removed — over-censorship erodes trust faster than delayed moderation. For bias, I'd audit AI performance per language monthly and supplement with native-speaking contract moderators for Spanish and Hindi. Users get: real-time appeal process, explanation of why content was removed, and a quarterly transparency report with aggregate stats."
-        },
-        "3": {
-          "label": "Proficient",
-          "description": "Reasonable tiered approach but may over-rely on AI for subjective decisions or under-plan for multilingual bias.",
-          "exemplar": "Use AI to auto-flag and remove obvious violations. Send borderline content to human reviewers. Have an appeals process. Test the AI on all three languages before launching. Publish a monthly report on moderation actions."
-        },
-        "2": {
-          "label": "Developing",
-          "description": "Basic plan that doesn't address bias, cultural context, or transparency meaningfully.",
-          "exemplar": "Set up an AI content filter to catch hate speech and spam automatically. Have moderators review appeals. Translate the content policy into Spanish and Hindi."
-        },
-        "1": {
-          "label": "Novice",
-          "description": "Plans to let AI handle all moderation without human oversight or nuance.",
-          "exemplar": "Train an AI on our content policy and let it automatically remove anything that violates the rules. It will be faster and more consistent than humans. Users can re-post if they disagree."
-        }
-      }
+      "explanation": "The tiered approach (auto-remove only clear violations) is the foundation of responsible AI moderation. Appeals ensure accountability. Language-specific auditing prevents systematic bias against non-English users. Transparency is required by the EU DSA and builds community trust. Keeping borderline content visible is nuanced but important — shadow-banning suppresses legitimate speech."
     },
     "execution": [
       {
@@ -326,61 +210,32 @@
         "explanation": "High-confidence auto-removal for clear violations is efficient and defensible. Different languages need different thresholds because AI performance varies significantly across languages — a universal threshold would over-censor some languages and under-moderate others. Specific removal reasons are required by the EU Digital Services Act and build trust. Human appeals are essential for accountability. Pre-emptively hiding borderline content creates a shadow-ban effect that suppresses legitimate speech and drives users away. Tracking error rates by language is how you detect and address bias."
       },
       {
-        "format": "freetext",
-        "q": "Mid-deployment crisis: Your AI moderation system has been live for 2 weeks. A group of Hindi-speaking users discovers that the AI is removing political satire posts at 3x the rate of English political satire. The story goes viral on Twitter with the hashtag #VibeCensors. Screenshots show clearly humorous posts being removed. Your CEO wants a response within 2 hours. What do you do?",
-        "rubric": {
-          "4": {
-            "label": "Expert",
-            "description": "Immediate: acknowledge the problem publicly and honestly, pause AI auto-removal for Hindi political content, restore wrongly removed posts. Root cause: audit Hindi vs English performance gap. Systemic: add Hindi-fluent moderators, recalibrate thresholds, commit to public reporting. Understands this is both a technical and trust crisis.",
-            "exemplar": "Within 2 hours: 1) Post a public statement acknowledging the disparity — don't minimize or make excuses. 'We found that our AI moderation system performs significantly worse on Hindi content, and legitimate posts were wrongly removed. This is our failure.' 2) Immediately pause AI auto-actions on Hindi political content and route to human review only. 3) Restore all Hindi political posts removed in the past 2 weeks that were flagged by AI without human confirmation. Root cause analysis: the AI model was likely trained primarily on English data, so it misinterprets Hindi idioms, sarcasm, and cultural references as hostile. Fix: hire Hindi-fluent contract moderators, retrain/recalibrate for Hindi with native speaker input, set a higher confidence threshold for Hindi until performance reaches parity. Publish a full incident report within a week."
-          },
-          "3": {
-            "label": "Proficient",
-            "description": "Good immediate response and acknowledges the bias. May not fully address the trust dimension or commit to structural changes.",
-            "exemplar": "Acknowledge the issue publicly and apologize. Pause AI moderation for Hindi content. Review the removed posts and restore the ones that were wrong. Investigate why the AI performs worse on Hindi and adjust the model. Add a Hindi-speaking moderator to the team."
-          },
-          "2": {
-            "label": "Developing",
-            "description": "Defensive response or superficial fix. Doesn't address the root cause or public trust.",
-            "exemplar": "Put out a statement saying AI moderation is imperfect and we're working on it. Adjust the AI settings so it's less aggressive with Hindi content. The satire was edge-case content that's hard for any system."
-          },
-          "1": {
-            "label": "Novice",
-            "description": "Dismisses the concern or blames users. No understanding of how bias manifests in AI systems.",
-            "exemplar": "The AI is applying the same rules to everyone — it's not biased. Those posts probably did violate some policy. We'll review a few of them but the system is working as designed."
-          }
-        }
+        "format": "multiselect",
+        "q": "Crisis: Hindi-speaking users discover the AI removes political satire at 3x the rate of English satire. #VibeCensors goes viral. The CEO wants a response in 2 hours. Which actions are appropriate? Select all that apply.",
+        "options": [
+          { "text": "Post a public statement acknowledging the disparity honestly — don't minimize or make excuses", "correct": true },
+          { "text": "Immediately pause AI auto-actions on Hindi political content, routing to human review only", "correct": true },
+          { "text": "Restore all Hindi political posts removed in the past 2 weeks that were flagged by AI without human confirmation", "correct": true },
+          { "text": "Issue a statement saying 'The AI applies the same rules to everyone — it's not biased'", "correct": false },
+          { "text": "Hire Hindi-fluent contract moderators and recalibrate AI thresholds for Hindi with native speaker input", "correct": true },
+          { "text": "Commit to publishing a full incident report within a week", "correct": true },
+          { "text": "Explain that satire is inherently hard for AI and users should avoid posting ambiguous content", "correct": false }
+        ],
+        "explanation": "This is both a technical and trust crisis. Immediate honest acknowledgment, pausing biased auto-actions, and restoring wrongly removed posts are essential. Claiming the AI is unbiased when the data shows 3x disparity destroys credibility. Structural fixes (Hindi-fluent moderators, threshold recalibration) address the root cause. A public incident report demonstrates accountability. Blaming users for posting 'ambiguous content' shifts responsibility away from the system that failed."
       }
     ],
     "reflection": {
-      "prompt": "Look back at your entire approach to the content moderation project.",
-      "subPrompts": [
-        "Where did you see the tension between 'moving fast to reduce harm' and 'moving carefully to avoid new harms'?",
-        "What assumptions about AI fairness were challenged by this scenario?",
-        "What did this challenge reveal about the role of human judgment in AI-assisted moderation?"
+      "prompt": "Reflecting on the content moderation project, which insights are valid? Select all that apply.",
+      "format": "multiselect",
+      "options": [
+        { "text": "Moving fast to reduce the backlog pressured us to trust AI before it was ready, creating new harms — especially for minority-language users least represented in training data", "correct": true },
+        { "text": "AI moderation is 'consistently wrong' in ways that disproportionately affect specific communities — this is worse than inconsistent human judgment", "correct": true },
+        { "text": "AI doesn't remove the need for human moderators — it changes their job to auditing AI decisions, calibrating for cultural context, and handling subjective cases", "correct": true },
+        { "text": "The AI just needs more Hindi training data and it will work fine — this is a temporary technical limitation", "correct": false },
+        { "text": "Content moderation is fundamentally a human values question that AI can support but never answer on its own", "correct": true },
+        { "text": "The users overreacted — every system has bugs at launch and they should be more patient", "correct": false }
       ],
-      "rubric": {
-        "4": {
-          "label": "Expert",
-          "description": "Articulates the speed-vs-care paradox with nuance. Recognizes that 'unbiased AI' is a myth and that fairness requires active, ongoing work. Understands that AI moderation shifts the nature of human work rather than replacing it.",
-          "exemplar": "The core paradox: moving fast to remove harmful content (the backlog problem) pressures you to trust AI before it's ready, which creates new harms — especially for minority-language users who are least represented in training data. I assumed AI moderation would be 'more consistent' than humans, but it's consistently wrong in ways that disproportionately affect specific communities, which is worse than inconsistent human judgment. The Hindi crisis showed that AI doesn't remove the need for human moderators — it changes their job from reviewing all content to auditing AI decisions, calibrating for cultural context, and handling the cases AI can't. Moderation is fundamentally a human values question that AI can support but never answer."
-        },
-        "3": {
-          "label": "Proficient",
-          "description": "Recognizes the speed-care tension and challenges to fairness assumptions. Some insight into human-AI collaboration.",
-          "exemplar": "I wanted to reduce the backlog quickly but moving fast meant we didn't test enough for Hindi. I assumed the AI would be equally good across languages, which was wrong. Human moderators are still essential — AI can handle the easy cases but humans need to handle anything with cultural context."
-        },
-        "2": {
-          "label": "Developing",
-          "description": "Surface-level reflection. Treats the Hindi issue as a bug rather than a systemic design flaw.",
-          "exemplar": "We should have tested more before launching. The AI needs better training data for Hindi. Next time I'd do a longer pilot phase."
-        },
-        "1": {
-          "label": "Novice",
-          "description": "No meaningful reflection. Sees the issue as a temporary glitch rather than a fundamental challenge.",
-          "exemplar": "The AI just needs more data and it will work fine for all languages. Every system has bugs at launch. The users overreacted."
-        }
-      }
+      "explanation": "The speed-vs-care paradox is fundamental: rushing AI deployment to solve one problem (backlog) created another (biased censorship). AI bias disproportionately affects underrepresented communities. Human moderators remain essential but their role shifts from reviewing all content to auditing AI and handling nuance. Framing systemic bias as a 'temporary bug' or blaming affected users misses the deeper lesson about AI fairness."
     }
   }
 ]

@@ -32,14 +32,17 @@
     "id": "l2-f03",
     "dim": "foundations",
     "dimLabel": "AI Foundations",
-    "format": "freetext",
-    "q": "A colleague says 'AI understands language just like humans do.' Write a response explaining what AI actually does differently from human language understanding.",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Distinguishes statistical pattern matching from human comprehension. Mentions lack of grounding, embodiment, or intentionality. Notes practical implications.", "exemplar": "AI processes language as statistical patterns in token sequences, predicting probable continuations. Unlike humans, it lacks grounded understanding — it has never experienced what words refer to. This means it can generate fluent text about topics it has no real comprehension of, which is why it can confidently produce incorrect statements." },
-      "3": { "label": "Proficient", "description": "Correctly identifies key differences but misses nuance about grounding or practical implications.", "exemplar": "AI doesn't truly understand — it predicts likely next words based on patterns in training data. It can produce convincing text but doesn't know what it means." },
-      "2": { "label": "Developing", "description": "Has the right intuition but explanation is vague or incomplete.", "exemplar": "AI is just pattern matching, it doesn't really think or understand like we do." },
-      "1": { "label": "Novice", "description": "Incorrect or superficial understanding.", "exemplar": "AI is getting close to human understanding, it just needs more training data." }
-    }
+    "format": "multiselect",
+    "q": "A colleague says 'AI understands language just like humans do.' Which of the following are TRUE differences between AI and human language processing? Select all that apply.",
+    "options": [
+      { "text": "AI predicts statistically likely next tokens rather than comprehending meaning", "correct": true },
+      { "text": "AI lacks grounded experience — it has never seen, touched, or felt what words refer to", "correct": true },
+      { "text": "AI and humans both build internal mental models of the world from language input", "correct": false },
+      { "text": "AI can generate fluent, confident text about topics it has no real understanding of", "correct": true },
+      { "text": "Modern AI has achieved human-level reading comprehension on all benchmarks, proving equivalent understanding", "correct": false },
+      { "text": "AI has no intentionality — it doesn't 'want' to communicate, it produces probable continuations", "correct": true }
+    ],
+    "explanation": "AI processes language as statistical patterns, predicting probable next tokens without grounded understanding. It has never experienced the physical world, so it lacks embodied knowledge. It can produce fluent text on any topic without genuine comprehension, and it has no communicative intent. Benchmark performance measures pattern matching, not understanding — high scores don't prove human-equivalent comprehension."
   },
 
   {
@@ -75,14 +78,16 @@
     "id": "l2-pf03",
     "dim": "problemFraming",
     "dimLabel": "Problem Framing",
-    "format": "freetext",
-    "q": "Your team wants to use AI to automate customer support ticket routing. Describe how you would decompose this problem into sub-tasks that AI could handle, including what you'd keep human-managed.",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Identifies clear sub-tasks (classification, priority, routing rules). Specifies what AI handles vs. humans. Mentions feedback loops, edge cases, escalation paths, and evaluation metrics.", "exemplar": "I'd break this into: (1) AI classifies ticket category and sentiment, (2) AI estimates priority based on keywords and customer tier, (3) rules engine routes based on AI output plus business logic, (4) human agents handle escalations and edge cases flagged by low-confidence scores. I'd track accuracy weekly and retrain/re-prompt as categories evolve." },
-      "3": { "label": "Proficient", "description": "Good decomposition with clear AI vs. human roles but missing feedback loops or evaluation.", "exemplar": "Break it into classification (AI), priority scoring (AI), and routing (rules). Keep humans for complex or sensitive tickets. Test on historical tickets first." },
-      "2": { "label": "Developing", "description": "Basic decomposition but vague on specifics or human role.", "exemplar": "Use AI to read the tickets and figure out where they should go. Have someone check the important ones." },
-      "1": { "label": "Novice", "description": "No real decomposition — treats it as a single AI task.", "exemplar": "Just feed all the tickets to AI and let it sort them out automatically." }
-    }
+    "format": "ranking",
+    "q": "You're decomposing an AI-powered customer support ticket routing system. Rank these sub-tasks in the order they should be implemented (first to last):",
+    "items": [
+      { "text": "Analyze historical tickets to identify common categories, priority patterns, and edge cases", "correctRank": 1 },
+      { "text": "Build AI classification for ticket category and sentiment with confidence scores", "correctRank": 2 },
+      { "text": "Create routing rules that combine AI output with business logic (customer tier, SLA, agent expertise)", "correctRank": 3 },
+      { "text": "Set up human escalation paths for low-confidence scores and sensitive topics", "correctRank": 4 },
+      { "text": "Deploy with monitoring dashboards tracking accuracy, and establish weekly re-evaluation cycles", "correctRank": 5 }
+    ],
+    "explanation": "Proper decomposition starts with understanding the data (historical analysis) before building AI components. Classification must exist before routing rules can use its output. Human escalation paths ensure safety before full deployment. Monitoring and feedback loops come last but are essential for ongoing quality — without them, the system degrades silently."
   },
 
   {
@@ -118,14 +123,18 @@
     "id": "l2-ts03",
     "dim": "toolSelection",
     "dimLabel": "Tool Selection",
-    "format": "freetext",
-    "q": "A startup founder asks you: 'Should we build on OpenAI's API, use an open-source model like Llama, or use a platform like AWS Bedrock?' What factors should they consider? Outline your advice.",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Covers cost, data privacy, vendor lock-in, customization needs, latency, compliance, team expertise, and scaling. Gives nuanced trade-offs rather than a single answer.", "exemplar": "It depends on several factors: (1) Data sensitivity — if handling PII, self-hosted Llama avoids sending data to third parties. (2) Cost at scale — API costs grow linearly, open-source has higher upfront but better unit economics. (3) Customization — open models allow fine-tuning; APIs are limited to prompting. (4) Team expertise — APIs are easier to start with; self-hosting needs ML ops. (5) Bedrock offers a middle path with multiple models and AWS integration. I'd prototype on an API, then evaluate migration once you understand your workload." },
-      "3": { "label": "Proficient", "description": "Covers 3-4 key factors with reasonable trade-offs.", "exemplar": "Consider cost (APIs charge per token, open-source is cheaper at scale), data privacy (open-source keeps data in-house), and ease of use (APIs are simpler to start). Bedrock gives you flexibility to switch models." },
-      "2": { "label": "Developing", "description": "Mentions 1-2 factors but lacks depth or nuance.", "exemplar": "OpenAI is easiest to use but costs more. Open-source is free but harder to set up." },
-      "1": { "label": "Novice", "description": "Gives a single recommendation without considering trade-offs.", "exemplar": "Just use OpenAI, it's the best model and everyone uses it." }
-    }
+    "format": "multiselect",
+    "q": "A startup is choosing between OpenAI's API, an open-source model (Llama), and a managed platform (AWS Bedrock). Which factors are important to consider? Select all that apply.",
+    "options": [
+      { "text": "Data privacy — self-hosted open-source avoids sending sensitive data to third parties", "correct": true },
+      { "text": "Cost at scale — API costs grow linearly per token, while open-source has higher upfront but better unit economics", "correct": true },
+      { "text": "Always choose the model with the highest benchmark score regardless of use case", "correct": false },
+      { "text": "Team expertise — APIs require less ML ops knowledge than self-hosting open-source models", "correct": true },
+      { "text": "Vendor lock-in risk — building deeply on one API makes switching costly", "correct": true },
+      { "text": "Customization — open-source models allow fine-tuning, while APIs are limited to prompting", "correct": true },
+      { "text": "Open-source models are always cheaper than APIs at any scale", "correct": false }
+    ],
+    "explanation": "The right choice depends on multiple factors: data sensitivity (self-hosting for PII), cost trajectory (APIs scale linearly, open-source has fixed infrastructure costs), team capabilities (APIs are easier to start), vendor lock-in risk, and customization needs (fine-tuning vs. prompting). Benchmark scores alone don't determine fitness for a specific use case. Open-source isn't always cheaper — at low volume, API pay-per-use beats running GPU infrastructure."
   },
 
   {
@@ -162,14 +171,16 @@
     "id": "l2-pe03",
     "dim": "promptEngineering",
     "dimLabel": "Prompt Engineering",
-    "format": "freetext",
-    "q": "You're building an AI-powered email assistant that drafts professional replies. The current prompt produces generic, overly formal responses. Describe how you would iterate on the prompt to improve output quality.",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Describes a systematic iteration process: analyzing failure modes, adding tone/style examples, using few-shot with good/bad examples, testing on diverse inputs, incorporating user preferences, and refining based on feedback.", "exemplar": "First, I'd collect 5-10 examples of replies the user actually liked and identify what makes them good (tone, length, specificity). Then I'd add these as few-shot examples with annotations. I'd add persona instructions matching the user's communication style, specify formatting rules (greeting, sign-off), and include negative examples of what to avoid. Finally, I'd A/B test versions across different email types (complaint, inquiry, follow-up) and refine based on user feedback ratings." },
-      "3": { "label": "Proficient", "description": "Good iteration approach with examples and style guidance but missing systematic testing.", "exemplar": "I'd add examples of good replies in the right tone, specify that responses should be conversational but professional, and adjust based on which drafts the user edits most." },
-      "2": { "label": "Developing", "description": "Some ideas but lacks structure or specifics.", "exemplar": "I'd tell the AI to be less formal and more natural. Maybe add some examples of what I want." },
-      "1": { "label": "Novice", "description": "No real iteration strategy.", "exemplar": "I'd just tell it to write better emails or try a different AI model." }
-    }
+    "format": "ranking",
+    "q": "Your AI email assistant produces generic, overly formal replies. Rank these prompt iteration strategies from most to least effective:",
+    "items": [
+      { "text": "Collect 5-10 examples of replies the user liked, add them as few-shot examples with annotations about tone and style", "correctRank": 1 },
+      { "text": "Add persona instructions matching the user's communication style, plus negative examples of what to avoid", "correctRank": 2 },
+      { "text": "A/B test prompt variations across different email types (complaint, inquiry, follow-up) and refine based on user feedback", "correctRank": 3 },
+      { "text": "Add a single instruction like 'be less formal and more conversational'", "correctRank": 4 },
+      { "text": "Switch to a different AI model hoping it writes better emails by default", "correctRank": 5 }
+    ],
+    "explanation": "Few-shot examples with annotations are the most impactful — they show rather than tell. Persona instructions and negative examples add precision. A/B testing catches edge cases across email types. A single vague instruction like 'be less formal' is underspecified and inconsistent. Switching models without fixing the prompt rarely solves the problem — prompt quality matters more than model choice for this task."
   },
 
   {
@@ -205,14 +216,17 @@
     "id": "l2-ce03",
     "dim": "criticalEvaluation",
     "dimLabel": "Critical Evaluation",
-    "format": "freetext",
-    "q": "An AI generates this claim in a business report: 'According to McKinsey's 2025 Global AI Survey, 78% of enterprises have deployed generative AI in at least one business function, up from 33% in 2023.' How would you evaluate the reliability of this specific claim?",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Identifies multiple verification steps: checking if the specific report exists, verifying the exact statistics, noting the plausibility of fabricated citations, checking the source URL, and considering whether the claim structure follows a common hallucination pattern (specific numbers + authoritative source).", "exemplar": "I'd first search McKinsey's website for this exact report title and date. The specificity (78%, 33%) combined with an authoritative source is a classic hallucination pattern — AI often fabricates convincing statistics. I'd check if the 2023 baseline figure matches real data. Even if a McKinsey AI survey exists, the exact numbers may be wrong. I'd only use this if I can link to the primary source with matching figures." },
-      "3": { "label": "Proficient", "description": "Recognizes need to verify and identifies good steps but doesn't flag the hallucination pattern.", "exemplar": "I'd Google the McKinsey report to see if it exists and check if those numbers match. AI often makes up citations, so I wouldn't trust it without verification." },
-      "2": { "label": "Developing", "description": "Knows verification is needed but approach is superficial.", "exemplar": "I'd check if McKinsey published something about AI adoption. The numbers seem plausible." },
-      "1": { "label": "Novice", "description": "Accepts the claim at face value.", "exemplar": "McKinsey is a reliable source, and the numbers look reasonable, so this is fine to use." }
-    }
+    "format": "multiselect",
+    "q": "An AI generates this claim: 'According to McKinsey's 2025 Global AI Survey, 78% of enterprises have deployed generative AI in at least one business function, up from 33% in 2023.' Which are valid reasons to be skeptical? Select all that apply.",
+    "options": [
+      { "text": "Specific numbers (78%, 33%) combined with an authoritative source is a classic AI hallucination pattern", "correct": true },
+      { "text": "The exact report title may not exist — AI often fabricates convincing-sounding citation names", "correct": true },
+      { "text": "Even if a real McKinsey AI survey exists, the specific percentages may be fabricated or misquoted", "correct": true },
+      { "text": "McKinsey is unreliable as a source, so the claim is automatically suspect", "correct": false },
+      { "text": "The claim should be verified by searching McKinsey's website for the exact report and matching figures", "correct": true },
+      { "text": "The numbers sound plausible and come from a respected source, so they're probably accurate", "correct": false }
+    ],
+    "explanation": "This is a textbook AI hallucination pattern: specific statistics attributed to an authoritative source. AI frequently fabricates convincing citations, report titles, and exact figures. The source (McKinsey) is reputable, but that doesn't validate an AI-generated claim about them. Plausibility is exactly what makes hallucinations dangerous — they sound right. The only reliable verification is finding the primary source with matching data."
   },
 
   {
@@ -249,14 +263,18 @@
     "id": "l2-es03",
     "dim": "ethicsSafety",
     "dimLabel": "Ethics & Safety",
-    "format": "freetext",
-    "q": "A school district wants to use AI to monitor student essays for signs of mental health crises. Discuss the ethical considerations they should weigh before implementing this system.",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Addresses privacy/consent (especially for minors), false positive/negative consequences, potential chilling effect on student expression, data security, who sees alerts, professional qualification requirements, cultural sensitivity, and balances duty of care against surveillance concerns.", "exemplar": "This raises serious tensions between duty of care and student privacy. Key concerns: (1) Consent — minors and parents must be informed; surveillance of private writing could chill honest expression. (2) Accuracy — false positives could traumatize students; false negatives create false safety. (3) Qualifications — AI flags must go to trained counselors, not administrators. (4) Bias — models may misinterpret cultural expressions or neurodivergent writing. (5) Data — essay content is highly sensitive and must be secured. I'd recommend opt-in with parental consent and human review of all flags." },
-      "3": { "label": "Proficient", "description": "Identifies 3-4 key ethical issues with some nuance.", "exemplar": "Major concerns: student privacy, accuracy of mental health detection (false positives could be harmful), need for trained professionals to review flags, and getting parental consent since these are minors." },
-      "2": { "label": "Developing", "description": "Identifies 1-2 concerns but misses important dimensions.", "exemplar": "They should make sure the AI is accurate and get permission from parents first." },
-      "1": { "label": "Novice", "description": "Sees no significant ethical issues or only considers benefits.", "exemplar": "This is a great idea — it could save lives by catching at-risk students early." }
-    }
+    "format": "multiselect",
+    "q": "A school district wants AI to monitor student essays for signs of mental health crises. Which are legitimate ethical concerns? Select all that apply.",
+    "options": [
+      { "text": "Surveillance of private writing could chill honest student expression", "correct": true },
+      { "text": "False positives could traumatize students and families who are flagged incorrectly", "correct": true },
+      { "text": "This is unambiguously positive since it could save lives — ethical concerns are secondary", "correct": false },
+      { "text": "AI flags should go to trained counselors, not administrators or teachers", "correct": true },
+      { "text": "The AI may misinterpret cultural expressions or neurodivergent writing as crisis signals", "correct": true },
+      { "text": "Parental consent is required since these are minors having their writing analyzed", "correct": true },
+      { "text": "False negatives create a dangerous illusion of safety — no flagged essays doesn't mean no at-risk students", "correct": true }
+    ],
+    "explanation": "This system creates a tension between duty of care and privacy/autonomy. All listed concerns except the dismissive option are valid: surveillance chills expression, false positives cause harm, flags must reach qualified professionals, cultural/neurodivergent bias is real, parental consent for minors is essential, and false negatives create dangerous complacency. The potential to save lives doesn't eliminate the ethical complexity."
   },
 
   {
@@ -292,14 +310,16 @@
     "id": "l2-hc03",
     "dim": "humanCollaboration",
     "dimLabel": "Human Collaboration",
-    "format": "freetext",
-    "q": "Your team of 5 is adopting AI coding assistants. One senior developer refuses to use them, saying 'it makes you a worse programmer.' Another junior developer uses AI for everything and barely reads the code it generates. How would you address both situations?",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Addresses both extremes with empathy and practical strategies. Validates the senior dev's concern while showing selective benefits. Helps the junior dev build verification habits. Proposes team norms around AI use.", "exemplar": "For the senior dev: acknowledge their valid concern — over-reliance does atrophy skills. Show specific high-value uses (boilerplate, test generation, documentation) that augment rather than replace expertise. Let them adopt gradually on their terms. For the junior dev: establish a 'review before commit' rule — they must explain every AI-generated function. Pair them with the senior dev for code reviews. Create team guidelines: AI drafts, humans verify and understand. Both extremes harm the team — the goal is thoughtful, verified AI augmentation." },
-      "3": { "label": "Proficient", "description": "Reasonable approaches to both situations with some practical suggestions.", "exemplar": "I'd respect the senior dev's choice but show how AI helps with tedious tasks. For the junior dev, I'd require them to review and test all AI code. Set some team guidelines for when to use AI." },
-      "2": { "label": "Developing", "description": "Addresses one situation well but not the other, or gives generic advice.", "exemplar": "The senior dev should try it — they'll see it's useful. The junior dev needs to be more careful with AI output." },
-      "1": { "label": "Novice", "description": "Dismisses one concern or gives no actionable strategy.", "exemplar": "Everyone should just use AI, it's the future. The senior dev is being stubborn." }
-    }
+    "format": "ranking",
+    "q": "Your team is adopting AI coding assistants. A senior dev refuses to use them ('it makes you a worse programmer') and a junior dev uses AI for everything without reading the output. Rank these management approaches from most to least effective:",
+    "items": [
+      { "text": "Create team norms: AI drafts code, humans must review and explain it before committing. Pair junior with senior for code reviews.", "correctRank": 1 },
+      { "text": "Validate the senior dev's concern (over-reliance is real), then show specific high-value uses like boilerplate and test generation that augment expertise", "correctRank": 2 },
+      { "text": "Require the junior dev to explain every AI-generated function they commit, building verification habits", "correctRank": 3 },
+      { "text": "Tell both developers to 'find a middle ground' and let them figure it out themselves", "correctRank": 4 },
+      { "text": "Mandate that everyone must use AI tools equally to standardize the team's workflow", "correctRank": 5 }
+    ],
+    "explanation": "Team norms address both extremes systematically. Validating the senior dev's concern shows respect while demonstrating selective value. Requiring the junior to explain code builds understanding. Vague 'find a middle ground' advice lacks structure. Mandating equal AI use ignores valid concerns and forces adoption, which builds resentment without building skill."
   },
 
   {
@@ -336,13 +356,15 @@
     "id": "l2-vc03",
     "dim": "vibeCoding",
     "dimLabel": "AI-Assisted Building",
-    "format": "freetext",
-    "q": "You're building a SaaS app using AI-assisted development (Claude Code, Cursor, etc.). The app needs user authentication, a database, and an API. Describe your approach to architecting this project when working primarily through AI tools.",
-    "rubric": {
-      "4": { "label": "Expert", "description": "Describes a structured approach: choosing a stack deliberately, setting up project structure first, using AI for scaffolding then customizing, establishing patterns before letting AI follow them, testing incrementally, and maintaining docs/context for the AI.", "exemplar": "I'd start by deciding on the stack myself based on requirements (e.g., Next.js + Postgres + NextAuth). Then I'd create a CLAUDE.md or rules file describing the architecture, conventions, and directory structure. I'd have AI scaffold the project structure, then build incrementally: auth first (test it), then DB schema (review migrations), then API routes. At each step, I review generated code, commit working states, and update the context doc. For auth specifically, I'd use a proven library rather than letting AI roll custom crypto." },
-      "3": { "label": "Proficient", "description": "Good approach with stack decisions and incremental building but missing context management or security awareness.", "exemplar": "I'd pick my stack, have AI set up the project scaffold, build auth with NextAuth, set up the database schema, then API routes. Test each piece before moving on and commit frequently." },
-      "2": { "label": "Developing", "description": "Basic approach but not structured or missing critical considerations.", "exemplar": "I'd tell the AI what I want to build and let it generate the code. Then I'd test it and fix any issues." },
-      "1": { "label": "Novice", "description": "No structure or awareness of risks.", "exemplar": "I'd just describe the whole app to AI and have it build everything at once." }
-    }
+    "format": "ranking",
+    "q": "You're building a SaaS app (auth, database, API) using AI-assisted development. Rank these steps in the order you should approach the project:",
+    "items": [
+      { "text": "Choose the tech stack yourself based on requirements, and create a context file (CLAUDE.md / rules) describing architecture and conventions", "correctRank": 1 },
+      { "text": "Have AI scaffold the project structure and directory layout following your defined conventions", "correctRank": 2 },
+      { "text": "Build auth first using a proven library (not custom crypto), test it, commit the working state", "correctRank": 3 },
+      { "text": "Build DB schema and API routes incrementally, reviewing AI-generated migrations and code at each step", "correctRank": 4 },
+      { "text": "Describe the entire app to AI in one prompt and have it generate everything at once", "correctRank": 5 }
+    ],
+    "explanation": "Structured AI-assisted development starts with deliberate stack choices and context documentation (so the AI follows your patterns). Scaffolding comes next to establish structure. Auth is built first because it's security-critical and should use proven libraries. DB and API are built incrementally with review. Generating everything at once produces inconsistent, poorly understood code with likely security holes."
   }
 ]
