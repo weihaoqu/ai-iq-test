@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI IQ Test — Level 3: Boss Challenge</title>
+<meta name="theme-color" content="#06080f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/styles.css">
+<link rel="stylesheet" href="shared/stitch.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="shared/engine.js" defer></script>
+<script src="shared/shader.js" defer></script>
+<script src="shared/submit.js" defer></script>
+<script src="shared/components.js" defer></script>
+</head>
+<body>
+
+<!-- Stitch Background Layers -->
+<div class="stitch-bg" aria-hidden="true"></div>
+<div class="stitch-particles" aria-hidden="true">
+  <div class="stitch-star" style="top:15%;left:10%;width:6px;height:6px"></div>
+  <div class="stitch-star" style="top:45%;left:85%;width:4px;height:4px;animation-delay:1.5s"></div>
+  <div class="stitch-star" style="top:75%;left:20%;width:8px;height:8px;animation-delay:0.5s"></div>
+  <div class="stitch-star" style="top:25%;left:70%;width:4px;height:4px;animation-delay:2.2s"></div>
+  <div class="stitch-parcel" style="top:10%;left:15%;width:64px;height:64px;color:rgba(255,255,255,0.1);--drift:25s;--glow:10s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+  </div>
+  <div class="stitch-parcel" style="bottom:15%;right:25%;width:56px;height:56px;color:rgba(255,255,255,0.2);--drift:22s;--glow:7s;animation-delay:-3s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5V19L12 23L21 19V5L12 1ZM12 3.3L19 6.4V17.6L12 20.7L5 17.6V6.4L12 3.3Z"/></svg>
+  </div>
+  <div class="stitch-parcel" style="top:60%;right:10%;width:40px;height:40px;color:rgba(255,255,255,0.1);--drift:18s;--glow:5s;animation-delay:-5s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+  </div>
+  <div class="stitch-parcel" style="top:30%;right:40%;width:48px;height:48px;color:rgba(255,255,255,0.05);--drift:30s;--glow:12s;animation-delay:-8s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7L12 12L22 7L12 2Z"/><path d="M2 17L12 22L22 17" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+  </div>
+  <div class="stitch-blob" style="top:25%;left:-80px;width:384px;height:384px;background:rgba(124,58,237,0.2)"></div>
+  <div class="stitch-blob" style="bottom:25%;right:-80px;width:384px;height:384px;background:rgba(219,39,119,0.2)"></div>
+</div>
+
+<div id="shader-bg" aria-hidden="true"></div>
+
+<!-- Stitch Top Navigation for L3 -->
+<nav class="stitch-topbar" id="stitch-nav-l3">
+  <div class="stitch-topbar-left">
+    <span class="stitch-topbar-level" style="color:#60a5fa">NEURAL BATTLEGROUND</span>
+  </div>
+  <div class="stitch-topbar-right" id="stitch-phase-nav" style="display:flex;align-items:center;gap:24px;font-family:'Space Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.15em">
+    <span id="stitch-phase-1" class="stitch-phase-tab" style="color:#22d3ee;font-weight:700;border-bottom:2px solid #22d3ee;padding-bottom:4px">Briefing</span>
+    <span id="stitch-phase-2" class="stitch-phase-tab" style="color:rgba(255,255,255,0.4)">Planning</span>
+    <span id="stitch-phase-3" class="stitch-phase-tab" style="color:rgba(255,255,255,0.4)">Execution</span>
+    <span id="stitch-phase-4" class="stitch-phase-tab" style="color:rgba(255,255,255,0.4)">Reflection</span>
+  </div>
+</nav>
+
+<!-- Stitch Horizon Progress -->
+<div class="stitch-horizon">
+  <div class="stitch-horizon-fill" id="stitch-horizon-l3" style="width:0%"></div>
+</div>
+
+<div class="app" id="app">
+
+  <!-- Level indicator at top -->
+  <div id="level-indicator" style="text-align:center;padding:12px 0;font-size:.85rem;color:var(--text-dim)"></div>
+
+  <!-- SCREEN: Briefing -->
+  <div class="screen active" id="screen-briefing">
+    <div class="phase-indicator" id="phase-1">
+      <span class="phase-dot active"><span class="phase-circle">&#9679;</span> Briefing</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot"><span class="phase-circle">&#9675;</span> Planning</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot"><span class="phase-circle">&#9675;</span> Execution</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot"><span class="phase-circle">&#9675;</span> Reflection</span>
+    </div>
+
+    <div style="text-align:center;padding-top:12px">
+      <div class="iq-badge-big" style="font-size:.85rem;letter-spacing:2px">LEVEL 3</div>
+      <h1 style="margin-top:10px">&#127942; Boss Challenge</h1>
+      <p class="subtitle" style="margin-top:8px">Multi-step case study &middot; Self-assessed</p>
+    </div>
+
+    <div class="card">
+      <h2 id="briefing-title" style="color:var(--accent);margin-bottom:16px"></h2>
+      <div id="briefing-text" style="line-height:1.7;font-size:.95rem;color:var(--text)"></div>
+      <div class="constraints-box" id="briefing-constraints">
+        <h4 style="font-size:.85rem;font-weight:700;color:var(--accent);margin-bottom:10px">Constraints</h4>
+        <ul id="constraints-list"></ul>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:.82rem;color:var(--text-muted);font-style:italic;padding:0 8px">
+      Read carefully &mdash; you'll reference this throughout the challenge.
+    </div>
+
+    <button class="btn btn-primary btn-full btn-lg" onclick="goToPlanning()">Begin Planning &rarr;</button>
+
+    <div style="text-align:center;margin-top:8px">
+      <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">&larr; Back to main menu</a>
+    </div>
+  </div>
+
+  <!-- SCREEN: Planning -->
+  <div class="screen" id="screen-planning">
+    <div class="phase-indicator" id="phase-2">
+      <span class="phase-dot completed"><span class="phase-circle">&#10003;</span> Briefing</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot active"><span class="phase-circle">&#9679;</span> Planning</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot"><span class="phase-circle">&#9675;</span> Execution</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot"><span class="phase-circle">&#9675;</span> Reflection</span>
+    </div>
+
+    <div style="text-align:center">
+      <h2>Phase 1: Planning</h2>
+    </div>
+
+    <!-- Collapsible scenario summary -->
+    <div class="card" style="padding:0">
+      <div class="scenario-summary-toggle" id="summary-toggle" onclick="toggleSummary()">
+        <span id="summary-arrow">&#9654;</span> Scenario Summary (quick reference)
+      </div>
+      <div class="scenario-summary-content" id="summary-content"></div>
+    </div>
+
+    <div class="card">
+      <p id="planning-prompt" style="font-size:1rem;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:12px"></p>
+      <ul class="guiding-bullets" id="planning-sub-prompts"></ul>
+    </div>
+
+    <textarea class="freetext-area" id="planning-area" placeholder="Write your plan here..." rows="10"></textarea>
+    <div class="char-hint">
+      <span class="char-count" id="planning-count">0</span> characters &middot; ~300-600 recommended
+    </div>
+
+    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-planning" disabled onclick="submitPlanning()">Submit Plan &rarr;</button>
+  </div>
+
+  <!-- SCREEN: Execution -->
+  <div class="screen" id="screen-execution">
+    <div class="phase-indicator" id="phase-3">
+      <span class="phase-dot completed"><span class="phase-circle">&#10003;</span> Briefing</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot completed"><span class="phase-circle">&#10003;</span> Planning</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot active"><span class="phase-circle">&#9679;</span> Execution</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot"><span class="phase-circle">&#9675;</span> Reflection</span>
+    </div>
+
+    <div style="text-align:center">
+      <h2>Phase 2: Execution</h2>
+      <div class="sub-phase-dots" id="exec-dots"></div>
+    </div>
+
+    <div id="exec-content"></div>
+
+    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-exec" onclick="submitExecution()">Submit</button>
+  </div>
+
+  <!-- SCREEN: Reflection -->
+  <div class="screen" id="screen-reflection">
+    <div class="phase-indicator" id="phase-4">
+      <span class="phase-dot completed"><span class="phase-circle">&#10003;</span> Briefing</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot completed"><span class="phase-circle">&#10003;</span> Planning</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot completed"><span class="phase-circle">&#10003;</span> Execution</span>
+      <span class="phase-line"></span>
+      <span class="phase-dot active"><span class="phase-circle">&#9679;</span> Reflection</span>
+    </div>
+
+    <div style="text-align:center">
+      <h2>Phase 3: Reflection</h2>
+    </div>
+
+    <!-- Collapsible scenario summary -->
+    <div class="card" style="padding:0">
+      <div class="scenario-summary-toggle" onclick="toggleSummaryReflection()">
+        <span id="summary-arrow-r">&#9654;</span> Scenario Summary (quick reference)
+      </div>
+      <div class="scenario-summary-content" id="summary-content-r"></div>
+    </div>
+
+    <div class="card">
+      <p id="reflection-prompt" style="font-size:1rem;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:12px"></p>
+      <ul class="guiding-bullets" id="reflection-sub-prompts"></ul>
+    </div>
+
+    <textarea class="freetext-area" id="reflection-area" placeholder="Write your reflection here..." rows="10"></textarea>
+    <div class="char-hint">
+      <span class="char-count" id="reflection-count">0</span> characters &middot; ~200-500 recommended
+    </div>
+
+    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-reflection" disabled onclick="submitReflection()">Submit Reflection &rarr;</button>
+  </div>
+
+  <!-- SCREEN: Result -->
+  <div class="screen" id="screen-result">
+    <div id="result-content"></div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">&larr; Back to main menu</a>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+</div>
+
+<script>
+// ─── Level 3: Boss Challenge ─────────────────────────────────────────────
+
+// State
+let activeScenario = null;
+let participantId = '';
+let participantName = '';
+let quizStartTime = null;
+let testMode = 'adaptive';
+let session = {};
+let tapSelected = null;
+
+let phaseScores = {
+  planning: null,
+  execution: [],
+  reflection: null
+};
+
+let currentExecTask = 0;
+
+// ─── Load & Init ─────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  session = getAdaptiveSession();
+
+  // Guard: must have L3 unlocked
+  if (!session.level3Unlocked) {
+    showToast('Boss Challenge not yet unlocked');
+    setTimeout(() => location.href = 'index.html', 1200);
+    return;
+  }
+
+  renderLevelIndicator(document.getElementById('level-indicator'), 3);
+  participantId = session.participantId || 'AIQ' + Date.now();
+  participantName = session.participantName || 'Anonymous';
+
+  // Load scenarios
+  fetch('questions/level3.json')
+    .then(r => r.json())
+    .then(scenarios => {
+      activeScenario = shuffle(scenarios)[0];
+      renderBriefing();
+    })
+    .catch(err => {
+      console.error('Failed to load L3 scenarios:', err);
+      showToast('Error loading scenarios');
+    });
+});
+
+// ─── Render Briefing ─────────────────────────────────────────────────────
+function renderBriefing() {
+  document.getElementById('briefing-title').textContent = activeScenario.title;
+  document.getElementById('briefing-text').innerHTML = activeScenario.briefing.text
+    .split('\n').map(p => `<p style="margin-bottom:12px">${esc(p)}</p>`).join('');
+
+  const list = document.getElementById('constraints-list');
+  list.innerHTML = activeScenario.briefing.constraints
+    .map(c => `<li>${esc(c)}</li>`).join('');
+}
+
+// ─── Scenario Summary (collapsible) ──────────────────────────────────────
+function buildSummaryHtml() {
+  return `<p style="margin-bottom:8px"><strong>${esc(activeScenario.title)}</strong></p>
+    <p style="margin-bottom:8px">${esc(activeScenario.briefing.text)}</p>
+    <p style="font-weight:600;margin-bottom:4px">Constraints:</p>
+    <ul style="list-style:disc;padding-left:20px;margin:0">
+      ${activeScenario.briefing.constraints.map(c => `<li>${esc(c)}</li>`).join('')}
+    </ul>`;
+}
+
+function toggleSummary() {
+  const content = document.getElementById('summary-content');
+  const arrow = document.getElementById('summary-arrow');
+  if (!content.innerHTML) content.innerHTML = buildSummaryHtml();
+  content.classList.toggle('open');
+  arrow.textContent = content.classList.contains('open') ? '\u25BC' : '\u25B6';
+}
+
+function toggleSummaryReflection() {
+  const content = document.getElementById('summary-content-r');
+  const arrow = document.getElementById('summary-arrow-r');
+  if (!content.innerHTML) content.innerHTML = buildSummaryHtml();
+  content.classList.toggle('open');
+  arrow.textContent = content.classList.contains('open') ? '\u25BC' : '\u25B6';
+}
+
+// ─── Phase Navigation ────────────────────────────────────────────────────
+function goToPlanning() {
+  quizStartTime = Date.now();
+
+  // Populate planning screen
+  document.getElementById('planning-prompt').textContent = activeScenario.planning.prompt;
+  const subList = document.getElementById('planning-sub-prompts');
+  subList.innerHTML = activeScenario.planning.subPrompts
+    .map(s => `<li>${esc(s)}</li>`).join('');
+
+  // Wire up textarea
+  const ta = document.getElementById('planning-area');
+  const counter = document.getElementById('planning-count');
+  const btn = document.getElementById('btn-submit-planning');
+  ta.addEventListener('input', () => {
+    const len = ta.value.length;
+    counter.textContent = len;
+    counter.className = 'char-count' + (len < 100 ? ' short' : len > 700 ? ' long' : len >= 100 ? ' good' : '');
+    btn.disabled = len < 20;
+  });
+
+  showScreen('screen-planning');
+  setTimeout(() => ta.focus(), 200);
+}
+
+function submitPlanning() {
+  const ta = document.getElementById('planning-area');
+  if (ta.value.trim().length < 20) {
+    showToast('Please write a more detailed plan');
+    return;
+  }
+
+  // Show rubric self-assessment for planning
+  showFreetextAssessment(activeScenario.planning, ta.value.trim(), (score) => {
+    phaseScores.planning = score;
+    goToExecution();
+  });
+}
+
+// ─── Execution Phase ─────────────────────────────────────────────────────
+function goToExecution() {
+  currentExecTask = 0;
+  renderExecDots();
+  renderExecTask();
+  showScreen('screen-execution');
+}
+
+function renderExecDots() {
+  const total = activeScenario.execution.length;
+  const dots = document.getElementById('exec-dots');
+  dots.innerHTML = Array.from({length: total}, (_, i) => {
+    let cls = 'sub-phase-dot';
+    if (i < currentExecTask) cls += ' completed';
+    else if (i === currentExecTask) cls += ' active';
+    return `<span class="${cls}"></span>`;
+  }).join('');
+}
+
+function renderExecTask() {
+  const task = activeScenario.execution[currentExecTask];
+  const content = document.getElementById('exec-content');
+  const btn = document.getElementById('btn-submit-exec');
+
+  if (task.format === 'ranking') {
+    renderExecRanking(task, content);
+    btn.disabled = false;
+    btn.textContent = 'Submit';
+  } else if (task.format === 'multiselect') {
+    renderExecMultiselect(task, content);
+    btn.disabled = false;
+    btn.textContent = 'Submit';
+  } else if (task.format === 'freetext') {
+    renderExecFreetext(task, content);
+    btn.disabled = true;
+    btn.textContent = 'Submit';
+  }
+}
+
+function submitExecution() {
+  const task = activeScenario.execution[currentExecTask];
+
+  if (task.format === 'freetext') {
+    const ta = document.querySelector('#exec-content .freetext-area');
+    if (!ta || ta.value.trim().length < 20) {
+      showToast('Please write a more detailed response');
+      return;
+    }
+  }
+
+  if (task.format === 'ranking') {
+    storeCurrentRankingAnswer();
+  }
+
+  // Show self-assessment for this task
+  showExecAssessment(task, (score) => {
+    phaseScores.execution.push(score);
+    currentExecTask++;
+
+    if (currentExecTask < activeScenario.execution.length) {
+      renderExecDots();
+      renderExecTask();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      goToReflection();
+    }
+  });
+}
+
+// ─── Execution: Ranking Renderer ─────────────────────────────────────────
+function renderExecRanking(task, container) {
+  const items = shuffle(task.items.map((item, i) => ({...item, origIdx: i})));
+
+  container.innerHTML = `
+    <div class="card">
+      <p class="question-text" style="margin-bottom:16px">${esc(task.q)}</p>
+      <div class="ranking-list" id="ranking-list">
+        ${items.map((item, i) => `
+          <div class="ranking-item" data-idx="${i}" draggable="true"
+               style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
+            <span class="drag-handle" aria-hidden="true"></span>
+            <span class="rank-num">${i+1}</span>
+            <span class="ranking-text">${esc(item.text)}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="touch-hint">Tap an item, then tap where to move it</div>
+  `;
+
+  initDragAndDrop();
+  initTapReorder();
+}
+
+function storeCurrentRankingAnswer() {
+  // No-op for scoring — ranking is self-assessed
+}
+
+function initDragAndDrop() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+  let draggedEl = null;
+
+  list.addEventListener('dragstart', e => {
+    const item = e.target.closest('.ranking-item');
+    if (!item) return;
+    draggedEl = item;
+    item.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  });
+
+  list.addEventListener('dragend', e => {
+    if (draggedEl) {
+      draggedEl.classList.remove('dragging');
+      draggedEl = null;
+    }
+    list.querySelectorAll('.ranking-item').forEach(el => el.classList.remove('drop-target'));
+    updateRankNumbers();
+  });
+
+  list.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.ranking-item');
+    if (!target || target === draggedEl) return;
+    list.querySelectorAll('.ranking-item').forEach(el => el.classList.remove('drop-target'));
+    target.classList.add('drop-target');
+
+    const items = [...list.children];
+    const dragIdx = items.indexOf(draggedEl);
+    const targetIdx = items.indexOf(target);
+    if (dragIdx < targetIdx) {
+      target.after(draggedEl);
+    } else {
+      target.before(draggedEl);
+    }
+  });
+
+  list.addEventListener('drop', e => { e.preventDefault(); });
+}
+
+function initTapReorder() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+
+  list.addEventListener('click', e => {
+    const item = e.target.closest('.ranking-item');
+    if (!item) return;
+    if (window.matchMedia('(hover: hover)').matches) return;
+
+    if (tapSelected === null) {
+      tapSelected = item;
+      item.classList.add('tap-selected');
+    } else if (tapSelected === item) {
+      item.classList.remove('tap-selected');
+      tapSelected = null;
+    } else {
+      tapSelected.classList.remove('tap-selected');
+      const items = [...list.children];
+      const fromIdx = items.indexOf(tapSelected);
+      const toIdx = items.indexOf(item);
+      if (fromIdx < toIdx) { item.after(tapSelected); }
+      else { item.before(tapSelected); }
+      tapSelected = null;
+      updateRankNumbers();
+    }
+  });
+}
+
+function updateRankNumbers() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+  list.querySelectorAll('.rank-num').forEach((el, i) => { el.textContent = i + 1; });
+}
+
+// ─── Execution: Multi-Select Renderer ────────────────────────────────────
+function renderExecMultiselect(task, container) {
+  container.innerHTML = `
+    <div class="card">
+      <p class="question-text" style="margin-bottom:16px">${esc(task.q)}</p>
+      <p style="font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:8px">Select ALL that apply</p>
+      <div class="multiselect-list" id="ms-list">
+        ${task.options.map((opt, i) => `
+          <div class="multiselect-item" data-idx="${i}"
+               style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
+            <span class="checkbox"></span>
+            <span class="multiselect-text">${esc(opt.text)}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="select-counter" id="ms-counter">0 selected</div>
+    </div>
+  `;
+
+  document.getElementById('ms-list').addEventListener('click', e => {
+    const item = e.target.closest('.multiselect-item');
+    if (!item) return;
+    item.classList.toggle('checked');
+    const cb = item.querySelector('.checkbox');
+    cb.innerHTML = item.classList.contains('checked') ? '&#10003;' : '';
+    const count = document.querySelectorAll('.multiselect-item.checked').length;
+    document.getElementById('ms-counter').textContent = `${count} selected`;
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
+}
+
+// ─── Execution: Free-Text Renderer ───────────────────────────────────────
+function renderExecFreetext(task, container) {
+  container.innerHTML = `
+    <div class="card">
+      <p class="question-text" style="margin-bottom:16px">${esc(task.q)}</p>
+    </div>
+    <textarea class="freetext-area" id="exec-ft-area" placeholder="Write your response here..." rows="10"></textarea>
+    <div class="char-hint">
+      <span class="char-count" id="exec-ft-count">0</span> characters &middot; ~200-500 recommended
+    </div>
+  `;
+
+  const ta = document.getElementById('exec-ft-area');
+  const counter = document.getElementById('exec-ft-count');
+  const btn = document.getElementById('btn-submit-exec');
+
+  ta.addEventListener('input', () => {
+    const len = ta.value.length;
+    counter.textContent = len;
+    counter.className = 'char-count' + (len < 100 ? ' short' : len > 600 ? ' long' : len >= 100 ? ' good' : '');
+    btn.disabled = len < 20;
+  });
+
+  setTimeout(() => ta.focus(), 200);
+}
+
+// ─── Self-Assessment (Freetext with rubric) ──────────────────────────────
+function showFreetextAssessment(phaseData, userAnswer, onComplete) {
+  let selectedScore = null;
+  const overlay = document.createElement('div');
+  overlay.className = 'sa-overlay';
+
+  const panel = document.createElement('div');
+  panel.className = 'sa-panel';
+
+  panel.innerHTML = `
+    <h3>Compare your answer to these levels:</h3>
+    <div class="rubric-cards" id="sa-rubrics">
+      ${[4,3,2,1].map(score => {
+        const r = phaseData.rubric[String(score)];
+        return `
+          <div class="rubric-card" data-score="${score}">
+            <div class="rubric-level">
+              <span>${esc(r.label)}</span>
+              <span class="rubric-score">${score}/4</span>
+            </div>
+            <div class="rubric-desc">${esc(r.description)}</div>
+          </div>`;
+      }).join('')}
+    </div>
+    <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
+  `;
+
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  panel.querySelector('#sa-rubrics').addEventListener('click', e => {
+    const card = e.target.closest('.rubric-card');
+    if (!card) return;
+    panel.querySelectorAll('.rubric-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedScore = parseInt(card.dataset.score);
+    panel.querySelector('#sa-continue').disabled = false;
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
+
+  panel.querySelector('#sa-continue').addEventListener('click', () => {
+    if (selectedScore === null) return;
+    document.body.style.overflow = '';
+    overlay.remove();
+    onComplete(selectedScore);
+  });
+}
+
+// ─── Self-Assessment (Ranking / Multiselect with correct answer) ─────────
+function showExecAssessment(task, onComplete) {
+  if (task.format === 'freetext') {
+    const ta = document.querySelector('#exec-content .freetext-area');
+    showFreetextAssessment(task, ta ? ta.value.trim() : '', onComplete);
+    return;
+  }
+
+  let selectedScore = null;
+  const overlay = document.createElement('div');
+  overlay.className = 'sa-overlay';
+
+  const panel = document.createElement('div');
+  panel.className = 'sa-panel';
+
+  let correctHtml = '';
+  if (task.format === 'ranking') {
+    const sorted = [...task.items].sort((a, b) => a.correctRank - b.correctRank);
+    correctHtml = `<div class="sa-correct"><strong>Correct order:</strong><ol style="margin:8px 0 0 20px;line-height:1.7">
+      ${sorted.map(item => `<li>${esc(item.text)}</li>`).join('')}
+    </ol></div>`;
+  } else {
+    const correct = task.options.filter(o => o.correct).map(o => o.text);
+    correctHtml = `<div class="sa-correct"><strong>Correct answers:</strong><ul style="margin:8px 0 0 20px;line-height:1.7">
+      ${correct.map(t => `<li>${esc(t)}</li>`).join('')}
+    </ul></div>`;
+  }
+
+  panel.innerHTML = `
+    <h3>How did you do?</h3>
+    ${correctHtml}
+    <div class="sa-explanation">${esc(task.explanation)}</div>
+    <p style="text-align:center;font-size:.88rem;font-weight:600;color:var(--text)">Rate your answer:</p>
+    <div class="sa-ratings" id="sa-ratings">
+      <button class="sa-rate-btn" data-score="1"><span class="rate-score">1</span>Way off</button>
+      <button class="sa-rate-btn" data-score="2"><span class="rate-score">2</span>Partially right</button>
+      <button class="sa-rate-btn" data-score="3"><span class="rate-score">3</span>Close</button>
+      <button class="sa-rate-btn" data-score="4"><span class="rate-score">4</span>Nailed it</button>
+    </div>
+    <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
+  `;
+
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  panel.querySelector('#sa-ratings').addEventListener('click', e => {
+    const btn = e.target.closest('.sa-rate-btn');
+    if (!btn) return;
+    panel.querySelectorAll('.sa-rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedScore = parseInt(btn.dataset.score);
+    panel.querySelector('#sa-continue').disabled = false;
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
+
+  panel.querySelector('#sa-continue').addEventListener('click', () => {
+    if (selectedScore === null) return;
+    document.body.style.overflow = '';
+    overlay.remove();
+    onComplete(selectedScore);
+  });
+}
+
+// ─── Reflection Phase ────────────────────────────────────────────────────
+function goToReflection() {
+  document.getElementById('reflection-prompt').textContent = activeScenario.reflection.prompt;
+  const subList = document.getElementById('reflection-sub-prompts');
+  subList.innerHTML = activeScenario.reflection.subPrompts
+    .map(s => `<li>${esc(s)}</li>`).join('');
+
+  const ta = document.getElementById('reflection-area');
+  const counter = document.getElementById('reflection-count');
+  const btn = document.getElementById('btn-submit-reflection');
+
+  ta.addEventListener('input', () => {
+    const len = ta.value.length;
+    counter.textContent = len;
+    counter.className = 'char-count' + (len < 100 ? ' short' : len > 600 ? ' long' : len >= 100 ? ' good' : '');
+    btn.disabled = len < 20;
+  });
+
+  showScreen('screen-reflection');
+  setTimeout(() => ta.focus(), 200);
+}
+
+function submitReflection() {
+  const ta = document.getElementById('reflection-area');
+  if (ta.value.trim().length < 20) {
+    showToast('Please write a more detailed reflection');
+    return;
+  }
+
+  showFreetextAssessment(activeScenario.reflection, ta.value.trim(), (score) => {
+    phaseScores.reflection = score;
+    showResult();
+  });
+}
+
+// ─── Result Screen ───────────────────────────────────────────────────────
+function showResult() {
+  const allScores = [phaseScores.planning, ...phaseScores.execution, phaseScores.reflection];
+  const avg = allScores.reduce((s, v) => s + v, 0) / allScores.length;
+  const passed = avg >= 2.5;
+
+  const duration = Math.round((Date.now() - quizStartTime) / 1000);
+  const mins = Math.floor(duration / 60);
+  const secs = duration % 60;
+
+  // Submit to Sheets
+  submitToSheets({
+    participant_id: participantId,
+    participant_name: participantName,
+    timestamp: new Date().toISOString(),
+    ai_experience: session.experience,
+    test_mode: 'adaptive',
+    level: 3,
+    duration_seconds: duration,
+    boss_scenario: activeScenario.id,
+    boss_planning_rating: phaseScores.planning,
+    boss_execution_rating: Math.round(phaseScores.execution.reduce((a,b) => a+b, 0) / phaseScores.execution.length),
+    boss_reflection_rating: phaseScores.reflection,
+    boss_result: passed ? 'pass' : 'fail'
+  });
+
+  // Save to adaptive session
+  saveAdaptiveSession({
+    level3: {
+      scenario: activeScenario.id,
+      phaseScores: phaseScores,
+      average: avg,
+      passed: passed,
+      duration: duration
+    }
+  });
+
+  const content = document.getElementById('result-content');
+
+  if (passed) {
+    content.innerHTML = `
+      <div style="text-align:center;padding-top:16px">
+        <h1 style="color:var(--accent);margin-bottom:16px">Boss Challenge Complete!</h1>
+        <div class="boss-badge">AI PRACTITIONER &mdash; BOSS LEVEL</div>
+        <p class="subtitle" style="margin-top:16px">Average score: ${avg.toFixed(1)} / 4.0</p>
+        <p style="font-size:.85rem;color:var(--text-dim);margin-top:4px">Completed in ${mins}m ${secs}s</p>
+      </div>
+
+      <div class="card">
+        <h3 style="text-align:center;color:var(--primary-light);margin-bottom:16px">Phase Performance</h3>
+        ${renderPhaseDotsHtml()}
+      </div>
+
+      <div class="card">
+        <h3 style="text-align:center;color:var(--primary-light);margin-bottom:16px">Your Journey</h3>
+        ${renderJourneyTimeline()}
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" onclick="location.href='index.html'" style="margin-top:8px">Return Home &rarr;</button>
+    `;
+
+    showScreen('screen-result');
+    launchConfetti();
+  } else {
+    content.innerHTML = `
+      <div style="text-align:center;padding-top:16px">
+        <h1 style="color:#fb7185;margin-bottom:16px">Not quite &mdash; but you're close</h1>
+        <p class="subtitle" style="margin-top:8px">Average score: ${avg.toFixed(1)} / 4.0 &middot; Need 2.5+ to pass</p>
+        <p style="font-size:.85rem;color:var(--text-dim);margin-top:4px">Completed in ${mins}m ${secs}s</p>
+      </div>
+
+      <div class="card">
+        <h3 style="color:var(--primary-light);margin-bottom:16px">Phase-by-Phase Feedback</h3>
+        ${renderPhaseFeedbackHtml()}
+      </div>
+
+      <div style="text-align:center;font-size:.85rem;color:var(--text-muted);font-style:italic;padding:0 8px">
+        Tip: Reloading will give you a different random scenario to practice with.
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" onclick="location.reload()">Try Again</button>
+      <button class="btn btn-outline btn-full" onclick="location.href='index.html'" style="margin-top:8px">Return Home</button>
+    `;
+
+    showScreen('screen-result');
+  }
+}
+
+// ─── Result Helpers ──────────────────────────────────────────────────────
+function renderPhaseDotsHtml() {
+  const phases = [
+    { label: 'Planning', score: phaseScores.planning },
+    { label: 'Exec 1', score: phaseScores.execution[0] },
+    { label: 'Exec 2', score: phaseScores.execution[1] },
+    { label: 'Exec 3', score: phaseScores.execution[2] },
+    { label: 'Reflection', score: phaseScores.reflection }
+  ];
+
+  return `<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+    ${phases.map(p => {
+      const strong = p.score >= 3;
+      const color = strong ? '#34d399' : p.score >= 2 ? 'var(--accent)' : '#fb7185';
+      return `<div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="width:36px;height:36px;border-radius:50%;background:${color}22;border:2px solid ${color};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:${color}">${p.score}</div>
+        <span style="font-size:.7rem;color:var(--text-dim)">${p.label}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderPhaseFeedbackHtml() {
+  const phases = [
+    { label: 'Planning', score: phaseScores.planning },
+    { label: 'Execution (avg)', score: Math.round(phaseScores.execution.reduce((a,b)=>a+b,0) / phaseScores.execution.length * 10) / 10 },
+    { label: 'Reflection', score: phaseScores.reflection }
+  ];
+
+  return phases.map(p => {
+    const weak = p.score < 2.5;
+    const icon = weak ? '&#9888;' : '&#10003;';
+    const color = weak ? '#fb7185' : '#34d399';
+    const advice = weak
+      ? 'Focus on depth and specificity. Reference the constraints and consider edge cases.'
+      : 'Solid performance. Keep building on this foundation.';
+    return `<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="color:${color};font-size:1rem">${icon}</span>
+        <span style="font-weight:600">${p.label}</span>
+        <span style="margin-left:auto;font-family:'Space Mono',monospace;font-size:.85rem;color:${color}">${p.score}/4</span>
+      </div>
+      <p style="font-size:.82rem;color:var(--text-dim);margin:0">${advice}</p>
+    </div>`;
+  }).join('');
+}
+
+function renderJourneyTimeline() {
+  const l1Pct = session.level1 ? session.level1.percentage : '?';
+  const l2Pct = session.level2 ? session.level2.percentage : '?';
+
+  return `<div class="journey-timeline">
+    <div class="journey-dot">
+      <div class="dot" style="background:var(--primary-light)"></div>
+      <span class="label">L1: ${l1Pct}%</span>
+    </div>
+    <div class="journey-line"></div>
+    <div class="journey-dot">
+      <div class="dot" style="background:var(--cyan)"></div>
+      <span class="label">L2: ${l2Pct}%</span>
+    </div>
+    <div class="journey-line"></div>
+    <div class="journey-dot">
+      <div class="dot" style="background:var(--accent);box-shadow:0 0 12px var(--accent-glow)"></div>
+      <span class="label" style="color:var(--accent);font-weight:700">L3: Passed</span>
+    </div>
+  </div>`;
+}
+
+// ─── Stitch L3 Topbar Phase Sync (after defer scripts) ──────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  function updateStitchPhase() {
+    const phases = ['screen-briefing', 'screen-planning', 'screen-execution', 'screen-reflection', 'screen-result'];
+    const phaseTabIds = ['stitch-phase-1', 'stitch-phase-2', 'stitch-phase-3', 'stitch-phase-4'];
+    const phasePcts = [0, 25, 50, 75, 100];
+
+    let activeIdx = 0;
+    phases.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains('active')) activeIdx = i;
+    });
+
+    phaseTabIds.forEach((tabId, i) => {
+      const tab = document.getElementById(tabId);
+      if (!tab) return;
+      if (i < activeIdx) {
+        tab.style.color = '#22d3ee';
+        tab.style.fontWeight = '400';
+        tab.style.borderBottom = 'none';
+      } else if (i === activeIdx) {
+        tab.style.color = '#22d3ee';
+        tab.style.fontWeight = '700';
+        tab.style.borderBottom = '2px solid #22d3ee';
+        tab.style.paddingBottom = '4px';
+      } else {
+        tab.style.color = 'rgba(255,255,255,0.4)';
+        tab.style.fontWeight = '400';
+        tab.style.borderBottom = 'none';
+      }
+    });
+
+    const horizon = document.getElementById('stitch-horizon-l3');
+    if (horizon) horizon.style.width = phasePcts[Math.min(activeIdx, 4)] + '%';
+
+    const nav = document.getElementById('stitch-nav-l3');
+    if (nav) {
+      nav.style.display = activeIdx >= 4 ? 'none' : 'flex';
+    }
+  }
+
+  const _origShowScreenL3 = showScreen;
+  showScreen = function(id) {
+    _origShowScreenL3(id);
+    updateStitchPhase();
+  };
+  updateStitchPhase();
+});
+</script>
+
+</body>
+</html>

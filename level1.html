@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI IQ Test — Level 1: Quick Scan</title>
+<meta name="theme-color" content="#06080f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/styles.css">
+<link rel="stylesheet" href="shared/stitch.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="shared/engine.js" defer></script>
+<script src="shared/shader.js" defer></script>
+<script src="shared/submit.js" defer></script>
+<script src="shared/components.js" defer></script>
+</head>
+<body>
+
+<!-- Stitch Background Layers -->
+<div class="stitch-bg" aria-hidden="true"></div>
+<div class="stitch-particles" aria-hidden="true">
+  <div class="stitch-star" style="top:15%;left:10%;width:6px;height:6px"></div>
+  <div class="stitch-star" style="top:45%;left:85%;width:4px;height:4px;animation-delay:1.5s"></div>
+  <div class="stitch-star" style="top:75%;left:20%;width:8px;height:8px;animation-delay:0.5s"></div>
+  <div class="stitch-star" style="top:25%;left:70%;width:4px;height:4px;animation-delay:2.2s"></div>
+  <div class="stitch-star" style="bottom:20%;right:15%;width:6px;height:6px;animation-delay:0.8s"></div>
+  <div class="stitch-parcel" style="top:10%;left:15%;width:64px;height:64px;color:rgba(255,255,255,0.1);--drift:25s;--glow:10s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+  </div>
+  <div class="stitch-parcel" style="bottom:15%;right:25%;width:56px;height:56px;color:rgba(255,255,255,0.2);--drift:22s;--glow:7s;animation-delay:-3s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5V19L12 23L21 19V5L12 1ZM12 3.3L19 6.4V17.6L12 20.7L5 17.6V6.4L12 3.3Z"/></svg>
+  </div>
+  <div class="stitch-blob" style="top:25%;left:-80px;width:384px;height:384px;background:rgba(124,58,237,0.2)"></div>
+  <div class="stitch-blob" style="bottom:25%;right:-80px;width:384px;height:384px;background:rgba(219,39,119,0.2)"></div>
+</div>
+
+<div id="shader-bg" aria-hidden="true"></div>
+
+<!-- Stitch Top Navigation -->
+<nav class="stitch-topbar" id="stitch-nav">
+  <div class="stitch-topbar-left">
+    <span class="stitch-topbar-level">Level 1</span>
+    <span class="stitch-topbar-qcount" id="stitch-qcount"></span>
+  </div>
+  <div class="stitch-topbar-right">
+    <div class="stitch-timer-pill">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">timer</span>
+      <span id="stitch-timer">00:00</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Stitch Horizon Progress -->
+<div class="stitch-horizon">
+  <div class="stitch-horizon-fill" id="stitch-horizon" style="width:0%"></div>
+</div>
+
+<div class="app" id="app">
+
+  <!-- Level indicator at top -->
+  <div id="level-indicator" style="text-align:center;padding:12px 0;font-size:.85rem;color:var(--text-dim)"></div>
+
+  <!-- SCREEN: Welcome -->
+  <div class="screen active" id="screen-welcome">
+    <div style="text-align:center;padding-top:24px">
+      <div class="iq-badge-big" style="font-size:.85rem;letter-spacing:2px">LEVEL 1</div>
+      <h1 style="margin-top:10px">Quick Scan</h1>
+      <p class="subtitle" style="margin-top:8px">16 questions across 8 AI dimensions &middot; ~4 minutes</p>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;gap:20px">
+      <div class="input-group">
+        <label for="inp-name">Your name</label>
+        <input type="text" id="inp-name" placeholder="Enter your name...">
+      </div>
+      <div class="input-group">
+        <label for="inp-background">Your experience with AI tools</label>
+        <select id="inp-background">
+          <option value="">Select one...</option>
+          <option value="none">Never used AI tools</option>
+          <option value="beginner">Tried ChatGPT a few times</option>
+          <option value="regular">Use AI tools regularly</option>
+          <option value="advanced">Build things with AI daily</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-full btn-lg" onclick="beginQuiz()">Start Level 1</button>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">&larr; Back to main menu</a>
+    </div>
+  </div>
+
+  <!-- SCREEN: Question -->
+  <div class="screen" id="screen-question" role="main" aria-label="Quiz Question">
+    <div class="progress-wrap">
+      <span class="progress-label" id="q-counter">01/16</span>
+      <div class="progress-track" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="16" id="q-progress-track"><div class="progress-fill" id="q-progress" style="width:6.25%"></div></div>
+      <span class="progress-label" id="q-timer" style="color:var(--text-muted);font-size:.7rem">0:00</span>
+    </div>
+    <div class="progress-dots" id="q-dots"></div>
+    <div id="q-badge"></div>
+    <div class="scenario-img-wrap">
+      <div class="img-placeholder" id="q-img-placeholder">Loading...</div>
+      <img id="q-img" src="" alt="Scenario illustration" onload="this.previousElementSibling.style.display='none'" onerror="this.previousElementSibling.textContent=this.parentElement.dataset.dim||'Scenario';this.previousElementSibling.style.animation='none';this.previousElementSibling.style.backgroundSize='100% 100%'">
+    </div>
+    <p class="question-text" id="q-text"></p>
+    <div class="choices" id="q-choices" role="radiogroup" aria-label="Answer choices"></div>
+    <div class="nav-row">
+      <button class="btn btn-outline" id="btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-primary" id="btn-next" onclick="goNext()" disabled>Next</button>
+    </div>
+    <div style="text-align:center;font-size:.7rem;color:var(--text-muted);margin-top:-8px" class="kb-hint">Press 1-4 to choose &middot; Enter to advance</div>
+  </div>
+
+  <!-- SCREEN: Results -->
+  <div class="screen" id="screen-results" role="main" aria-label="Level 1 Results">
+    <div class="iq-score-wrap">
+      <div class="iq-score-num" id="res-iq">0</div>
+      <div class="iq-score-label">Level 1 Score <span id="res-pct" style="font-family:'Space Mono',monospace;color:var(--primary-light)"></span></div>
+      <div><span class="iq-level" id="res-level"></span></div>
+      <div id="res-time" style="font-size:.85rem;color:var(--text-dim);margin-top:6px"></div>
+      <div id="res-level-desc" style="font-size:.8rem;color:var(--text-dim);margin-top:10px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.5;text-align:center"></div>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="card">
+      <h3 style="margin-bottom:10px;text-align:center;color:var(--primary-light)">Your AI Profile</h3>
+      <div class="radar-wrap">
+        <canvas id="radarChart" width="340" height="340"></canvas>
+      </div>
+    </div>
+
+    <!-- Dimension Bars -->
+    <div class="card">
+      <h3 style="margin-bottom:16px;color:var(--primary-light)">Dimension Breakdown</h3>
+      <div class="dim-bars" id="res-dims"></div>
+    </div>
+
+    <!-- Gate Section -->
+    <div class="card" id="gate-section"></div>
+
+    <!-- Review -->
+    <div class="card review-section">
+      <button class="review-toggle" id="review-toggle" onclick="toggleReview()">
+        <span class="arrow">&#9654;</span> Review All 16 Answers
+      </button>
+      <div id="review-filters" style="display:none;flex-wrap:wrap;gap:6px;padding:10px 0">
+        <button class="dim-filter active" data-dim="all" onclick="filterReview('all')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:var(--primary);color:#fff;cursor:pointer;font-family:'Outfit',sans-serif">All</button>
+      </div>
+      <div class="review-items" id="review-items"></div>
+    </div>
+
+    <div style="text-align:center;margin-top:12px">
+      <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">&larr; Back to main menu</a>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="fb-modal-overlay" id="fb-modal" onclick="if(event.target===this)closeFeedbackModal()">
+    <div class="fb-modal">
+      <button class="fb-modal-close" onclick="closeFeedbackModal()">&times;</button>
+      <div class="feedback-wrap" id="feedback-wrap">
+        <h2 style="color:inherit;margin-bottom:0;font-size:1.2rem">How was this test?</h2>
+        <div class="feedback-face">
+          <div class="feedback-eyes">
+            <div class="feedback-eye" id="fb-eye-l"></div>
+            <div class="feedback-eye" id="fb-eye-r"></div>
+          </div>
+          <div class="feedback-mouth" id="fb-mouth">
+            <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
+              <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-mouth-path"/>
+            </svg>
+          </div>
+        </div>
+        <div class="feedback-label" id="fb-label">NOT BAD</div>
+        <div class="feedback-track">
+          <div class="feedback-track-line" id="fb-track-line"></div>
+          <button class="feedback-dot" onclick="setFeedback(0)"></button>
+          <button class="feedback-dot" onclick="setFeedback(1)"></button>
+          <button class="feedback-dot" onclick="setFeedback(2)"></button>
+          <div class="feedback-indicator" id="fb-indicator">
+            <svg width="100%" height="100%" viewBox="0 0 100 60" fill="none">
+              <path d="M10 30 Q50 70 90 30" stroke="#000" stroke-width="12" stroke-linecap="round" id="fb-ind-path"/>
+            </svg>
+          </div>
+        </div>
+        <div class="feedback-labels" id="fb-labels">
+          <span>Bad</span><span>Not Bad</span><span>Good</span>
+        </div>
+        <textarea class="feedback-comment" id="fb-comment" placeholder="Any comments? (optional)" rows="3"></textarea>
+        <button class="feedback-submit" id="fb-submit" onclick="submitFeedback()">Submit Feedback</button>
+        <button class="feedback-skip" onclick="closeFeedbackModal()">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+</div>
+
+<script>
+// ─── Level 1: Quick Scan ─────────────────────────────────────────────────
+
+// State
+let questions = [];
+let activeQuestions = [];
+let currentQ = 0;
+let answers = [];
+let shuffledChoices = [];
+let participantId = '';
+let participantName = '';
+let quizStartTime = null;
+let testMode = 'adaptive'; // for feedback modal compatibility
+
+// DIM_MAX for quick mode: 2 questions per dim, max 4 pts each = 8
+let DIM_MAX = {};
+
+// Init after shared modules load (defer scripts execute before DOMContentLoaded)
+document.addEventListener('DOMContentLoaded', () => {
+  DIMS.forEach(d => { DIM_MAX[d.key] = 8; });
+
+  // Load questions from JSON
+  fetch('questions/level1.json')
+    .then(r => r.json())
+    .then(data => { questions = data; })
+    .catch(err => console.error('Failed to load questions:', err));
+
+  // Init level indicator
+  renderLevelIndicator(document.getElementById('level-indicator'), 1);
+  // Pre-fill from adaptive session if resuming
+  const session = getAdaptiveSession();
+  if (session.participantName) {
+    document.getElementById('inp-name').value = session.participantName;
+  }
+  if (session.experience) {
+    document.getElementById('inp-background').value = session.experience;
+  }
+});
+
+// ─── Select 2 random questions per dimension ─────────────────────────────
+function selectQuickQuestions() {
+  const picked = [];
+  DIMS.forEach(d => {
+    const pool = questions.filter(q => q.dim === d.key);
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    picked.push(shuffled[0], shuffled[1]);
+  });
+  // Shuffle the final set
+  for (let i = picked.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [picked[i], picked[j]] = [picked[j], picked[i]];
+  }
+  return picked;
+}
+
+// ─── Begin Quiz ──────────────────────────────────────────────────────────
+function beginQuiz() {
+  const bg = document.getElementById('inp-background').value;
+  if (!bg) { showToast('Please select your AI experience'); return; }
+  if (!questions.length) { showToast('Questions still loading, please wait...'); return; }
+
+  participantName = document.getElementById('inp-name').value.trim() || 'Anonymous';
+  participantId = 'AIQ' + Date.now();
+  quizStartTime = Date.now();
+
+  activeQuestions = selectQuickQuestions();
+  startTimer();
+  shuffledChoices = activeQuestions.map(q => shuffle(q.choices));
+  currentQ = 0;
+  answers = new Array(activeQuestions.length).fill(null);
+
+  // Save adaptive session start
+  saveAdaptiveSession({
+    participantId,
+    participantName,
+    experience: bg,
+    startTime: quizStartTime
+  });
+
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+// ─── Render Question ─────────────────────────────────────────────────────
+function renderQuestion() {
+  const q = activeQuestions[currentQ];
+  const sc = shuffledChoices[currentQ];
+  const total = activeQuestions.length;
+  const dim = DIMS.find(d => d.key === q.dim);
+
+  const num = String(currentQ + 1).padStart(2, '0');
+  document.getElementById('q-counter').textContent = `${num}/${total}`;
+  document.getElementById('q-progress').style.width = `${((currentQ + 1) / total) * 100}%`;
+  document.getElementById('q-progress-track').setAttribute('aria-valuenow', currentQ + 1);
+  const answeredCount = answers.filter(a => a !== null).length;
+  document.getElementById('q-badge').innerHTML = `<span class="badge" style="background:${dim.color}22;color:${dim.color};border-color:${dim.color}44">${dim.label}</span><span style="float:right;font-size:.75rem;color:var(--text-muted)">${answeredCount}/${total} answered</span>`;
+
+  // Update progress dots
+  const dotsEl = document.getElementById('q-dots');
+  if (!dotsEl.children.length) {
+    dotsEl.innerHTML = Array.from({length: total}, (_, i) => `<button class="dot" data-idx="${i}" title="Q${i + 1}" aria-label="Jump to question ${i + 1}"></button>`).join('');
+    dotsEl.addEventListener('click', function(e) {
+      const idx = e.target.dataset.idx;
+      if (idx !== undefined) { currentQ = parseInt(idx); renderQuestion(); window.scrollTo({top: 0, behavior: 'smooth'}); }
+    });
+  }
+  dotsEl.querySelectorAll('.dot').forEach((dot, i) => {
+    dot.classList.toggle('answered', answers[i] !== null);
+    dot.classList.toggle('current', i === currentQ);
+  });
+
+  const img = document.getElementById('q-img');
+  const ph = document.getElementById('q-img-placeholder');
+  ph.style.display = 'flex';
+  ph.textContent = 'Loading...';
+  document.querySelector('.scenario-img-wrap').dataset.dim = dim.label;
+  img.src = q.img;
+  img.alt = `${dim.label} scenario illustration`;
+
+  // Preload next question's image
+  if (currentQ < activeQuestions.length - 1) { const nx = new Image(); nx.src = activeQuestions[currentQ + 1].img; }
+
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-text').classList.remove('q-animate');
+  void document.getElementById('q-text').offsetWidth;
+  document.getElementById('q-text').classList.add('q-animate');
+
+  const cDiv = document.getElementById('q-choices');
+  const letters = ['A', 'B', 'C', 'D'];
+  cDiv.innerHTML = sc.map((c, i) => `
+    <button class="choice-btn${answers[currentQ] && answers[currentQ].choiceIdx === i ? ' selected' : ''}"
+            onclick="selectChoice(${i})" type="button"
+            role="radio" aria-checked="${answers[currentQ] && answers[currentQ].choiceIdx === i ? 'true' : 'false'}"
+            aria-label="Option ${letters[i]}: ${c.text}"
+            style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i * 0.06}s both">
+      <span class="choice-letter">${letters[i]}</span>
+      <span class="choice-text">${c.text}</span>
+    </button>`).join('');
+
+  document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.disabled = !answers[currentQ];
+  nextBtn.textContent = currentQ === total - 1 ? 'See Results' : 'Next';
+}
+
+// ─── Select Choice ───────────────────────────────────────────────────────
+function selectChoice(idx) {
+  const sc = shuffledChoices[currentQ];
+  const chosen = sc[idx];
+  answers[currentQ] = {choiceIdx: idx, origLetter: chosen.letter, score: chosen.score};
+  document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === idx);
+    btn.setAttribute('aria-checked', i === idx ? 'true' : 'false');
+  });
+  document.getElementById('btn-next').disabled = false;
+  if (navigator.vibrate) navigator.vibrate(10);
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────
+function goBack() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function goNext() {
+  if (!answers[currentQ]) return;
+  if (currentQ < activeQuestions.length - 1) { currentQ++; renderQuestion(); }
+  else {
+    // Check for unanswered questions
+    const unanswered = answers.findIndex(a => a === null);
+    if (unanswered !== -1) {
+      showToast(`Question ${unanswered + 1} is unanswered — jumping there`);
+      currentQ = unanswered; renderQuestion();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      return;
+    }
+    buildResults();
+    showScreen('screen-results');
+    // Show feedback modal after a short delay
+    setTimeout(showFeedbackModal, 6000); // Delayed so users can see results first
+    const finalScore = answers.reduce((s, a) => s + a.score, 0);
+    const finalPct = Math.round((finalScore / (activeQuestions.length * 4)) * 100);
+    if (finalPct >= 67) launchConfetti();
+    else {
+      const scoreWrap = document.querySelector('.iq-score-wrap');
+      scoreWrap.style.animation = 'glowPulse 2s ease-in-out 2';
+    }
+  }
+}
+
+// ─── Build Results ───────────────────────────────────────────────────────
+function buildResults() {
+  stopTimer();
+  const total = answers.reduce((s, a) => s + a.score, 0);
+  const maxScore = activeQuestions.length * 4;
+  const pct = Math.round((total / maxScore) * 100);
+  const level = QUICK_LEVELS.find(l => pct >= l.min && pct <= l.max) || QUICK_LEVELS[QUICK_LEVELS.length - 1];
+
+  // Score display — show percentage for quick mode
+  const iqEl = document.getElementById('res-iq');
+  animateCount(iqEl, pct, 1400);
+  iqEl.dataset.suffix = '%';
+  document.getElementById('res-pct').textContent = '';
+
+  const lvlEl = document.getElementById('res-level');
+  lvlEl.textContent = level.label;
+  lvlEl.className = 'iq-level ' + level.cls;
+
+  const levelDescs = {
+    1: 'You\'re at the start of your AI journey. These skills are very learnable — keep exploring!',
+    2: 'You have real AI skills developing. Focusing on your weak spots will level you up fast.',
+    3: 'Strong AI competency across most dimensions. A few targeted improvements separate you from mastery.',
+    4: 'Exceptional AI intelligence. You understand, evaluate, and leverage AI at the highest level.'
+  };
+  document.getElementById('res-level-desc').textContent = levelDescs[level.lvl] || '';
+
+  // Show duration
+  if (quizStartTime) {
+    const secs = Math.round((Date.now() - quizStartTime) / 1000);
+    const mins = Math.floor(secs / 60);
+    const remSecs = secs % 60;
+    document.getElementById('res-time').textContent = `Completed in ${mins}m ${remSecs}s`;
+  }
+
+  // Calculate dimension scores
+  const dimScores = {};
+  DIMS.forEach(d => { dimScores[d.key] = 0; });
+  activeQuestions.forEach((q, i) => { dimScores[q.dim] += (answers[i]?.score || 0); });
+
+  // Quick mode: 2 questions per dim, max 4 pts each = 8 per dim
+  const dimMax = Object.fromEntries(DIMS.map(d => [d.key, 8]));
+
+  // Dimension bars
+  const dimsEl = document.getElementById('res-dims');
+  dimsEl.innerHTML = DIMS.map((d, idx) => {
+    const score = dimScores[d.key];
+    const mx = dimMax[d.key];
+    const barPct = (score / mx) * 100;
+    return `<div class="dim-bar-item" style="animation:slideInStagger .5s cubic-bezier(.16,1,.3,1) ${idx * 0.08}s both">
+      <div class="dim-bar-header">
+        <span class="dim-bar-name">${d.label}</span>
+        <span class="dim-bar-score">${score}/${mx}</span>
+      </div>
+      <div class="dim-bar-track">
+        <div class="dim-bar-fill" style="--bar-w:${barPct}%;background:${d.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.dim-bar-fill').forEach(el => {
+      el.style.width = el.style.getPropertyValue('--bar-w');
+    });
+  });
+
+  // Radar chart
+  drawRadar(dimScores);
+
+  // Gate section
+  renderGate(level, pct);
+
+  // Review section
+  const revEl = document.getElementById('review-items');
+  revEl.innerHTML = activeQuestions.map((q, i) => {
+    const ans = answers[i];
+    const best = q.choices.find(c => c.score === 4);
+    const yours = q.choices.find(c => c.letter === ans.origLetter);
+    const dim = DIMS.find(d => d.key === q.dim);
+    const pips = Array.from({length: 4}, (_, j) => `<span class="pip${j < ans.score ? ' filled' : ''}"></span>`).join('');
+    return `<div class="review-item" data-dim="${q.dim}" style="border-left-color:${dim.color}">
+      <div class="ri-q">Q${i + 1} (${dim.label}): ${q.q}</div>
+      <div class="ri-your">Your answer: ${ans.origLetter}. ${yours.text} <span class="ri-score">${pips}</span></div>
+      ${ans.score < 4 ? `<div class="ri-best">Best: ${best.letter}. ${best.text}</div>` : `<div class="ri-best">&#10003; Perfect!</div>`}
+    </div>`;
+  }).join('');
+
+  // Build dimension filter buttons
+  const filtersEl = document.getElementById('review-filters');
+  const dimColors2 = ['#60a5fa', '#f472b6', '#f59e0b', '#34d399', '#fb923c', '#a78bfa', '#38bdf8', '#f97316'];
+  filtersEl.innerHTML = `<button class="dim-filter active" data-dim="all" onclick="filterReview('all')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:var(--primary);color:#fff;cursor:pointer;font-family:'Outfit',sans-serif">All</button>` +
+    DIMS.map((d, i) => `<button class="dim-filter" data-dim="${d.key}" onclick="filterReview('${d.key}')" style="padding:4px 12px;border-radius:99px;font-size:.72rem;font-weight:600;border:1px solid ${dimColors2[i]}40;background:transparent;color:var(--text-dim);cursor:pointer;font-family:'Outfit',sans-serif">${d.label.split(' ')[0]}</button>`).join('');
+
+  document.getElementById('review-toggle').innerHTML = `<span class="arrow">&#9654;</span> Review All ${activeQuestions.length} Answers`;
+
+  // Submit to Google Sheets
+  submitToSheets({
+    participant_id: participantId,
+    participant_name: participantName,
+    timestamp: new Date().toISOString(),
+    ai_experience: document.getElementById('inp-background').value,
+    test_mode: 'adaptive',
+    level: 1,
+    total_score: total,
+    percentage: pct,
+    result_level: level.label,
+    duration_seconds: Math.round((Date.now() - quizStartTime) / 1000),
+    ...Object.fromEntries(DIMS.map(d => [`dim_${d.key}`, dimScores[d.key]])),
+  });
+
+  // Save adaptive session with L1 results
+  saveAdaptiveSession({
+    participantId,
+    participantName,
+    experience: document.getElementById('inp-background').value,
+    startTime: quizStartTime,
+    level1: {
+      scores: dimScores,
+      totalScore: total,
+      percentage: pct,
+      level: level.label,
+      answers: activeQuestions.map((q, i) => ({
+        qId: q.id, choiceIdx: answers[i].choiceIdx,
+        origLetter: answers[i].origLetter, score: answers[i].score
+      }))
+    }
+  });
+}
+
+// ─── Gate Logic ──────────────────────────────────────────────────────────
+function renderGate(level, pct) {
+  const gate = document.getElementById('gate-section');
+  const isQualified = pct >= 70; // Practitioner+ threshold (raised from 57% — random clicking averages ~62%)
+
+  if (isQualified) {
+    gate.innerHTML = `
+      <div style="text-align:center">
+        <h2 style="color:var(--cyan)">You've qualified for Level 2!</h2>
+        <p class="subtitle" style="margin:12px 0">Level 2 adapts to your results — focusing on developing areas with new question formats.</p>
+        <button class="btn btn-primary btn-full btn-lg" onclick="location.href='level2.html'" style="margin-top:16px">Continue to Level 2 &rarr;</button>
+      </div>`;
+  } else {
+    gate.innerHTML = `
+      <div style="text-align:center">
+        <h2 style="color:#fb7185">You need Apprentice level to advance</h2>
+        <p class="subtitle" style="margin:12px 0">Score 70%+ to unlock Level 2.</p>
+        <button class="btn btn-primary btn-full btn-lg" onclick="location.reload()" style="margin-top:16px">Try Again</button>
+      </div>`;
+  }
+}
+
+// ─── Review Toggle & Filter ──────────────────────────────────────────────
+function toggleReview() {
+  const isOpen = document.getElementById('review-toggle').classList.toggle('open');
+  document.getElementById('review-items').classList.toggle('open');
+  document.getElementById('review-filters').style.display = isOpen ? 'flex' : 'none';
+}
+
+function filterReview(dimKey) {
+  document.querySelectorAll('.dim-filter').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.dim === dimKey);
+    btn.style.background = btn.dataset.dim === dimKey ? 'var(--primary)' : 'transparent';
+    btn.style.color = btn.dataset.dim === dimKey ? '#fff' : 'var(--text-dim)';
+  });
+  document.querySelectorAll('.review-item').forEach(item => {
+    item.style.display = (dimKey === 'all' || item.dataset.dim === dimKey) ? 'block' : 'none';
+  });
+}
+
+// ─── Keyboard Navigation ─────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  const active = document.getElementById('screen-question');
+  if (!active || !active.classList.contains('active')) return;
+  if (e.key >= '1' && e.key <= '4') {
+    const idx = parseInt(e.key) - 1;
+    const btns = document.querySelectorAll('.choice-btn');
+    if (btns[idx]) btns[idx].click();
+  }
+  if (e.key === 'Enter' && answers[currentQ]) {
+    e.preventDefault();
+    goNext();
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+    if (currentQ > 0) { e.preventDefault(); goBack(); }
+  }
+});
+
+// ─── Swipe Gestures (mobile) ─────────────────────────────────────────────
+(function() {
+  let startX = 0, startY = 0;
+  const qScreen = () => document.getElementById('screen-question');
+  document.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive: true});
+  document.addEventListener('touchend', function(e) {
+    if (!qScreen() || !qScreen().classList.contains('active')) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx)) return;
+    if (dx < -60 && answers[currentQ]) goNext();
+    else if (dx > 60 && currentQ > 0) goBack();
+  }, {passive: true});
+})();
+
+// ─── Stitch Topbar Sync ─────────────────────────────────────────────────
+// Keep stitch topbar in sync with existing quiz state
+const _origRenderQ = renderQuestion;
+renderQuestion = function() {
+  _origRenderQ.apply(this, arguments);
+  const total = activeQuestions.length;
+  document.getElementById('stitch-qcount').textContent = `Q ${String(currentQ+1).padStart(2,'0')}/${total}`;
+  const pct = ((currentQ + 1) / total) * 100;
+  document.getElementById('stitch-horizon').style.width = pct + '%';
+};
+
+// Stitch UI sync — must wait for defer scripts
+document.addEventListener('DOMContentLoaded', () => {
+  // Sync timer display
+  const _origTimerEl = document.getElementById('q-timer');
+  if (_origTimerEl) {
+    const obs = new MutationObserver(() => {
+      const st = document.getElementById('stitch-timer');
+      if (st && _origTimerEl.textContent) st.textContent = _origTimerEl.textContent;
+    });
+    obs.observe(_origTimerEl, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Show/hide topbar based on active screen
+  function updateStitchNav() {
+    const nav = document.getElementById('stitch-nav');
+    const qScreen = document.getElementById('screen-question');
+    if (nav) {
+      nav.style.display = (qScreen && qScreen.classList.contains('active')) ? 'flex' : 'none';
+    }
+  }
+  const _origShowScreen = showScreen;
+  showScreen = function(id) {
+    _origShowScreen(id);
+    updateStitchNav();
+  };
+  updateStitchNav();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI IQ Test — Level 2: Deep Dive</title>
+<meta name="theme-color" content="#06080f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/styles.css">
+<link rel="stylesheet" href="shared/stitch.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="shared/engine.js" defer></script>
+<script src="shared/shader.js" defer></script>
+<script src="shared/submit.js" defer></script>
+<script src="shared/components.js" defer></script>
+</head>
+<body>
+
+<!-- Stitch Background Layers -->
+<div class="stitch-bg" aria-hidden="true"></div>
+<div class="stitch-particles" aria-hidden="true">
+  <div class="stitch-star" style="top:15%;left:10%;width:6px;height:6px"></div>
+  <div class="stitch-star" style="top:45%;left:85%;width:4px;height:4px;animation-delay:1.5s"></div>
+  <div class="stitch-star" style="top:75%;left:20%;width:8px;height:8px;animation-delay:0.5s"></div>
+  <div class="stitch-star" style="top:25%;left:70%;width:4px;height:4px;animation-delay:2.2s"></div>
+  <div class="stitch-star" style="bottom:20%;right:15%;width:6px;height:6px;animation-delay:0.8s"></div>
+  <div class="stitch-parcel" style="top:10%;left:15%;width:64px;height:64px;color:rgba(255,255,255,0.1);--drift:25s;--glow:10s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+  </div>
+  <div class="stitch-parcel" style="bottom:15%;right:25%;width:56px;height:56px;color:rgba(255,255,255,0.2);--drift:22s;--glow:7s;animation-delay:-3s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5V19L12 23L21 19V5L12 1ZM12 3.3L19 6.4V17.6L12 20.7L5 17.6V6.4L12 3.3Z"/></svg>
+  </div>
+  <div class="stitch-parcel" style="top:60%;right:10%;width:40px;height:40px;color:rgba(255,255,255,0.1);--drift:18s;--glow:5s;animation-delay:-5s">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+  </div>
+  <div class="stitch-blob" style="top:25%;left:-80px;width:384px;height:384px;background:rgba(124,58,237,0.2)"></div>
+  <div class="stitch-blob" style="bottom:25%;right:-80px;width:384px;height:384px;background:rgba(219,39,119,0.2)"></div>
+</div>
+
+<div id="shader-bg" aria-hidden="true"></div>
+
+<!-- Stitch Top Navigation -->
+<nav class="stitch-topbar" id="stitch-nav">
+  <div class="stitch-topbar-left">
+    <span class="material-symbols-outlined" style="color:#60a5fa">grid_view</span>
+    <span class="stitch-topbar-level">Level 2</span>
+    <div style="height:16px;width:1px;background:rgba(255,255,255,0.2);margin:0 4px"></div>
+    <span class="stitch-topbar-qcount" id="stitch-qcount" style="color:#ffb95f"></span>
+  </div>
+  <div class="stitch-topbar-right">
+    <div class="stitch-timer-pill">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;color:#5de6ff;font-size:16px">timer</span>
+      <span id="stitch-timer" style="color:#5de6ff">00:00</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Stitch Horizon Progress -->
+<div class="stitch-horizon">
+  <div class="stitch-horizon-fill" id="stitch-horizon" style="width:0%"></div>
+</div>
+
+<div class="app" id="app">
+
+  <!-- Level indicator at top -->
+  <div id="level-indicator" style="text-align:center;padding:12px 0;font-size:.85rem;color:var(--text-dim)"></div>
+
+  <!-- SCREEN: Intro -->
+  <div class="screen active" id="screen-intro">
+    <div style="text-align:center;padding-top:24px">
+      <div class="iq-badge-big" style="font-size:.85rem;letter-spacing:2px">LEVEL 2</div>
+      <h1 style="margin-top:10px">Deep Dive</h1>
+      <p class="subtitle" style="margin-top:8px">Adapted to your Level 1 results &middot; 3 question formats</p>
+    </div>
+
+    <div class="card">
+      <h3 style="color:var(--primary-light);margin-bottom:14px">What to Expect</h3>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="format-preview">
+          <div class="format-icon">&#x2195;</div>
+          <div class="format-info">
+            <div class="format-name">Ranking</div>
+            <div class="format-desc">Drag items into the correct order</div>
+          </div>
+        </div>
+        <div class="format-preview">
+          <div class="format-icon">&#x2611;</div>
+          <div class="format-info">
+            <div class="format-name">Multi-Select</div>
+            <div class="format-desc">Choose all correct answers</div>
+          </div>
+        </div>
+        <div class="format-preview">
+          <div class="format-icon">&#x270D;</div>
+          <div class="format-info">
+            <div class="format-name">Free Response</div>
+            <div class="format-desc">Write your answer, then self-assess</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color:var(--primary-light);margin-bottom:14px">Focus Areas</h3>
+      <p class="subtitle" style="margin-bottom:12px">Based on your Level 1 performance:</p>
+      <div class="focus-tags" id="focus-tags"></div>
+    </div>
+
+    <button class="btn btn-primary btn-full btn-lg" onclick="startLevel2()">Start Level 2 &rarr;</button>
+
+    <div style="text-align:center;margin-top:8px">
+      <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">&larr; Back to main menu</a>
+    </div>
+  </div>
+
+  <!-- SCREEN: Question -->
+  <div class="screen" id="screen-question" role="main" aria-label="Quiz Question">
+    <div class="progress-wrap">
+      <span class="progress-label" id="q-counter">01/14</span>
+      <div class="progress-track" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="14" id="q-progress-track"><div class="progress-fill" id="q-progress" style="width:7%"></div></div>
+      <span class="progress-label" id="q-timer" style="color:var(--text-muted);font-size:.7rem">0:00</span>
+    </div>
+    <div class="progress-dots" id="q-dots"></div>
+    <div id="q-badge"></div>
+    <p class="question-text" id="q-text"></p>
+    <div id="q-content"></div>
+    <div class="nav-row">
+      <button class="btn btn-outline" id="btn-back" onclick="goBack()">Back</button>
+      <button class="btn btn-primary" id="btn-next" onclick="goNext()">Submit</button>
+    </div>
+    <div class="touch-hint" id="touch-hint">Tap an item, then tap where to move it</div>
+  </div>
+
+  <!-- SCREEN: Results -->
+  <div class="screen" id="screen-results" role="main" aria-label="Level 2 Results">
+    <div class="iq-score-wrap">
+      <div class="iq-score-num" id="res-iq">0</div>
+      <div class="iq-score-label">Combined Score <span id="res-pct" style="font-family:'Space Mono',monospace;color:var(--primary-light)"></span></div>
+      <div><span class="iq-level" id="res-level"></span></div>
+      <div id="res-improvement" style="margin-top:8px"></div>
+      <div id="res-time" style="font-size:.85rem;color:var(--text-dim);margin-top:6px"></div>
+    </div>
+
+    <!-- Dual Radar Chart -->
+    <div class="card">
+      <h3 style="margin-bottom:10px;text-align:center;color:var(--primary-light)">Level 1 vs Level 2 Profile</h3>
+      <div class="dual-radar-legend">
+        <span><span class="legend-dot" style="background:rgba(96,165,250,.3)"></span> Level 1</span>
+        <span><span class="legend-dot" style="background:var(--cyan)"></span> Level 2</span>
+      </div>
+      <div class="radar-wrap">
+        <canvas id="radarChart" width="340" height="340"></canvas>
+      </div>
+    </div>
+
+    <!-- Dimension Bars -->
+    <div class="card">
+      <h3 style="margin-bottom:16px;color:var(--primary-light)">Dimension Breakdown</h3>
+      <div class="dim-bars" id="res-dims"></div>
+    </div>
+
+    <!-- Gate Section -->
+    <div class="card" id="gate-section"></div>
+
+    <div style="text-align:center;margin-top:12px">
+      <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">&larr; Back to main menu</a>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+</div>
+
+<script>
+// ─── Level 2: Deep Dive ─────────────────────────────────────────────────
+
+// State
+let allQuestions = [];
+let activeQuestions = [];
+let currentQ = 0;
+let answers = [];          // { userAnswer: ..., selfScore: 1-4 }
+let participantId = '';
+let participantName = '';
+let quizStartTime = null;
+let testMode = 'adaptive';
+let session = {};
+let tapSelected = null;    // for mobile ranking reorder
+
+// DIM_MAX for L2: variable per dimension (depends on how many Qs selected)
+let DIM_MAX = {};
+let DIM_COUNTS = {};
+
+// ─── Load & Init (after defer scripts) ──────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  DIMS.forEach(d => { DIM_MAX[d.key] = 0; DIM_COUNTS[d.key] = 0; });
+
+  fetch('questions/level2.json')
+    .then(r => r.json())
+    .then(data => { allQuestions = data; })
+    .catch(err => console.error('Failed to load L2 questions:', err));
+
+  session = getAdaptiveSession();
+
+  // Guard: must have completed L1
+  if (!session.level1) {
+    showToast('Please complete Level 1 first');
+    setTimeout(() => location.href = 'level1.html', 1200);
+    return;
+  }
+
+  renderLevelIndicator(document.getElementById('level-indicator'), 2);
+  participantId = session.participantId || 'AIQ' + Date.now();
+  participantName = session.participantName || 'Anonymous';
+
+  // Render focus areas
+  renderFocusAreas();
+});
+
+function renderFocusAreas() {
+  const l1Scores = session.level1.scores;
+  const sorted = DIMS.map(d => ({
+    key: d.key,
+    label: d.label,
+    score: l1Scores[d.key] || 0,
+    color: d.color
+  })).sort((a, b) => a.score - b.score);
+
+  const tags = document.getElementById('focus-tags');
+  // Weakest 4
+  sorted.slice(0, 4).forEach(d => {
+    tags.innerHTML += `<span class="focus-tag weak" style="border-color:${d.color}40;color:${d.color}">${d.label} &mdash; needs work</span>`;
+  });
+  // Strongest 2
+  sorted.slice(-2).forEach(d => {
+    tags.innerHTML += `<span class="focus-tag strong" style="border-color:${d.color}40;color:${d.color}">${d.label} &mdash; strength</span>`;
+  });
+}
+
+// ─── Adaptive Question Selection ─────────────────────────────────────────
+function selectLevel2Questions() {
+  const l1Scores = session.level1.scores;
+  const sorted = DIMS.map(d => ({ key: d.key, score: l1Scores[d.key] || 0 }))
+    .sort((a, b) => a.score - b.score);
+
+  const selected = [];
+  // 4 weakest dimensions: up to 3 questions each
+  sorted.slice(0, 4).forEach(d => {
+    const pool = allQuestions.filter(q => q.dim === d.key);
+    selected.push(...shuffle(pool).slice(0, 3));
+  });
+  // 2 strongest: 1 question each
+  sorted.slice(-2).forEach(d => {
+    const pool = allQuestions.filter(q => q.dim === d.key);
+    selected.push(...shuffle(pool).slice(0, 1));
+  });
+  return shuffle(selected);
+}
+
+// ─── Start Level 2 ──────────────────────────────────────────────────────
+function startLevel2() {
+  if (!allQuestions.length) {
+    showToast('Questions still loading, please wait...');
+    return;
+  }
+
+  quizStartTime = Date.now();
+  activeQuestions = selectLevel2Questions();
+  currentQ = 0;
+  answers = new Array(activeQuestions.length).fill(null);
+
+  // Compute DIM_MAX based on selected questions
+  DIMS.forEach(d => { DIM_MAX[d.key] = 0; DIM_COUNTS[d.key] = 0; });
+  activeQuestions.forEach(q => {
+    DIM_MAX[q.dim] = (DIM_MAX[q.dim] || 0) + 4;
+    DIM_COUNTS[q.dim] = (DIM_COUNTS[q.dim] || 0) + 1;
+  });
+
+  startTimer();
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+// ─── Render Question ─────────────────────────────────────────────────────
+function renderQuestion() {
+  const q = activeQuestions[currentQ];
+  const total = activeQuestions.length;
+  const dim = DIMS.find(d => d.key === q.dim);
+
+  // Header
+  const num = String(currentQ + 1).padStart(2, '0');
+  document.getElementById('q-counter').textContent = `${num}/${total}`;
+  document.getElementById('q-progress').style.width = `${((currentQ + 1) / total) * 100}%`;
+  document.getElementById('q-progress-track').setAttribute('aria-valuenow', currentQ + 1);
+  document.getElementById('q-progress-track').setAttribute('aria-valuemax', total);
+
+  const answeredCount = answers.filter(a => a !== null).length;
+  document.getElementById('q-badge').innerHTML = `<span class="badge" style="background:${dim.color}22;color:${dim.color};border-color:${dim.color}44">${dim.label}</span><span style="float:right;font-size:.75rem;color:var(--text-muted)">${answeredCount}/${total} answered</span>`;
+
+  // Progress dots
+  const dotsEl = document.getElementById('q-dots');
+  if (!dotsEl.children.length || dotsEl.children.length !== total) {
+    dotsEl.innerHTML = Array.from({length: total}, (_, i) =>
+      `<button class="dot" data-idx="${i}" title="Q${i+1}" aria-label="Jump to question ${i+1}"></button>`
+    ).join('');
+    dotsEl.addEventListener('click', function(e) {
+      const idx = e.target.dataset.idx;
+      if (idx !== undefined) { currentQ = parseInt(idx); renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+    });
+  }
+  dotsEl.querySelectorAll('.dot').forEach((dot, i) => {
+    dot.classList.toggle('answered', answers[i] !== null);
+    dot.classList.toggle('current', i === currentQ);
+  });
+
+  // Question text
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-text').classList.remove('q-animate');
+  void document.getElementById('q-text').offsetWidth;
+  document.getElementById('q-text').classList.add('q-animate');
+
+  // Dynamic content
+  const content = document.getElementById('q-content');
+  const hint = document.getElementById('touch-hint');
+
+  if (q.format === 'ranking') {
+    renderRanking(q, content);
+    hint.style.display = '';
+  } else if (q.format === 'multiselect') {
+    renderMultiselect(q, content);
+    hint.style.display = 'none';
+  } else if (q.format === 'freetext') {
+    renderFreetext(q, content);
+    hint.style.display = 'none';
+  }
+
+  // Navigation
+  document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  updateSubmitButton();
+}
+
+function updateSubmitButton() {
+  const btn = document.getElementById('btn-next');
+  const q = activeQuestions[currentQ];
+  const total = activeQuestions.length;
+  btn.textContent = currentQ === total - 1 ? 'Submit & Finish' : 'Submit';
+
+  // Enable/disable based on whether user has provided an answer
+  if (q.format === 'freetext') {
+    const ta = document.querySelector('.freetext-area');
+    btn.disabled = !ta || ta.value.trim().length < 10;
+  } else {
+    // Ranking and multiselect always have a default state
+    btn.disabled = false;
+  }
+}
+
+// ─── Ranking Renderer ────────────────────────────────────────────────────
+function renderRanking(q, container) {
+  // Restore previous answer or shuffle
+  let items;
+  if (answers[currentQ] && answers[currentQ].userAnswer) {
+    items = answers[currentQ].userAnswer;
+  } else {
+    items = shuffle(q.items.map((item, i) => ({ ...item, origIdx: i })));
+  }
+
+  container.innerHTML = `
+    <div class="ranking-list" id="ranking-list">
+      ${items.map((item, i) => `
+        <div class="ranking-item" data-idx="${i}" draggable="true"
+             style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
+          <span class="drag-handle" aria-hidden="true"></span>
+          <span class="rank-num">${i+1}</span>
+          <span class="ranking-text">${esc(item.text)}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  initDragAndDrop();
+  initTapReorder();
+  storeRankingAnswer();
+}
+
+function initDragAndDrop() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+  let draggedEl = null;
+
+  list.addEventListener('dragstart', e => {
+    const item = e.target.closest('.ranking-item');
+    if (!item) return;
+    draggedEl = item;
+    item.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', '');
+  });
+
+  list.addEventListener('dragend', e => {
+    if (draggedEl) {
+      draggedEl.classList.remove('dragging');
+      draggedEl = null;
+    }
+    list.querySelectorAll('.ranking-item').forEach(el => el.classList.remove('drop-target'));
+    updateRankNumbers();
+    storeRankingAnswer();
+  });
+
+  list.addEventListener('dragover', e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const target = e.target.closest('.ranking-item');
+    if (!target || target === draggedEl) return;
+    list.querySelectorAll('.ranking-item').forEach(el => el.classList.remove('drop-target'));
+    target.classList.add('drop-target');
+
+    const items = [...list.children];
+    const dragIdx = items.indexOf(draggedEl);
+    const targetIdx = items.indexOf(target);
+    if (dragIdx < targetIdx) {
+      target.after(draggedEl);
+    } else {
+      target.before(draggedEl);
+    }
+  });
+
+  list.addEventListener('drop', e => {
+    e.preventDefault();
+  });
+}
+
+function initTapReorder() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+
+  list.addEventListener('click', e => {
+    const item = e.target.closest('.ranking-item');
+    if (!item) return;
+
+    // If we're on a device with fine pointer (desktop), skip tap reorder
+    if (window.matchMedia('(hover: hover)').matches) return;
+
+    if (tapSelected === null) {
+      // First tap: select
+      tapSelected = item;
+      item.classList.add('tap-selected');
+    } else if (tapSelected === item) {
+      // Deselect
+      item.classList.remove('tap-selected');
+      tapSelected = null;
+    } else {
+      // Second tap: move selected before this item
+      tapSelected.classList.remove('tap-selected');
+      const items = [...list.children];
+      const fromIdx = items.indexOf(tapSelected);
+      const toIdx = items.indexOf(item);
+      if (fromIdx < toIdx) {
+        item.after(tapSelected);
+      } else {
+        item.before(tapSelected);
+      }
+      tapSelected = null;
+      updateRankNumbers();
+      storeRankingAnswer();
+    }
+  });
+}
+
+function updateRankNumbers() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+  list.querySelectorAll('.rank-num').forEach((el, i) => { el.textContent = i + 1; });
+}
+
+function storeRankingAnswer() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return;
+  const q = activeQuestions[currentQ];
+  const itemEls = [...list.querySelectorAll('.ranking-item')];
+  const userOrder = itemEls.map(el => {
+    const text = el.querySelector('.ranking-text').textContent;
+    return q.items.find(it => it.text === text);
+  });
+  if (!answers[currentQ]) answers[currentQ] = {};
+  answers[currentQ].userAnswer = userOrder;
+}
+
+// ─── Multi-Select Renderer ──────────────────────────────────────────────
+function renderMultiselect(q, container) {
+  const prev = answers[currentQ]?.userAnswer || [];
+
+  container.innerHTML = `
+    <p style="font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:4px">Select ALL that apply</p>
+    <div class="multiselect-list" id="ms-list">
+      ${q.options.map((opt, i) => `
+        <div class="multiselect-item${prev.includes(i) ? ' checked' : ''}" data-idx="${i}"
+             style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
+          <span class="checkbox">${prev.includes(i) ? '&#10003;' : ''}</span>
+          <span class="multiselect-text">${esc(opt.text)}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="select-counter" id="ms-counter">${prev.length} selected</div>
+  `;
+
+  document.getElementById('ms-list').addEventListener('click', e => {
+    const item = e.target.closest('.multiselect-item');
+    if (!item) return;
+    item.classList.toggle('checked');
+    const cb = item.querySelector('.checkbox');
+    cb.innerHTML = item.classList.contains('checked') ? '&#10003;' : '';
+    storeMultiselectAnswer();
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
+
+  storeMultiselectAnswer();
+}
+
+function storeMultiselectAnswer() {
+  const items = document.querySelectorAll('.multiselect-item');
+  const selected = [];
+  items.forEach((item, i) => { if (item.classList.contains('checked')) selected.push(i); });
+  if (!answers[currentQ]) answers[currentQ] = {};
+  answers[currentQ].userAnswer = selected;
+  const counter = document.getElementById('ms-counter');
+  if (counter) counter.textContent = `${selected.length} selected`;
+}
+
+// ─── Free-Text Renderer ─────────────────────────────────────────────────
+function renderFreetext(q, container) {
+  const prev = answers[currentQ]?.userAnswer || '';
+
+  container.innerHTML = `
+    <textarea class="freetext-area" id="ft-area" placeholder="Write your response here..."
+              rows="8">${esc(prev)}</textarea>
+    <div class="char-hint">
+      <span class="char-count" id="ft-count">${prev.length}</span> characters &middot; ~200-500 recommended
+    </div>
+  `;
+
+  const ta = document.getElementById('ft-area');
+  const counter = document.getElementById('ft-count');
+
+  ta.addEventListener('input', () => {
+    const len = ta.value.length;
+    counter.textContent = len;
+    counter.className = 'char-count' + (len < 100 ? ' short' : len > 600 ? ' long' : len >= 100 ? ' good' : '');
+    if (!answers[currentQ]) answers[currentQ] = {};
+    answers[currentQ].userAnswer = ta.value;
+    updateSubmitButton();
+  });
+
+  // Focus
+  setTimeout(() => ta.focus(), 200);
+}
+
+// ─── Navigation ──────────────────────────────────────────────────────────
+function goBack() {
+  if (currentQ > 0) { currentQ--; tapSelected = null; renderQuestion(); }
+}
+
+function goNext() {
+  const q = activeQuestions[currentQ];
+
+  // Validate free-text
+  if (q.format === 'freetext') {
+    const ta = document.querySelector('.freetext-area');
+    if (!ta || ta.value.trim().length < 10) {
+      showToast('Please write at least a short response');
+      return;
+    }
+    if (!answers[currentQ]) answers[currentQ] = {};
+    answers[currentQ].userAnswer = ta.value.trim();
+  }
+
+  // Store answer if not yet stored
+  if (q.format === 'ranking') storeRankingAnswer();
+  if (q.format === 'multiselect') storeMultiselectAnswer();
+
+  tapSelected = null;
+
+  // Show self-assessment
+  showSelfAssessment(q, answers[currentQ].userAnswer, (score) => {
+    answers[currentQ].selfScore = score;
+    advanceAfterAssessment();
+  });
+}
+
+function advanceAfterAssessment() {
+  if (currentQ < activeQuestions.length - 1) {
+    currentQ++;
+    renderQuestion();
+    window.scrollTo({top:0, behavior:'smooth'});
+  } else {
+    // Check for unanswered
+    const unanswered = answers.findIndex(a => a === null || a.selfScore === undefined);
+    if (unanswered !== -1) {
+      showToast(`Question ${unanswered + 1} needs an answer — jumping there`);
+      currentQ = unanswered;
+      renderQuestion();
+      window.scrollTo({top:0, behavior:'smooth'});
+      return;
+    }
+    buildResults();
+    showScreen('screen-results');
+    const combinedPct = getCombinedPct();
+    if (combinedPct >= 69) launchConfetti();
+  }
+}
+
+// ─── Self-Assessment Overlay ─────────────────────────────────────────────
+function showSelfAssessment(question, userAnswer, onComplete) {
+  let selectedScore = null;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'sa-overlay';
+
+  const panel = document.createElement('div');
+  panel.className = 'sa-panel';
+
+  if (question.format === 'freetext') {
+    // Rubric-based self-assessment
+    panel.innerHTML = `
+      <h3>Compare your answer to these levels:</h3>
+      <div class="rubric-cards" id="sa-rubrics">
+        ${[4,3,2,1].map(score => {
+          const r = question.rubric[String(score)];
+          return `
+            <div class="rubric-card" data-score="${score}">
+              <div class="rubric-level">
+                <span>${r.label}</span>
+                <span class="rubric-score">${score}/4</span>
+              </div>
+              <div class="rubric-desc">${esc(r.description)}</div>
+            </div>`;
+        }).join('')}
+      </div>
+      <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
+    `;
+  } else {
+    // Ranking or multiselect: show correct answer + 4-point scale
+    let correctHtml = '';
+
+    if (question.format === 'ranking') {
+      const sorted = [...question.items].sort((a, b) => a.correctRank - b.correctRank);
+      correctHtml = `<div class="sa-correct"><strong>Correct order:</strong><ol style="margin:8px 0 0 20px;line-height:1.7">
+        ${sorted.map(item => `<li>${esc(item.text)}</li>`).join('')}
+      </ol></div>`;
+    } else {
+      const correct = question.options.filter(o => o.correct).map(o => o.text);
+      correctHtml = `<div class="sa-correct"><strong>Correct answers:</strong><ul style="margin:8px 0 0 20px;line-height:1.7">
+        ${correct.map(t => `<li>${esc(t)}</li>`).join('')}
+      </ul></div>`;
+    }
+
+    panel.innerHTML = `
+      <h3>How did you do?</h3>
+      ${correctHtml}
+      <div class="sa-explanation">${esc(question.explanation)}</div>
+      <p style="text-align:center;font-size:.88rem;font-weight:600;color:var(--text)">Rate your answer:</p>
+      <div class="sa-ratings" id="sa-ratings">
+        <button class="sa-rate-btn" data-score="1"><span class="rate-score">1</span>Way off</button>
+        <button class="sa-rate-btn" data-score="2"><span class="rate-score">2</span>Partially right</button>
+        <button class="sa-rate-btn" data-score="3"><span class="rate-score">3</span>Close</button>
+        <button class="sa-rate-btn" data-score="4"><span class="rate-score">4</span>Nailed it</button>
+      </div>
+      <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
+    `;
+  }
+
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+
+  // Prevent body scroll
+  document.body.style.overflow = 'hidden';
+
+  // Rating selection
+  if (question.format === 'freetext') {
+    panel.querySelector('#sa-rubrics').addEventListener('click', e => {
+      const card = e.target.closest('.rubric-card');
+      if (!card) return;
+      panel.querySelectorAll('.rubric-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedScore = parseInt(card.dataset.score);
+      panel.querySelector('#sa-continue').disabled = false;
+      if (navigator.vibrate) navigator.vibrate(10);
+    });
+  } else {
+    panel.querySelector('#sa-ratings').addEventListener('click', e => {
+      const btn = e.target.closest('.sa-rate-btn');
+      if (!btn) return;
+      panel.querySelectorAll('.sa-rate-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedScore = parseInt(btn.dataset.score);
+      panel.querySelector('#sa-continue').disabled = false;
+      if (navigator.vibrate) navigator.vibrate(10);
+    });
+  }
+
+  // Continue
+  panel.querySelector('#sa-continue').addEventListener('click', () => {
+    if (selectedScore === null) return;
+    document.body.style.overflow = '';
+    overlay.remove();
+    onComplete(selectedScore);
+  });
+}
+
+// ─── Build Results ───────────────────────────────────────────────────────
+function getCombinedPct() {
+  const l1Pct = session.level1.percentage;
+  const total = answers.reduce((s, a) => s + (a?.selfScore || 0), 0);
+  const maxScore = activeQuestions.length * 4;
+  const l2Pct = Math.round((total / maxScore) * 100);
+  return Math.round((l1Pct + l2Pct) / 2);
+}
+
+function buildResults() {
+  stopTimer();
+
+  const l1Pct = session.level1.percentage;
+  const total = answers.reduce((s, a) => s + (a?.selfScore || 0), 0);
+  const maxScore = activeQuestions.length * 4;
+  const l2Pct = Math.round((total / maxScore) * 100);
+  const combinedPct = Math.round((l1Pct + l2Pct) / 2);
+  const level = QUICK_LEVELS.find(l => combinedPct >= l.min && combinedPct <= l.max) || QUICK_LEVELS[QUICK_LEVELS.length - 1];
+
+  // Score display
+  const iqEl = document.getElementById('res-iq');
+  animateCount(iqEl, combinedPct, 1400);
+  iqEl.dataset.suffix = '%';
+  document.getElementById('res-pct').textContent = '';
+
+  const lvlEl = document.getElementById('res-level');
+  lvlEl.textContent = level.label;
+  lvlEl.className = 'iq-level ' + level.cls;
+
+  // Improvement indicator
+  const diff = combinedPct - l1Pct;
+  const impEl = document.getElementById('res-improvement');
+  if (diff > 0) {
+    impEl.innerHTML = `<span class="improvement up">&uarr;${diff}% from Level 1</span>`;
+  } else if (diff < 0) {
+    impEl.innerHTML = `<span class="improvement down">&darr;${Math.abs(diff)}% from Level 1</span>`;
+  } else {
+    impEl.innerHTML = `<span class="improvement same">&ndash; same as Level 1</span>`;
+  }
+
+  // Duration
+  if (quizStartTime) {
+    const secs = Math.round((Date.now() - quizStartTime) / 1000);
+    const mins = Math.floor(secs / 60);
+    const remSecs = secs % 60;
+    document.getElementById('res-time').textContent = `Completed in ${mins}m ${remSecs}s`;
+  }
+
+  // Calculate L2 dimension scores
+  const dimScoresL2 = {};
+  DIMS.forEach(d => { dimScoresL2[d.key] = 0; });
+  activeQuestions.forEach((q, i) => {
+    dimScoresL2[q.dim] += (answers[i]?.selfScore || 0);
+  });
+
+  // L1 dimension scores (from session)
+  const dimScoresL1 = session.level1.scores;
+
+  // Draw dual radar
+  drawDualRadar(dimScoresL1, dimScoresL2);
+
+  // Dimension bars with L1 overlay
+  const dimsEl = document.getElementById('res-dims');
+  dimsEl.innerHTML = DIMS.map((d, idx) => {
+    const l1Score = dimScoresL1[d.key] || 0;
+    const l2Score = dimScoresL2[d.key] || 0;
+    const l1Max = 8; // L1: 2 questions per dim, max 4 each
+    const l2Max = DIM_MAX[d.key] || 4;
+    const l1BarPct = (l1Score / l1Max) * 100;
+    const l2BarPct = l2Max > 0 ? (l2Score / l2Max) * 100 : 0;
+    return `<div class="dim-bar-item" style="animation:slideInStagger .5s cubic-bezier(.16,1,.3,1) ${idx*0.08}s both">
+      <div class="dim-bar-header">
+        <span class="dim-bar-name">${d.label}</span>
+        <span class="dim-bar-score">${l2Score}/${l2Max}${DIM_COUNTS[d.key] ? '' : ' (not tested)'}</span>
+      </div>
+      <div class="dim-bar-track-dual">
+        <div class="dim-bar-fill-l1" style="--bar-w:${l1BarPct}%;background:${d.color}"></div>
+        <div class="dim-bar-fill-l2" style="--bar-w:${l2BarPct}%;background:${d.color}"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.dim-bar-fill-l1').forEach(el => { el.style.width = el.style.getPropertyValue('--bar-w'); });
+    document.querySelectorAll('.dim-bar-fill-l2').forEach(el => { el.style.width = el.style.getPropertyValue('--bar-w'); });
+  });
+
+  // Gate section
+  renderGate(level, combinedPct);
+
+  // Submit to Sheets
+  submitToSheets({
+    participant_id: participantId,
+    participant_name: participantName,
+    timestamp: new Date().toISOString(),
+    ai_experience: session.experience,
+    test_mode: 'adaptive',
+    level: 2,
+    total_score: total,
+    percentage: l2Pct,
+    combined_percentage: combinedPct,
+    result_level: level.label,
+    duration_seconds: Math.round((Date.now() - quizStartTime) / 1000),
+    ...Object.fromEntries(DIMS.map(d => [`dim_${d.key}`, dimScoresL2[d.key]])),
+  });
+
+  // Save to adaptive session
+  saveAdaptiveSession({
+    level2: {
+      scores: dimScoresL2,
+      totalScore: total,
+      percentage: l2Pct,
+      combinedPercentage: combinedPct,
+      level: level.label,
+      answers: activeQuestions.map((q, i) => ({
+        qId: q.id,
+        format: q.format,
+        selfScore: answers[i]?.selfScore || 0
+      }))
+    }
+  });
+}
+
+// ─── Dual Radar Chart ────────────────────────────────────────────────────
+function drawDualRadar(l1Scores, l2Scores) {
+  const canvas = document.getElementById('radarChart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const size = 340;
+  canvas.width = size * dpr; canvas.height = size * dpr;
+  canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
+  ctx.scale(dpr, dpr);
+
+  const cx = size/2, cy = size/2, maxR = 125;
+  const n = DIMS.length;
+  const angleStep = (2 * Math.PI) / n;
+  const startAngle = -Math.PI / 2;
+
+  // Grid rings
+  [0.25, 0.5, 0.75, 1].forEach(frac => {
+    ctx.beginPath();
+    for (let i = 0; i <= n; i++) {
+      const angle = startAngle + i * angleStep;
+      const x = cx + Math.cos(angle) * maxR * frac;
+      const y = cy + Math.sin(angle) * maxR * frac;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1; ctx.stroke();
+  });
+
+  // Axes + Labels
+  const colors = ['#60a5fa','#f472b6','#f59e0b','#34d399','#fb923c','#a78bfa','#38bdf8','#f97316'];
+  DIMS.forEach((d, i) => {
+    const angle = startAngle + i * angleStep;
+    ctx.beginPath(); ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
+    ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1; ctx.stroke();
+
+    const lx = cx + Math.cos(angle) * (maxR + 30);
+    const ly = cy + Math.sin(angle) * (maxR + 30);
+    ctx.font = '600 9px Outfit,sans-serif';
+    ctx.fillStyle = colors[i];
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const words = d.label.split(' ');
+    if (words.length <= 2) { ctx.fillText(d.label, lx, ly); }
+    else { ctx.fillText(words.slice(0, 2).join(' '), lx, ly - 7); ctx.fillText(words.slice(2).join(' '), lx, ly + 7); }
+  });
+
+  const l1Max = 8; // L1: 2 Qs per dim, 4 pts max each
+
+  // L1 polygon (dimmed)
+  const l1Values = DIMS.map(d => (l1Scores[d.key] || 0) / l1Max);
+  ctx.beginPath();
+  l1Values.forEach((v, i) => {
+    const angle = startAngle + i * angleStep;
+    const x = cx + Math.cos(angle) * maxR * v;
+    const y = cy + Math.sin(angle) * maxR * v;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(96,165,250,.08)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(96,165,250,.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // L2 polygon (bright)
+  const l2Values = DIMS.map(d => {
+    const max = DIM_MAX[d.key] || 4;
+    return max > 0 ? (l2Scores[d.key] || 0) / max : 0;
+  });
+
+  // Glow
+  ctx.save();
+  ctx.beginPath();
+  l2Values.forEach((v, i) => {
+    const angle = startAngle + i * angleStep;
+    const x = cx + Math.cos(angle) * maxR * v;
+    const y = cy + Math.sin(angle) * maxR * v;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.shadowColor = 'rgba(34,211,238,.5)'; ctx.shadowBlur = 20;
+  ctx.fillStyle = 'rgba(34,211,238,.08)'; ctx.fill();
+  ctx.restore();
+
+  // Main L2 polygon
+  ctx.beginPath();
+  l2Values.forEach((v, i) => {
+    const angle = startAngle + i * angleStep;
+    const x = cx + Math.cos(angle) * maxR * v;
+    const y = cy + Math.sin(angle) * maxR * v;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(cx - maxR, cy - maxR, cx + maxR, cy + maxR);
+  grad.addColorStop(0, 'rgba(34,211,238,.12)');
+  grad.addColorStop(1, 'rgba(245,158,11,.06)');
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.strokeStyle = 'rgba(34,211,238,.7)'; ctx.lineWidth = 2; ctx.stroke();
+
+  // Data points (L2 only)
+  l2Values.forEach((v, i) => {
+    const angle = startAngle + i * angleStep;
+    const x = cx + Math.cos(angle) * maxR * v;
+    const y = cy + Math.sin(angle) * maxR * v;
+    ctx.beginPath(); ctx.arc(x, y, 4.5, 0, 2 * Math.PI);
+    ctx.fillStyle = colors[i]; ctx.fill();
+    ctx.strokeStyle = 'rgba(6,8,15,.6)'; ctx.lineWidth = 2; ctx.stroke();
+  });
+}
+
+// ─── Gate Logic ──────────────────────────────────────────────────────────
+function renderGate(level, combinedPct) {
+  const gate = document.getElementById('gate-section');
+  const isQualified = combinedPct >= 69; // Practitioner+ threshold
+
+  if (isQualified) {
+    saveAdaptiveSession({ level3Unlocked: true });
+    gate.innerHTML = `
+      <div class="gate-unlock">
+        <h2 style="color:var(--accent)">Boss Challenge Unlocked!</h2>
+        <p class="subtitle" style="margin:12px 0">You've proven deep AI understanding. Ready for the ultimate test?</p>
+        <button class="btn btn-primary btn-full btn-lg" onclick="location.href='level3.html'" style="margin-top:16px">Continue to Boss Challenge &rarr;</button>
+        <div style="margin-top:12px">
+          <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">Return to Home</a>
+        </div>
+      </div>`;
+  } else {
+    // Find weakest dimensions for tips
+    const dimScoresL2 = {};
+    DIMS.forEach(d => { dimScoresL2[d.key] = 0; });
+    activeQuestions.forEach((q, i) => { dimScoresL2[q.dim] += (answers[i]?.selfScore || 0); });
+
+    const weakest = DIMS.map(d => ({
+      label: d.label,
+      score: dimScoresL2[d.key] || 0,
+      max: DIM_MAX[d.key] || 0
+    })).filter(d => d.max > 0).sort((a, b) => (a.score / a.max) - (b.score / b.max)).slice(0, 3);
+
+    gate.innerHTML = `
+      <div style="text-align:center">
+        <h2 style="color:#fb7185">Keep building your skills</h2>
+        <p class="subtitle" style="margin:12px 0">Score 69%+ combined to unlock the Boss Challenge.</p>
+        <div style="text-align:left;margin:16px 0">
+          <p style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:8px">Focus on improving:</p>
+          ${weakest.map(d => `<p style="font-size:.82rem;color:var(--text-dim);padding:4px 0">&bull; ${d.label} (${d.score}/${d.max})</p>`).join('')}
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="location.href='index.html'" style="margin-top:12px">Return to Home</button>
+      </div>`;
+  }
+}
+
+// ─── Keyboard Navigation ─────────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  const active = document.getElementById('screen-question');
+  if (!active || !active.classList.contains('active')) return;
+  // Don't hijack keys when typing in textarea
+  if (document.activeElement && document.activeElement.tagName === 'TEXTAREA') return;
+
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    goNext();
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
+    if (currentQ > 0) { e.preventDefault(); goBack(); }
+  }
+});
+
+// ─── Swipe Gestures (mobile) ─────────────────────────────────────────────
+(function() {
+  let startX = 0, startY = 0;
+  const qScreen = () => document.getElementById('screen-question');
+  document.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; startY = e.touches[0].clientY; }, {passive: true});
+  document.addEventListener('touchend', function(e) {
+    if (!qScreen() || !qScreen().classList.contains('active')) return;
+    // Don't interfere with ranking drag
+    if (e.target.closest('.ranking-list')) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx)) return;
+    if (dx > 60 && currentQ > 0) goBack();
+  }, {passive: true});
+})();
+
+// ─── Stitch Topbar Sync (after defer scripts) ──────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const _origRenderQ2 = renderQuestion;
+  renderQuestion = function() {
+    _origRenderQ2.apply(this, arguments);
+    const total = activeQuestions.length;
+    const el = document.getElementById('stitch-qcount');
+    if (el) el.textContent = `Q ${String(currentQ+1).padStart(2,'0')}/${total}`;
+    const h = document.getElementById('stitch-horizon');
+    if (h) h.style.width = ((currentQ + 1) / total) * 100 + '%';
+  };
+
+  // Sync timer
+  const _origTimerEl2 = document.getElementById('q-timer');
+  if (_origTimerEl2) {
+    const obs2 = new MutationObserver(() => {
+      const st = document.getElementById('stitch-timer');
+      if (st && _origTimerEl2.textContent) st.textContent = _origTimerEl2.textContent;
+    });
+    obs2.observe(_origTimerEl2, { childList: true, characterData: true, subtree: true });
+  }
+
+  function updateStitchNav() {
+    const nav = document.getElementById('stitch-nav');
+    const qScreen = document.getElementById('screen-question');
+    if (nav) {
+      nav.style.display = (qScreen && qScreen.classList.contains('active')) ? 'flex' : 'none';
+    }
+  }
+  const _origShowScreen2 = showScreen;
+  showScreen = function(id) {
+    _origShowScreen2(id);
+    updateStitchNav();
+  };
+  updateStitchNav();
+});
+</script>
+
+</body>
+</html>
