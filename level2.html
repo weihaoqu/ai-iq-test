@@ -904,6 +904,7 @@ function renderGate(level, combinedPct) {
   const isQualified = combinedPct >= 69; // Practitioner+ threshold
 
   if (isQualified) {
+    saveAdaptiveSession({ level3Unlocked: true });
     gate.innerHTML = `
       <div class="gate-unlock">
         <h2 style="color:var(--accent)">Boss Challenge Unlocked!</h2>

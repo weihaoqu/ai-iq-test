@@ -1007,3 +1007,51 @@ canvas#radarChart{max-width:340px;max-height:340px}
   padding:4px 0;font-style:italic;
 }
 @media(hover:hover){.touch-hint{display:none}}
+
+/* ── Level 3: Boss Challenge ── */
+.phase-indicator{display:flex;align-items:center;gap:8px;justify-content:center;padding:12px 0;flex-wrap:wrap}
+.phase-dot{display:flex;align-items:center;gap:4px;font-size:.75rem;color:var(--text-muted)}
+.phase-dot.active{color:var(--cyan)}
+.phase-dot.completed{color:#34d399}
+.phase-line{width:20px;height:1px;background:var(--border)}
+
+.constraints-box{
+  background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);
+  border-left:3px solid var(--accent);border-radius:var(--radius-xs);padding:16px;margin-top:16px;
+}
+.constraints-box ul{list-style:none;padding:0}
+.constraints-box li{padding:6px 0;font-size:.9rem;display:flex;align-items:flex-start;gap:8px}
+.constraints-box li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:8px}
+
+.boss-badge{
+  display:inline-block;padding:12px 32px;border-radius:99px;
+  background:linear-gradient(135deg,var(--accent),#f59e0b,var(--cyan));
+  font-weight:800;font-size:1.1rem;color:#0c1222;
+  animation:popIn .6s ease,glowPulse 3s ease-in-out infinite;
+}
+
+.journey-timeline{display:flex;align-items:center;gap:12px;justify-content:center;padding:20px 0}
+.journey-dot{display:flex;flex-direction:column;align-items:center;gap:4px}
+.journey-dot .dot{width:12px;height:12px;border-radius:50%}
+.journey-dot .label{font-size:.7rem;color:var(--text-dim)}
+.journey-line{width:40px;height:2px;background:var(--border)}
+
+.scenario-summary-toggle{
+  cursor:pointer;font-size:.85rem;color:var(--primary-light);
+  display:flex;align-items:center;gap:6px;padding:12px 16px;
+}
+.scenario-summary-toggle:hover{background:rgba(255,255,255,.03)}
+.scenario-summary-content{display:none;padding:0 16px 16px;font-size:.85rem;color:var(--text-dim);line-height:1.6}
+.scenario-summary-content.open{display:block}
+
+.sub-phase-dots{display:flex;gap:6px;justify-content:center;padding:8px 0}
+.sub-phase-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1)}
+.sub-phase-dot.active{background:var(--cyan);box-shadow:0 0 8px var(--cyan-glow)}
+.sub-phase-dot.completed{background:#34d399}
+
+.guiding-bullets{list-style:none;padding:0;margin:0}
+.guiding-bullets li{
+  padding:6px 0;font-size:.88rem;color:var(--text-muted);
+  display:flex;align-items:flex-start;gap:8px;line-height:1.5;
+}
+.guiding-bullets li::before{content:'\2022';color:var(--text-muted);flex-shrink:0;margin-top:0}
