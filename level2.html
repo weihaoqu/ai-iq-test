@@ -1016,39 +1016,42 @@ document.addEventListener('keydown', function(e) {
   }, {passive: true});
 })();
 
-// ─── Stitch Topbar Sync ─────────────────────────────────────────────────
-const _origRenderQ2 = renderQuestion;
-renderQuestion = function() {
-  _origRenderQ2.apply(this, arguments);
-  const total = activeQuestions.length;
-  document.getElementById('stitch-qcount').textContent = `Q ${String(currentQ+1).padStart(2,'0')}/${total}`;
-  const pct = ((currentQ + 1) / total) * 100;
-  document.getElementById('stitch-horizon').style.width = pct + '%';
-};
+// ─── Stitch Topbar Sync (after defer scripts) ──────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const _origRenderQ2 = renderQuestion;
+  renderQuestion = function() {
+    _origRenderQ2.apply(this, arguments);
+    const total = activeQuestions.length;
+    const el = document.getElementById('stitch-qcount');
+    if (el) el.textContent = `Q ${String(currentQ+1).padStart(2,'0')}/${total}`;
+    const h = document.getElementById('stitch-horizon');
+    if (h) h.style.width = ((currentQ + 1) / total) * 100 + '%';
+  };
 
-// Sync timer
-const _origTimerEl2 = document.getElementById('q-timer');
-if (_origTimerEl2) {
-  const obs2 = new MutationObserver(() => {
-    const st = document.getElementById('stitch-timer');
-    if (st && _origTimerEl2.textContent) st.textContent = _origTimerEl2.textContent;
-  });
-  obs2.observe(_origTimerEl2, { childList: true, characterData: true, subtree: true });
-}
-
-function updateStitchNav() {
-  const nav = document.getElementById('stitch-nav');
-  const qScreen = document.getElementById('screen-question');
-  if (nav) {
-    nav.style.display = (qScreen && qScreen.classList.contains('active')) ? 'flex' : 'none';
+  // Sync timer
+  const _origTimerEl2 = document.getElementById('q-timer');
+  if (_origTimerEl2) {
+    const obs2 = new MutationObserver(() => {
+      const st = document.getElementById('stitch-timer');
+      if (st && _origTimerEl2.textContent) st.textContent = _origTimerEl2.textContent;
+    });
+    obs2.observe(_origTimerEl2, { childList: true, characterData: true, subtree: true });
   }
-}
-const _origShowScreen2 = showScreen;
-showScreen = function(id) {
-  _origShowScreen2(id);
+
+  function updateStitchNav() {
+    const nav = document.getElementById('stitch-nav');
+    const qScreen = document.getElementById('screen-question');
+    if (nav) {
+      nav.style.display = (qScreen && qScreen.classList.contains('active')) ? 'flex' : 'none';
+    }
+  }
+  const _origShowScreen2 = showScreen;
+  showScreen = function(id) {
+    _origShowScreen2(id);
+    updateStitchNav();
+  };
   updateStitchNav();
-};
-updateStitchNav();
+});
 </script>
 
 </body>

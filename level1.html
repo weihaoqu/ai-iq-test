@@ -603,30 +603,33 @@ renderQuestion = function() {
   document.getElementById('stitch-horizon').style.width = pct + '%';
 };
 
-// Sync timer display
-const _origTimerEl = document.getElementById('q-timer');
-if (_origTimerEl) {
-  const obs = new MutationObserver(() => {
-    const st = document.getElementById('stitch-timer');
-    if (st && _origTimerEl.textContent) st.textContent = _origTimerEl.textContent;
-  });
-  obs.observe(_origTimerEl, { childList: true, characterData: true, subtree: true });
-}
-
-// Show/hide topbar based on active screen
-function updateStitchNav() {
-  const nav = document.getElementById('stitch-nav');
-  const qScreen = document.getElementById('screen-question');
-  if (nav) {
-    nav.style.display = (qScreen && qScreen.classList.contains('active')) ? 'flex' : 'none';
+// Stitch UI sync — must wait for defer scripts
+document.addEventListener('DOMContentLoaded', () => {
+  // Sync timer display
+  const _origTimerEl = document.getElementById('q-timer');
+  if (_origTimerEl) {
+    const obs = new MutationObserver(() => {
+      const st = document.getElementById('stitch-timer');
+      if (st && _origTimerEl.textContent) st.textContent = _origTimerEl.textContent;
+    });
+    obs.observe(_origTimerEl, { childList: true, characterData: true, subtree: true });
   }
-}
-const _origShowScreen = showScreen;
-showScreen = function(id) {
-  _origShowScreen(id);
+
+  // Show/hide topbar based on active screen
+  function updateStitchNav() {
+    const nav = document.getElementById('stitch-nav');
+    const qScreen = document.getElementById('screen-question');
+    if (nav) {
+      nav.style.display = (qScreen && qScreen.classList.contains('active')) ? 'flex' : 'none';
+    }
+  }
+  const _origShowScreen = showScreen;
+  showScreen = function(id) {
+    _origShowScreen(id);
+    updateStitchNav();
+  };
   updateStitchNav();
-};
-updateStitchNav();
+});
 </script>
 
 </body>

@@ -877,55 +877,54 @@ function renderJourneyTimeline() {
   </div>`;
 }
 
-// ─── Stitch L3 Topbar Phase Sync ────────────────────────────────────────
-function updateStitchPhase() {
-  const phases = ['screen-briefing', 'screen-planning', 'screen-execution', 'screen-reflection', 'screen-result'];
-  const phaseTabIds = ['stitch-phase-1', 'stitch-phase-2', 'stitch-phase-3', 'stitch-phase-4'];
-  const phasePcts = [0, 25, 50, 75, 100];
+// ─── Stitch L3 Topbar Phase Sync (after defer scripts) ──────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  function updateStitchPhase() {
+    const phases = ['screen-briefing', 'screen-planning', 'screen-execution', 'screen-reflection', 'screen-result'];
+    const phaseTabIds = ['stitch-phase-1', 'stitch-phase-2', 'stitch-phase-3', 'stitch-phase-4'];
+    const phasePcts = [0, 25, 50, 75, 100];
 
-  let activeIdx = 0;
-  phases.forEach((id, i) => {
-    const el = document.getElementById(id);
-    if (el && el.classList.contains('active')) activeIdx = i;
-  });
+    let activeIdx = 0;
+    phases.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.classList.contains('active')) activeIdx = i;
+    });
 
-  // Update phase tabs
-  phaseTabIds.forEach((tabId, i) => {
-    const tab = document.getElementById(tabId);
-    if (!tab) return;
-    if (i < activeIdx) {
-      tab.style.color = '#22d3ee';
-      tab.style.fontWeight = '400';
-      tab.style.borderBottom = 'none';
-    } else if (i === activeIdx) {
-      tab.style.color = '#22d3ee';
-      tab.style.fontWeight = '700';
-      tab.style.borderBottom = '2px solid #22d3ee';
-      tab.style.paddingBottom = '4px';
-    } else {
-      tab.style.color = 'rgba(255,255,255,0.4)';
-      tab.style.fontWeight = '400';
-      tab.style.borderBottom = 'none';
+    phaseTabIds.forEach((tabId, i) => {
+      const tab = document.getElementById(tabId);
+      if (!tab) return;
+      if (i < activeIdx) {
+        tab.style.color = '#22d3ee';
+        tab.style.fontWeight = '400';
+        tab.style.borderBottom = 'none';
+      } else if (i === activeIdx) {
+        tab.style.color = '#22d3ee';
+        tab.style.fontWeight = '700';
+        tab.style.borderBottom = '2px solid #22d3ee';
+        tab.style.paddingBottom = '4px';
+      } else {
+        tab.style.color = 'rgba(255,255,255,0.4)';
+        tab.style.fontWeight = '400';
+        tab.style.borderBottom = 'none';
+      }
+    });
+
+    const horizon = document.getElementById('stitch-horizon-l3');
+    if (horizon) horizon.style.width = phasePcts[Math.min(activeIdx, 4)] + '%';
+
+    const nav = document.getElementById('stitch-nav-l3');
+    if (nav) {
+      nav.style.display = activeIdx >= 4 ? 'none' : 'flex';
     }
-  });
-
-  // Update horizon progress
-  const horizon = document.getElementById('stitch-horizon-l3');
-  if (horizon) horizon.style.width = phasePcts[Math.min(activeIdx, 4)] + '%';
-
-  // Hide topbar on result screen
-  const nav = document.getElementById('stitch-nav-l3');
-  if (nav) {
-    nav.style.display = activeIdx >= 4 ? 'none' : 'flex';
   }
-}
 
-const _origShowScreenL3 = showScreen;
-showScreen = function(id) {
-  _origShowScreenL3(id);
+  const _origShowScreenL3 = showScreen;
+  showScreen = function(id) {
+    _origShowScreenL3(id);
+    updateStitchPhase();
+  };
   updateStitchPhase();
-};
-updateStitchPhase();
+});
 </script>
 
 </body>
