@@ -380,7 +380,7 @@ function goNext() {
     buildResults();
     showScreen('screen-results');
     // Show feedback modal after a short delay
-    setTimeout(showFeedbackModal, 2000);
+    setTimeout(showFeedbackModal, 6000); // Delayed so users can see results first
     const finalScore = answers.reduce((s, a) => s + a.score, 0);
     const finalPct = Math.round((finalScore / (activeQuestions.length * 4)) * 100);
     if (finalPct >= 67) launchConfetti();
@@ -522,7 +522,7 @@ function buildResults() {
 // ─── Gate Logic ──────────────────────────────────────────────────────────
 function renderGate(level, pct) {
   const gate = document.getElementById('gate-section');
-  const isQualified = pct >= 57; // Apprentice+ threshold
+  const isQualified = pct >= 70; // Practitioner+ threshold (raised from 57% — random clicking averages ~62%)
 
   if (isQualified) {
     gate.innerHTML = `
@@ -535,7 +535,7 @@ function renderGate(level, pct) {
     gate.innerHTML = `
       <div style="text-align:center">
         <h2 style="color:#fb7185">You need Apprentice level to advance</h2>
-        <p class="subtitle" style="margin:12px 0">Score 57%+ to unlock Level 2.</p>
+        <p class="subtitle" style="margin:12px 0">Score 70%+ to unlock Level 2.</p>
         <button class="btn btn-primary btn-full btn-lg" onclick="location.reload()" style="margin-top:16px">Try Again</button>
       </div>`;
   }
