@@ -148,17 +148,18 @@ let session = {};
 let tapSelected = null;    // for mobile ranking reorder
 
 // DIM_MAX for L2: variable per dimension (depends on how many Qs selected)
-const DIM_MAX = {};
-const DIM_COUNTS = {};
-DIMS.forEach(d => { DIM_MAX[d.key] = 0; DIM_COUNTS[d.key] = 0; });
+let DIM_MAX = {};
+let DIM_COUNTS = {};
 
-// ─── Load & Init ─────────────────────────────────────────────────────────
-fetch('questions/level2.json')
-  .then(r => r.json())
-  .then(data => { allQuestions = data; })
-  .catch(err => console.error('Failed to load L2 questions:', err));
-
+// ─── Load & Init (after defer scripts) ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  DIMS.forEach(d => { DIM_MAX[d.key] = 0; DIM_COUNTS[d.key] = 0; });
+
+  fetch('questions/level2.json')
+    .then(r => r.json())
+    .then(data => { allQuestions = data; })
+    .catch(err => console.error('Failed to load L2 questions:', err));
+
   session = getAdaptiveSession();
 
   // Guard: must have completed L1

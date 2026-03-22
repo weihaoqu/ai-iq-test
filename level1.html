@@ -178,17 +178,19 @@ let quizStartTime = null;
 let testMode = 'adaptive'; // for feedback modal compatibility
 
 // DIM_MAX for quick mode: 2 questions per dim, max 4 pts each = 8
-const DIM_MAX = {};
-DIMS.forEach(d => { DIM_MAX[d.key] = 8; });
+let DIM_MAX = {};
 
-// Load questions from JSON
-fetch('questions/level1.json')
-  .then(r => r.json())
-  .then(data => { questions = data; })
-  .catch(err => console.error('Failed to load questions:', err));
-
-// Init level indicator
+// Init after shared modules load (defer scripts execute before DOMContentLoaded)
 document.addEventListener('DOMContentLoaded', () => {
+  DIMS.forEach(d => { DIM_MAX[d.key] = 8; });
+
+  // Load questions from JSON
+  fetch('questions/level1.json')
+    .then(r => r.json())
+    .then(data => { questions = data; })
+    .catch(err => console.error('Failed to load questions:', err));
+
+  // Init level indicator
   renderLevelIndicator(document.getElementById('level-indicator'), 1);
   // Pre-fill from adaptive session if resuming
   const session = getAdaptiveSession();
