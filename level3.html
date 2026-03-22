@@ -82,7 +82,7 @@
     <div style="text-align:center;padding-top:12px">
       <div class="iq-badge-big" style="font-size:.85rem;letter-spacing:2px">LEVEL 3</div>
       <h1 style="margin-top:10px">&#127942; Boss Challenge</h1>
-      <p class="subtitle" style="margin-top:8px">Multi-step case study &middot; Self-assessed</p>
+      <p class="subtitle" style="margin-top:8px">Multi-step case study &middot; Auto-graded</p>
     </div>
 
     <div class="card">
@@ -129,17 +129,9 @@
       <div class="scenario-summary-content" id="summary-content"></div>
     </div>
 
-    <div class="card">
-      <p id="planning-prompt" style="font-size:1rem;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:12px"></p>
-      <ul class="guiding-bullets" id="planning-sub-prompts"></ul>
-    </div>
+    <div id="planning-content"></div>
 
-    <textarea class="freetext-area" id="planning-area" placeholder="Write your plan here..." rows="10"></textarea>
-    <div class="char-hint">
-      <span class="char-count" id="planning-count">0</span> characters &middot; ~300-600 recommended
-    </div>
-
-    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-planning" disabled onclick="submitPlanning()">Submit Plan &rarr;</button>
+    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-planning" onclick="submitPlanning()">Submit Plan &rarr;</button>
   </div>
 
   <!-- SCREEN: Execution -->
@@ -188,17 +180,9 @@
       <div class="scenario-summary-content" id="summary-content-r"></div>
     </div>
 
-    <div class="card">
-      <p id="reflection-prompt" style="font-size:1rem;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:12px"></p>
-      <ul class="guiding-bullets" id="reflection-sub-prompts"></ul>
-    </div>
+    <div id="reflection-content"></div>
 
-    <textarea class="freetext-area" id="reflection-area" placeholder="Write your reflection here..." rows="10"></textarea>
-    <div class="char-hint">
-      <span class="char-count" id="reflection-count">0</span> characters &middot; ~200-500 recommended
-    </div>
-
-    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-reflection" disabled onclick="submitReflection()">Submit Reflection &rarr;</button>
+    <button class="btn btn-primary btn-full btn-lg" id="btn-submit-reflection" onclick="submitReflection()">Submit Reflection &rarr;</button>
   </div>
 
   <!-- SCREEN: Result -->
@@ -235,186 +219,102 @@ let phaseScores = {
 
 let currentExecTask = 0;
 
-// ─── Load & Init ─────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  session = getAdaptiveSession();
-
-  // Guard: must have L3 unlocked
-  if (!session.level3Unlocked) {
-    showToast('Boss Challenge not yet unlocked');
-    setTimeout(() => location.href = 'index.html', 1200);
-    return;
-  }
-
-  renderLevelIndicator(document.getElementById('level-indicator'), 3);
-  participantId = session.participantId || 'AIQ' + Date.now();
-  participantName = session.participantName || 'Anonymous';
-
-  // Load scenarios
-  fetch('questions/level3.json')
-    .then(r => r.json())
-    .then(scenarios => {
-      activeScenario = shuffle(scenarios)[0];
-      renderBriefing();
-    })
-    .catch(err => {
-      console.error('Failed to load L3 scenarios:', err);
-      showToast('Error loading scenarios');
-    });
-});
-
-// ─── Render Briefing ─────────────────────────────────────────────────────
-function renderBriefing() {
-  document.getElementById('briefing-title').textContent = activeScenario.title;
-  document.getElementById('briefing-text').innerHTML = activeScenario.briefing.text
-    .split('\n').map(p => `<p style="margin-bottom:12px">${esc(p)}</p>`).join('');
-
-  const list = document.getElementById('constraints-list');
-  list.innerHTML = activeScenario.briefing.constraints
-    .map(c => `<li>${esc(c)}</li>`).join('');
-}
-
-// ─── Scenario Summary (collapsible) ──────────────────────────────────────
-function buildSummaryHtml() {
-  return `<p style="margin-bottom:8px"><strong>${esc(activeScenario.title)}</strong></p>
-    <p style="margin-bottom:8px">${esc(activeScenario.briefing.text)}</p>
-    <p style="font-weight:600;margin-bottom:4px">Constraints:</p>
-    <ul style="list-style:disc;padding-left:20px;margin:0">
-      ${activeScenario.briefing.constraints.map(c => `<li>${esc(c)}</li>`).join('')}
-    </ul>`;
-}
-
-function toggleSummary() {
-  const content = document.getElementById('summary-content');
-  const arrow = document.getElementById('summary-arrow');
-  if (!content.innerHTML) content.innerHTML = buildSummaryHtml();
-  content.classList.toggle('open');
-  arrow.textContent = content.classList.contains('open') ? '\u25BC' : '\u25B6';
-}
-
-function toggleSummaryReflection() {
-  const content = document.getElementById('summary-content-r');
-  const arrow = document.getElementById('summary-arrow-r');
-  if (!content.innerHTML) content.innerHTML = buildSummaryHtml();
-  content.classList.toggle('open');
-  arrow.textContent = content.classList.contains('open') ? '\u25BC' : '\u25B6';
-}
-
-// ─── Phase Navigation ────────────────────────────────────────────────────
-function goToPlanning() {
-  quizStartTime = Date.now();
-
-  // Populate planning screen
-  document.getElementById('planning-prompt').textContent = activeScenario.planning.prompt;
-  const subList = document.getElementById('planning-sub-prompts');
-  subList.innerHTML = activeScenario.planning.subPrompts
-    .map(s => `<li>${esc(s)}</li>`).join('');
-
-  // Wire up textarea
-  const ta = document.getElementById('planning-area');
-  const counter = document.getElementById('planning-count');
-  const btn = document.getElementById('btn-submit-planning');
-  ta.addEventListener('input', () => {
-    const len = ta.value.length;
-    counter.textContent = len;
-    counter.className = 'char-count' + (len < 100 ? ' short' : len > 700 ? ' long' : len >= 100 ? ' good' : '');
-    btn.disabled = len < 20;
-  });
-
-  showScreen('screen-planning');
-  setTimeout(() => ta.focus(), 200);
-}
-
-function submitPlanning() {
-  const ta = document.getElementById('planning-area');
-  if (ta.value.trim().length < 20) {
-    showToast('Please write a more detailed plan');
-    return;
-  }
-
-  // Show rubric self-assessment for planning
-  showFreetextAssessment(activeScenario.planning, ta.value.trim(), (score) => {
-    phaseScores.planning = score;
-    goToExecution();
-  });
-}
-
-// ─── Execution Phase ─────────────────────────────────────────────────────
-function goToExecution() {
-  currentExecTask = 0;
-  renderExecDots();
-  renderExecTask();
-  showScreen('screen-execution');
-}
-
-function renderExecDots() {
-  const total = activeScenario.execution.length;
-  const dots = document.getElementById('exec-dots');
-  dots.innerHTML = Array.from({length: total}, (_, i) => {
-    let cls = 'sub-phase-dot';
-    if (i < currentExecTask) cls += ' completed';
-    else if (i === currentExecTask) cls += ' active';
-    return `<span class="${cls}"></span>`;
-  }).join('');
-}
-
-function renderExecTask() {
-  const task = activeScenario.execution[currentExecTask];
-  const content = document.getElementById('exec-content');
-  const btn = document.getElementById('btn-submit-exec');
-
-  if (task.format === 'ranking') {
-    renderExecRanking(task, content);
-    btn.disabled = false;
-    btn.textContent = 'Submit';
-  } else if (task.format === 'multiselect') {
-    renderExecMultiselect(task, content);
-    btn.disabled = false;
-    btn.textContent = 'Submit';
-  } else if (task.format === 'freetext') {
-    renderExecFreetext(task, content);
-    btn.disabled = true;
-    btn.textContent = 'Submit';
-  }
-}
-
-function submitExecution() {
-  const task = activeScenario.execution[currentExecTask];
-
-  if (task.format === 'freetext') {
-    const ta = document.querySelector('#exec-content .freetext-area');
-    if (!ta || ta.value.trim().length < 20) {
-      showToast('Please write a more detailed response');
-      return;
+// ─── Auto-Scoring Functions ──────────────────────────────────────────────
+function scoreRanking(userOrder, items) {
+  const userRanks = userOrder.map(item => item.correctRank);
+  let swaps = 0;
+  for (let i = 0; i < userRanks.length; i++) {
+    for (let j = i + 1; j < userRanks.length; j++) {
+      if (userRanks[i] > userRanks[j]) swaps++;
     }
   }
+  const maxSwaps = userRanks.length * (userRanks.length - 1) / 2;
+  const normalized = 1 - (swaps / maxSwaps);
+  if (normalized >= 0.9) return 4;
+  if (normalized >= 0.6) return 3;
+  if (normalized >= 0.3) return 2;
+  return 1;
+}
 
-  if (task.format === 'ranking') {
-    storeCurrentRankingAnswer();
+function scoreMultiSelect(userSelected, options) {
+  const userSet = new Set(userSelected);
+  const correctSet = new Set(options.map((o, i) => o.correct ? i : -1).filter(i => i >= 0));
+  const correctPicks = [...correctSet].filter(i => userSet.has(i)).length;
+  const wrongPicks = [...userSet].filter(i => !correctSet.has(i)).length;
+  const missed = correctSet.size - correctPicks;
+  if (wrongPicks === 0 && missed === 0) return 4;
+  if (wrongPicks === 0 && missed === 1) return 3;
+  if (wrongPicks <= 1 && missed <= 1) return 2;
+  return 1;
+}
+
+function getScoreLabel(score) {
+  if (score === 4) return 'Perfect!';
+  if (score === 3) return 'Close!';
+  if (score === 2) return 'Partially right';
+  return 'Needs work';
+}
+
+function getScoreColor(score) {
+  if (score === 4) return '#34d399';
+  if (score === 3) return '#60a5fa';
+  if (score === 2) return '#f59e0b';
+  return '#fb7185';
+}
+
+// ─── Feedback Overlay ────────────────────────────────────────────────────
+function showFeedback(taskData, score, onContinue) {
+  const overlay = document.createElement('div');
+  overlay.className = 'sa-overlay';
+  const panel = document.createElement('div');
+  panel.className = 'sa-panel';
+
+  const color = getScoreColor(score);
+  const label = getScoreLabel(score);
+
+  let correctHtml = '';
+  if (taskData.format === 'ranking') {
+    const sorted = [...taskData.items].sort((a, b) => a.correctRank - b.correctRank);
+    correctHtml = `<div class="sa-correct"><strong>Correct order:</strong><ol style="margin:8px 0 0 20px;line-height:1.7">
+      ${sorted.map(item => `<li>${esc(item.text)}</li>`).join('')}
+    </ol></div>`;
+  } else {
+    correctHtml = `<div class="sa-correct"><strong>Correct answers:</strong><ul style="margin:8px 0 0 20px;line-height:1.7">
+      ${taskData.options.map((opt, i) => {
+        const icon = opt.correct ? '<span style="color:#34d399">&#10003;</span>' : '<span style="color:#fb7185">&#10007;</span>';
+        return `<li>${icon} ${esc(opt.text)}</li>`;
+      }).join('')}
+    </ul></div>`;
   }
 
-  // Show self-assessment for this task
-  showExecAssessment(task, (score) => {
-    phaseScores.execution.push(score);
-    currentExecTask++;
+  panel.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2rem;font-weight:800;color:${color}">${score}/4</div>
+      <div style="font-size:1rem;font-weight:600;color:${color}">${label}</div>
+    </div>
+    ${correctHtml}
+    <div class="sa-explanation">${esc(taskData.explanation)}</div>
+    <button class="sa-continue" id="sa-continue">Continue &rarr;</button>
+  `;
 
-    if (currentExecTask < activeScenario.execution.length) {
-      renderExecDots();
-      renderExecTask();
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    } else {
-      goToReflection();
-    }
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  panel.querySelector('#sa-continue').addEventListener('click', () => {
+    document.body.style.overflow = '';
+    overlay.remove();
+    onContinue();
   });
 }
 
-// ─── Execution: Ranking Renderer ─────────────────────────────────────────
-function renderExecRanking(task, container) {
-  const items = shuffle(task.items.map((item, i) => ({...item, origIdx: i})));
+// ─── Generic Renderers (used for planning, execution, reflection) ────────
+function renderRankingInto(taskData, container) {
+  const items = shuffle(taskData.items.map((item, i) => ({...item, origIdx: i})));
 
   container.innerHTML = `
     <div class="card">
-      <p class="question-text" style="margin-bottom:16px">${esc(task.q)}</p>
+      <p class="question-text" style="margin-bottom:16px">${esc(taskData.prompt || taskData.q)}</p>
       <div class="ranking-list" id="ranking-list">
         ${items.map((item, i) => `
           <div class="ranking-item" data-idx="${i}" draggable="true"
@@ -433,10 +333,57 @@ function renderExecRanking(task, container) {
   initTapReorder();
 }
 
-function storeCurrentRankingAnswer() {
-  // No-op for scoring — ranking is self-assessed
+function renderMultiselectInto(taskData, container) {
+  container.innerHTML = `
+    <div class="card">
+      <p class="question-text" style="margin-bottom:16px">${esc(taskData.prompt || taskData.q)}</p>
+      <p style="font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:8px">Select ALL that apply</p>
+      <div class="multiselect-list" id="ms-list">
+        ${taskData.options.map((opt, i) => `
+          <div class="multiselect-item" data-idx="${i}"
+               style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
+            <span class="checkbox"></span>
+            <span class="multiselect-text">${esc(opt.text)}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="select-counter" id="ms-counter">0 selected</div>
+    </div>
+  `;
+
+  document.getElementById('ms-list').addEventListener('click', e => {
+    const item = e.target.closest('.multiselect-item');
+    if (!item) return;
+    item.classList.toggle('checked');
+    const cb = item.querySelector('.checkbox');
+    cb.innerHTML = item.classList.contains('checked') ? '&#10003;' : '';
+    const count = document.querySelectorAll('.multiselect-item.checked').length;
+    document.getElementById('ms-counter').textContent = `${count} selected`;
+    if (navigator.vibrate) navigator.vibrate(10);
+  });
 }
 
+function getCurrentRankingOrder() {
+  const list = document.getElementById('ranking-list');
+  if (!list) return [];
+  const itemEls = [...list.querySelectorAll('.ranking-item')];
+  return itemEls.map(el => {
+    const text = el.querySelector('.ranking-text').textContent;
+    return activeScenario.planning.items
+      ? (activeScenario.planning.items.find(it => it.text === text) ||
+         activeScenario.execution.flatMap(e => e.items || []).find(it => it.text === text))
+      : null;
+  }).filter(Boolean);
+}
+
+function getCurrentMultiselectAnswer() {
+  const items = document.querySelectorAll('.multiselect-item');
+  const selected = [];
+  items.forEach((item, i) => { if (item.classList.contains('checked')) selected.push(i); });
+  return selected;
+}
+
+// ─── Drag and Drop / Tap Reorder ─────────────────────────────────────────
 function initDragAndDrop() {
   const list = document.getElementById('ranking-list');
   if (!list) return;
@@ -515,207 +462,210 @@ function updateRankNumbers() {
   list.querySelectorAll('.rank-num').forEach((el, i) => { el.textContent = i + 1; });
 }
 
-// ─── Execution: Multi-Select Renderer ────────────────────────────────────
-function renderExecMultiselect(task, container) {
-  container.innerHTML = `
-    <div class="card">
-      <p class="question-text" style="margin-bottom:16px">${esc(task.q)}</p>
-      <p style="font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:8px">Select ALL that apply</p>
-      <div class="multiselect-list" id="ms-list">
-        ${task.options.map((opt, i) => `
-          <div class="multiselect-item" data-idx="${i}"
-               style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
-            <span class="checkbox"></span>
-            <span class="multiselect-text">${esc(opt.text)}</span>
-          </div>
-        `).join('')}
-      </div>
-      <div class="select-counter" id="ms-counter">0 selected</div>
-    </div>
-  `;
+// ─── Load & Init ─────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  session = getAdaptiveSession();
 
-  document.getElementById('ms-list').addEventListener('click', e => {
-    const item = e.target.closest('.multiselect-item');
-    if (!item) return;
-    item.classList.toggle('checked');
-    const cb = item.querySelector('.checkbox');
-    cb.innerHTML = item.classList.contains('checked') ? '&#10003;' : '';
-    const count = document.querySelectorAll('.multiselect-item.checked').length;
-    document.getElementById('ms-counter').textContent = `${count} selected`;
-    if (navigator.vibrate) navigator.vibrate(10);
-  });
-}
-
-// ─── Execution: Free-Text Renderer ───────────────────────────────────────
-function renderExecFreetext(task, container) {
-  container.innerHTML = `
-    <div class="card">
-      <p class="question-text" style="margin-bottom:16px">${esc(task.q)}</p>
-    </div>
-    <textarea class="freetext-area" id="exec-ft-area" placeholder="Write your response here..." rows="10"></textarea>
-    <div class="char-hint">
-      <span class="char-count" id="exec-ft-count">0</span> characters &middot; ~200-500 recommended
-    </div>
-  `;
-
-  const ta = document.getElementById('exec-ft-area');
-  const counter = document.getElementById('exec-ft-count');
-  const btn = document.getElementById('btn-submit-exec');
-
-  ta.addEventListener('input', () => {
-    const len = ta.value.length;
-    counter.textContent = len;
-    counter.className = 'char-count' + (len < 100 ? ' short' : len > 600 ? ' long' : len >= 100 ? ' good' : '');
-    btn.disabled = len < 20;
-  });
-
-  setTimeout(() => ta.focus(), 200);
-}
-
-// ─── Self-Assessment (Freetext with rubric) ──────────────────────────────
-function showFreetextAssessment(phaseData, userAnswer, onComplete) {
-  let selectedScore = null;
-  const overlay = document.createElement('div');
-  overlay.className = 'sa-overlay';
-
-  const panel = document.createElement('div');
-  panel.className = 'sa-panel';
-
-  panel.innerHTML = `
-    <h3>Compare your answer to these levels:</h3>
-    <div class="rubric-cards" id="sa-rubrics">
-      ${[4,3,2,1].map(score => {
-        const r = phaseData.rubric[String(score)];
-        return `
-          <div class="rubric-card" data-score="${score}">
-            <div class="rubric-level">
-              <span>${esc(r.label)}</span>
-              <span class="rubric-score">${score}/4</span>
-            </div>
-            <div class="rubric-desc">${esc(r.description)}</div>
-          </div>`;
-      }).join('')}
-    </div>
-    <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
-  `;
-
-  overlay.appendChild(panel);
-  document.body.appendChild(overlay);
-  document.body.style.overflow = 'hidden';
-
-  panel.querySelector('#sa-rubrics').addEventListener('click', e => {
-    const card = e.target.closest('.rubric-card');
-    if (!card) return;
-    panel.querySelectorAll('.rubric-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    selectedScore = parseInt(card.dataset.score);
-    panel.querySelector('#sa-continue').disabled = false;
-    if (navigator.vibrate) navigator.vibrate(10);
-  });
-
-  panel.querySelector('#sa-continue').addEventListener('click', () => {
-    if (selectedScore === null) return;
-    document.body.style.overflow = '';
-    overlay.remove();
-    onComplete(selectedScore);
-  });
-}
-
-// ─── Self-Assessment (Ranking / Multiselect with correct answer) ─────────
-function showExecAssessment(task, onComplete) {
-  if (task.format === 'freetext') {
-    const ta = document.querySelector('#exec-content .freetext-area');
-    showFreetextAssessment(task, ta ? ta.value.trim() : '', onComplete);
+  // Guard: must have L3 unlocked
+  if (!session.level3Unlocked) {
+    showToast('Boss Challenge not yet unlocked');
+    setTimeout(() => location.href = 'index.html', 1200);
     return;
   }
 
-  let selectedScore = null;
-  const overlay = document.createElement('div');
-  overlay.className = 'sa-overlay';
+  renderLevelIndicator(document.getElementById('level-indicator'), 3);
+  participantId = session.participantId || 'AIQ' + Date.now();
+  participantName = session.participantName || 'Anonymous';
 
-  const panel = document.createElement('div');
-  panel.className = 'sa-panel';
+  // Load scenarios
+  fetch('questions/level3.json')
+    .then(r => r.json())
+    .then(scenarios => {
+      activeScenario = shuffle(scenarios)[0];
+      renderBriefing();
+    })
+    .catch(err => {
+      console.error('Failed to load L3 scenarios:', err);
+      showToast('Error loading scenarios');
+    });
+});
 
-  let correctHtml = '';
-  if (task.format === 'ranking') {
-    const sorted = [...task.items].sort((a, b) => a.correctRank - b.correctRank);
-    correctHtml = `<div class="sa-correct"><strong>Correct order:</strong><ol style="margin:8px 0 0 20px;line-height:1.7">
-      ${sorted.map(item => `<li>${esc(item.text)}</li>`).join('')}
-    </ol></div>`;
-  } else {
-    const correct = task.options.filter(o => o.correct).map(o => o.text);
-    correctHtml = `<div class="sa-correct"><strong>Correct answers:</strong><ul style="margin:8px 0 0 20px;line-height:1.7">
-      ${correct.map(t => `<li>${esc(t)}</li>`).join('')}
-    </ul></div>`;
+// ─── Render Briefing ─────────────────────────────────────────────────────
+function renderBriefing() {
+  document.getElementById('briefing-title').textContent = activeScenario.title;
+  document.getElementById('briefing-text').innerHTML = activeScenario.briefing.text
+    .split('\n').map(p => `<p style="margin-bottom:12px">${esc(p)}</p>`).join('');
+
+  const list = document.getElementById('constraints-list');
+  list.innerHTML = activeScenario.briefing.constraints
+    .map(c => `<li>${esc(c)}</li>`).join('');
+}
+
+// ─── Scenario Summary (collapsible) ──────────────────────────────────────
+function buildSummaryHtml() {
+  return `<p style="margin-bottom:8px"><strong>${esc(activeScenario.title)}</strong></p>
+    <p style="margin-bottom:8px">${esc(activeScenario.briefing.text)}</p>
+    <p style="font-weight:600;margin-bottom:4px">Constraints:</p>
+    <ul style="list-style:disc;padding-left:20px;margin:0">
+      ${activeScenario.briefing.constraints.map(c => `<li>${esc(c)}</li>`).join('')}
+    </ul>`;
+}
+
+function toggleSummary() {
+  const content = document.getElementById('summary-content');
+  const arrow = document.getElementById('summary-arrow');
+  if (!content.innerHTML) content.innerHTML = buildSummaryHtml();
+  content.classList.toggle('open');
+  arrow.textContent = content.classList.contains('open') ? '\u25BC' : '\u25B6';
+}
+
+function toggleSummaryReflection() {
+  const content = document.getElementById('summary-content-r');
+  const arrow = document.getElementById('summary-arrow-r');
+  if (!content.innerHTML) content.innerHTML = buildSummaryHtml();
+  content.classList.toggle('open');
+  arrow.textContent = content.classList.contains('open') ? '\u25BC' : '\u25B6';
+}
+
+// ─── Phase Navigation ────────────────────────────────────────────────────
+function goToPlanning() {
+  quizStartTime = Date.now();
+
+  const planning = activeScenario.planning;
+  const container = document.getElementById('planning-content');
+
+  if (planning.format === 'ranking') {
+    renderRankingInto(planning, container);
+  } else if (planning.format === 'multiselect') {
+    renderMultiselectInto(planning, container);
   }
 
-  panel.innerHTML = `
-    <h3>How did you do?</h3>
-    ${correctHtml}
-    <div class="sa-explanation">${esc(task.explanation)}</div>
-    <p style="text-align:center;font-size:.88rem;font-weight:600;color:var(--text)">Rate your answer:</p>
-    <div class="sa-ratings" id="sa-ratings">
-      <button class="sa-rate-btn" data-score="1"><span class="rate-score">1</span>Way off</button>
-      <button class="sa-rate-btn" data-score="2"><span class="rate-score">2</span>Partially right</button>
-      <button class="sa-rate-btn" data-score="3"><span class="rate-score">3</span>Close</button>
-      <button class="sa-rate-btn" data-score="4"><span class="rate-score">4</span>Nailed it</button>
-    </div>
-    <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
-  `;
+  showScreen('screen-planning');
+}
 
-  overlay.appendChild(panel);
-  document.body.appendChild(overlay);
-  document.body.style.overflow = 'hidden';
+function submitPlanning() {
+  const planning = activeScenario.planning;
+  let score = 1;
 
-  panel.querySelector('#sa-ratings').addEventListener('click', e => {
-    const btn = e.target.closest('.sa-rate-btn');
-    if (!btn) return;
-    panel.querySelectorAll('.sa-rate-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedScore = parseInt(btn.dataset.score);
-    panel.querySelector('#sa-continue').disabled = false;
-    if (navigator.vibrate) navigator.vibrate(10);
+  if (planning.format === 'ranking') {
+    const list = document.getElementById('ranking-list');
+    const itemEls = [...list.querySelectorAll('.ranking-item')];
+    const userOrder = itemEls.map(el => {
+      const text = el.querySelector('.ranking-text').textContent;
+      return planning.items.find(it => it.text === text);
+    }).filter(Boolean);
+    score = scoreRanking(userOrder, planning.items);
+  } else if (planning.format === 'multiselect') {
+    const selected = getCurrentMultiselectAnswer();
+    score = scoreMultiSelect(selected, planning.options);
+  }
+
+  phaseScores.planning = score;
+
+  showFeedback(planning, score, () => {
+    goToExecution();
   });
+}
 
-  panel.querySelector('#sa-continue').addEventListener('click', () => {
-    if (selectedScore === null) return;
-    document.body.style.overflow = '';
-    overlay.remove();
-    onComplete(selectedScore);
+// ─── Execution Phase ─────────────────────────────────────────────────────
+function goToExecution() {
+  currentExecTask = 0;
+  renderExecDots();
+  renderExecTask();
+  showScreen('screen-execution');
+}
+
+function renderExecDots() {
+  const total = activeScenario.execution.length;
+  const dots = document.getElementById('exec-dots');
+  dots.innerHTML = Array.from({length: total}, (_, i) => {
+    let cls = 'sub-phase-dot';
+    if (i < currentExecTask) cls += ' completed';
+    else if (i === currentExecTask) cls += ' active';
+    return `<span class="${cls}"></span>`;
+  }).join('');
+}
+
+function renderExecTask() {
+  const task = activeScenario.execution[currentExecTask];
+  const content = document.getElementById('exec-content');
+  const btn = document.getElementById('btn-submit-exec');
+
+  if (task.format === 'ranking') {
+    renderRankingInto(task, content);
+  } else if (task.format === 'multiselect') {
+    renderMultiselectInto(task, content);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Submit';
+}
+
+function submitExecution() {
+  const task = activeScenario.execution[currentExecTask];
+  let score = 1;
+
+  if (task.format === 'ranking') {
+    const list = document.getElementById('ranking-list');
+    const itemEls = [...list.querySelectorAll('.ranking-item')];
+    const userOrder = itemEls.map(el => {
+      const text = el.querySelector('.ranking-text').textContent;
+      return task.items.find(it => it.text === text);
+    }).filter(Boolean);
+    score = scoreRanking(userOrder, task.items);
+  } else if (task.format === 'multiselect') {
+    const selected = getCurrentMultiselectAnswer();
+    score = scoreMultiSelect(selected, task.options);
+  }
+
+  phaseScores.execution.push(score);
+
+  showFeedback(task, score, () => {
+    currentExecTask++;
+    if (currentExecTask < activeScenario.execution.length) {
+      renderExecDots();
+      renderExecTask();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      goToReflection();
+    }
   });
 }
 
 // ─── Reflection Phase ────────────────────────────────────────────────────
 function goToReflection() {
-  document.getElementById('reflection-prompt').textContent = activeScenario.reflection.prompt;
-  const subList = document.getElementById('reflection-sub-prompts');
-  subList.innerHTML = activeScenario.reflection.subPrompts
-    .map(s => `<li>${esc(s)}</li>`).join('');
+  const reflection = activeScenario.reflection;
+  const container = document.getElementById('reflection-content');
 
-  const ta = document.getElementById('reflection-area');
-  const counter = document.getElementById('reflection-count');
-  const btn = document.getElementById('btn-submit-reflection');
-
-  ta.addEventListener('input', () => {
-    const len = ta.value.length;
-    counter.textContent = len;
-    counter.className = 'char-count' + (len < 100 ? ' short' : len > 600 ? ' long' : len >= 100 ? ' good' : '');
-    btn.disabled = len < 20;
-  });
+  if (reflection.format === 'ranking') {
+    renderRankingInto(reflection, container);
+  } else if (reflection.format === 'multiselect') {
+    renderMultiselectInto(reflection, container);
+  }
 
   showScreen('screen-reflection');
-  setTimeout(() => ta.focus(), 200);
 }
 
 function submitReflection() {
-  const ta = document.getElementById('reflection-area');
-  if (ta.value.trim().length < 20) {
-    showToast('Please write a more detailed reflection');
-    return;
+  const reflection = activeScenario.reflection;
+  let score = 1;
+
+  if (reflection.format === 'ranking') {
+    const list = document.getElementById('ranking-list');
+    const itemEls = [...list.querySelectorAll('.ranking-item')];
+    const userOrder = itemEls.map(el => {
+      const text = el.querySelector('.ranking-text').textContent;
+      return reflection.items.find(it => it.text === text);
+    }).filter(Boolean);
+    score = scoreRanking(userOrder, reflection.items);
+  } else if (reflection.format === 'multiselect') {
+    const selected = getCurrentMultiselectAnswer();
+    score = scoreMultiSelect(selected, reflection.options);
   }
 
-  showFreetextAssessment(activeScenario.reflection, ta.value.trim(), (score) => {
-    phaseScores.reflection = score;
+  phaseScores.reflection = score;
+
+  showFeedback(reflection, score, () => {
     showResult();
   });
 }

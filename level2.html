@@ -73,7 +73,7 @@
     <div style="text-align:center;padding-top:24px">
       <div class="iq-badge-big" style="font-size:.85rem;letter-spacing:2px">LEVEL 2</div>
       <h1 style="margin-top:10px">Deep Dive</h1>
-      <p class="subtitle" style="margin-top:8px">Adapted to your Level 1 results &middot; 3 question formats</p>
+      <p class="subtitle" style="margin-top:8px">Adapted to your Level 1 results &middot; 2 question formats</p>
     </div>
 
     <div class="card">
@@ -91,13 +91,6 @@
           <div class="format-info">
             <div class="format-name">Multi-Select</div>
             <div class="format-desc">Choose all correct answers</div>
-          </div>
-        </div>
-        <div class="format-preview">
-          <div class="format-icon">&#x270D;</div>
-          <div class="format-info">
-            <div class="format-name">Free Response</div>
-            <div class="format-desc">Write your answer, then self-assess</div>
           </div>
         </div>
       </div>
@@ -183,7 +176,7 @@
 let allQuestions = [];
 let activeQuestions = [];
 let currentQ = 0;
-let answers = [];          // { userAnswer: ..., selfScore: 1-4 }
+let answers = [];          // { userAnswer: ..., score: 1-4 }
 let participantId = '';
 let participantName = '';
 let quizStartTime = null;
@@ -333,9 +326,6 @@ function renderQuestion() {
   } else if (q.format === 'multiselect') {
     renderMultiselect(q, content);
     hint.style.display = 'none';
-  } else if (q.format === 'freetext') {
-    renderFreetext(q, content);
-    hint.style.display = 'none';
   }
 
   // Navigation
@@ -348,15 +338,7 @@ function updateSubmitButton() {
   const q = activeQuestions[currentQ];
   const total = activeQuestions.length;
   btn.textContent = currentQ === total - 1 ? 'Submit & Finish' : 'Submit';
-
-  // Enable/disable based on whether user has provided an answer
-  if (q.format === 'freetext') {
-    const ta = document.querySelector('.freetext-area');
-    btn.disabled = !ta || ta.value.trim().length < 10;
-  } else {
-    // Ranking and multiselect always have a default state
-    btn.disabled = false;
-  }
+  btn.disabled = false;
 }
 
 // ─── Ranking Renderer ────────────────────────────────────────────────────
@@ -531,32 +513,100 @@ function storeMultiselectAnswer() {
   if (counter) counter.textContent = `${selected.length} selected`;
 }
 
-// ─── Free-Text Renderer ─────────────────────────────────────────────────
-function renderFreetext(q, container) {
-  const prev = answers[currentQ]?.userAnswer || '';
+// ─── Auto-Scoring Functions ──────────────────────────────────────────────
+function scoreRanking(userOrder, correctOrder) {
+  // userOrder: array of item objects in user's order
+  // correctOrder: the original items with correctRank
+  // Calculate Kendall tau distance based on correctRank
+  const userRanks = userOrder.map(item => item.correctRank);
+  let swaps = 0;
+  for (let i = 0; i < userRanks.length; i++) {
+    for (let j = i + 1; j < userRanks.length; j++) {
+      if (userRanks[i] > userRanks[j]) swaps++;
+    }
+  }
+  const maxSwaps = userRanks.length * (userRanks.length - 1) / 2;
+  const normalized = 1 - (swaps / maxSwaps);
+  if (normalized >= 0.9) return 4;
+  if (normalized >= 0.6) return 3;
+  if (normalized >= 0.3) return 2;
+  return 1;
+}
 
-  container.innerHTML = `
-    <textarea class="freetext-area" id="ft-area" placeholder="Write your response here..."
-              rows="8">${esc(prev)}</textarea>
-    <div class="char-hint">
-      <span class="char-count" id="ft-count">${prev.length}</span> characters &middot; ~200-500 recommended
+function scoreMultiSelect(userSelected, options) {
+  // userSelected: array of indices user checked
+  // options: array of option objects with .correct
+  const userSet = new Set(userSelected);
+  const correctSet = new Set(options.map((o, i) => o.correct ? i : -1).filter(i => i >= 0));
+  const correctPicks = [...correctSet].filter(i => userSet.has(i)).length;
+  const wrongPicks = [...userSet].filter(i => !correctSet.has(i)).length;
+  const missed = correctSet.size - correctPicks;
+
+  if (wrongPicks === 0 && missed === 0) return 4;
+  if (wrongPicks === 0 && missed === 1) return 3;
+  if (wrongPicks <= 1 && missed <= 1) return 2;
+  return 1;
+}
+
+function getScoreLabel(score) {
+  if (score === 4) return 'Perfect!';
+  if (score === 3) return 'Close!';
+  if (score === 2) return 'Partially right';
+  return 'Needs work';
+}
+
+function getScoreColor(score) {
+  if (score === 4) return '#34d399';
+  if (score === 3) return '#60a5fa';
+  if (score === 2) return '#f59e0b';
+  return '#fb7185';
+}
+
+// ─── Feedback Overlay ────────────────────────────────────────────────────
+function showFeedback(question, score, onContinue) {
+  const overlay = document.createElement('div');
+  overlay.className = 'sa-overlay';
+
+  const panel = document.createElement('div');
+  panel.className = 'sa-panel';
+
+  const color = getScoreColor(score);
+  const label = getScoreLabel(score);
+
+  let correctHtml = '';
+  if (question.format === 'ranking') {
+    const sorted = [...question.items].sort((a, b) => a.correctRank - b.correctRank);
+    correctHtml = `<div class="sa-correct"><strong>Correct order:</strong><ol style="margin:8px 0 0 20px;line-height:1.7">
+      ${sorted.map(item => `<li>${esc(item.text)}</li>`).join('')}
+    </ol></div>`;
+  } else {
+    correctHtml = `<div class="sa-correct"><strong>Correct answers:</strong><ul style="margin:8px 0 0 20px;line-height:1.7">
+      ${question.options.map((opt, i) => {
+        const icon = opt.correct ? '<span style="color:#34d399">&#10003;</span>' : '<span style="color:#fb7185">&#10007;</span>';
+        return `<li>${icon} ${esc(opt.text)}</li>`;
+      }).join('')}
+    </ul></div>`;
+  }
+
+  panel.innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:2rem;font-weight:800;color:${color}">${score}/4</div>
+      <div style="font-size:1rem;font-weight:600;color:${color}">${label}</div>
     </div>
+    ${correctHtml}
+    <div class="sa-explanation">${esc(question.explanation)}</div>
+    <button class="sa-continue" id="sa-continue">Continue &rarr;</button>
   `;
 
-  const ta = document.getElementById('ft-area');
-  const counter = document.getElementById('ft-count');
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
 
-  ta.addEventListener('input', () => {
-    const len = ta.value.length;
-    counter.textContent = len;
-    counter.className = 'char-count' + (len < 100 ? ' short' : len > 600 ? ' long' : len >= 100 ? ' good' : '');
-    if (!answers[currentQ]) answers[currentQ] = {};
-    answers[currentQ].userAnswer = ta.value;
-    updateSubmitButton();
+  panel.querySelector('#sa-continue').addEventListener('click', () => {
+    document.body.style.overflow = '';
+    overlay.remove();
+    onContinue();
   });
-
-  // Focus
-  setTimeout(() => ta.focus(), 200);
 }
 
 // ─── Navigation ──────────────────────────────────────────────────────────
@@ -567,26 +617,23 @@ function goBack() {
 function goNext() {
   const q = activeQuestions[currentQ];
 
-  // Validate free-text
-  if (q.format === 'freetext') {
-    const ta = document.querySelector('.freetext-area');
-    if (!ta || ta.value.trim().length < 10) {
-      showToast('Please write at least a short response');
-      return;
-    }
-    if (!answers[currentQ]) answers[currentQ] = {};
-    answers[currentQ].userAnswer = ta.value.trim();
-  }
-
   // Store answer if not yet stored
   if (q.format === 'ranking') storeRankingAnswer();
   if (q.format === 'multiselect') storeMultiselectAnswer();
 
   tapSelected = null;
 
-  // Show self-assessment
-  showSelfAssessment(q, answers[currentQ].userAnswer, (score) => {
-    answers[currentQ].selfScore = score;
+  // Auto-score
+  let score = 1;
+  if (q.format === 'ranking') {
+    score = scoreRanking(answers[currentQ].userAnswer, q.items);
+  } else if (q.format === 'multiselect') {
+    score = scoreMultiSelect(answers[currentQ].userAnswer, q.options);
+  }
+  answers[currentQ].score = score;
+
+  // Show feedback overlay with auto-score
+  showFeedback(q, score, () => {
     advanceAfterAssessment();
   });
 }
@@ -598,7 +645,7 @@ function advanceAfterAssessment() {
     window.scrollTo({top:0, behavior:'smooth'});
   } else {
     // Check for unanswered
-    const unanswered = answers.findIndex(a => a === null || a.selfScore === undefined);
+    const unanswered = answers.findIndex(a => a === null || a.score === undefined);
     if (unanswered !== -1) {
       showToast(`Question ${unanswered + 1} needs an answer — jumping there`);
       currentQ = unanswered;
@@ -613,108 +660,10 @@ function advanceAfterAssessment() {
   }
 }
 
-// ─── Self-Assessment Overlay ─────────────────────────────────────────────
-function showSelfAssessment(question, userAnswer, onComplete) {
-  let selectedScore = null;
-
-  const overlay = document.createElement('div');
-  overlay.className = 'sa-overlay';
-
-  const panel = document.createElement('div');
-  panel.className = 'sa-panel';
-
-  if (question.format === 'freetext') {
-    // Rubric-based self-assessment
-    panel.innerHTML = `
-      <h3>Compare your answer to these levels:</h3>
-      <div class="rubric-cards" id="sa-rubrics">
-        ${[4,3,2,1].map(score => {
-          const r = question.rubric[String(score)];
-          return `
-            <div class="rubric-card" data-score="${score}">
-              <div class="rubric-level">
-                <span>${r.label}</span>
-                <span class="rubric-score">${score}/4</span>
-              </div>
-              <div class="rubric-desc">${esc(r.description)}</div>
-            </div>`;
-        }).join('')}
-      </div>
-      <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
-    `;
-  } else {
-    // Ranking or multiselect: show correct answer + 4-point scale
-    let correctHtml = '';
-
-    if (question.format === 'ranking') {
-      const sorted = [...question.items].sort((a, b) => a.correctRank - b.correctRank);
-      correctHtml = `<div class="sa-correct"><strong>Correct order:</strong><ol style="margin:8px 0 0 20px;line-height:1.7">
-        ${sorted.map(item => `<li>${esc(item.text)}</li>`).join('')}
-      </ol></div>`;
-    } else {
-      const correct = question.options.filter(o => o.correct).map(o => o.text);
-      correctHtml = `<div class="sa-correct"><strong>Correct answers:</strong><ul style="margin:8px 0 0 20px;line-height:1.7">
-        ${correct.map(t => `<li>${esc(t)}</li>`).join('')}
-      </ul></div>`;
-    }
-
-    panel.innerHTML = `
-      <h3>How did you do?</h3>
-      ${correctHtml}
-      <div class="sa-explanation">${esc(question.explanation)}</div>
-      <p style="text-align:center;font-size:.88rem;font-weight:600;color:var(--text)">Rate your answer:</p>
-      <div class="sa-ratings" id="sa-ratings">
-        <button class="sa-rate-btn" data-score="1"><span class="rate-score">1</span>Way off</button>
-        <button class="sa-rate-btn" data-score="2"><span class="rate-score">2</span>Partially right</button>
-        <button class="sa-rate-btn" data-score="3"><span class="rate-score">3</span>Close</button>
-        <button class="sa-rate-btn" data-score="4"><span class="rate-score">4</span>Nailed it</button>
-      </div>
-      <button class="sa-continue" disabled id="sa-continue">Continue &rarr;</button>
-    `;
-  }
-
-  overlay.appendChild(panel);
-  document.body.appendChild(overlay);
-
-  // Prevent body scroll
-  document.body.style.overflow = 'hidden';
-
-  // Rating selection
-  if (question.format === 'freetext') {
-    panel.querySelector('#sa-rubrics').addEventListener('click', e => {
-      const card = e.target.closest('.rubric-card');
-      if (!card) return;
-      panel.querySelectorAll('.rubric-card').forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedScore = parseInt(card.dataset.score);
-      panel.querySelector('#sa-continue').disabled = false;
-      if (navigator.vibrate) navigator.vibrate(10);
-    });
-  } else {
-    panel.querySelector('#sa-ratings').addEventListener('click', e => {
-      const btn = e.target.closest('.sa-rate-btn');
-      if (!btn) return;
-      panel.querySelectorAll('.sa-rate-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      selectedScore = parseInt(btn.dataset.score);
-      panel.querySelector('#sa-continue').disabled = false;
-      if (navigator.vibrate) navigator.vibrate(10);
-    });
-  }
-
-  // Continue
-  panel.querySelector('#sa-continue').addEventListener('click', () => {
-    if (selectedScore === null) return;
-    document.body.style.overflow = '';
-    overlay.remove();
-    onComplete(selectedScore);
-  });
-}
-
 // ─── Build Results ───────────────────────────────────────────────────────
 function getCombinedPct() {
   const l1Pct = session.level1.percentage;
-  const total = answers.reduce((s, a) => s + (a?.selfScore || 0), 0);
+  const total = answers.reduce((s, a) => s + (a?.score || 0), 0);
   const maxScore = activeQuestions.length * 4;
   const l2Pct = Math.round((total / maxScore) * 100);
   return Math.round((l1Pct + l2Pct) / 2);
@@ -724,7 +673,7 @@ function buildResults() {
   stopTimer();
 
   const l1Pct = session.level1.percentage;
-  const total = answers.reduce((s, a) => s + (a?.selfScore || 0), 0);
+  const total = answers.reduce((s, a) => s + (a?.score || 0), 0);
   const maxScore = activeQuestions.length * 4;
   const l2Pct = Math.round((total / maxScore) * 100);
   const combinedPct = Math.round((l1Pct + l2Pct) / 2);
@@ -763,7 +712,7 @@ function buildResults() {
   const dimScoresL2 = {};
   DIMS.forEach(d => { dimScoresL2[d.key] = 0; });
   activeQuestions.forEach((q, i) => {
-    dimScoresL2[q.dim] += (answers[i]?.selfScore || 0);
+    dimScoresL2[q.dim] += (answers[i]?.score || 0);
   });
 
   // L1 dimension scores (from session)
@@ -828,7 +777,7 @@ function buildResults() {
       answers: activeQuestions.map((q, i) => ({
         qId: q.id,
         format: q.format,
-        selfScore: answers[i]?.selfScore || 0
+        score: answers[i]?.score || 0
       }))
     }
   });
@@ -963,7 +912,7 @@ function renderGate(level, combinedPct) {
     // Find weakest dimensions for tips
     const dimScoresL2 = {};
     DIMS.forEach(d => { dimScoresL2[d.key] = 0; });
-    activeQuestions.forEach((q, i) => { dimScoresL2[q.dim] += (answers[i]?.selfScore || 0); });
+    activeQuestions.forEach((q, i) => { dimScoresL2[q.dim] += (answers[i]?.score || 0); });
 
     const weakest = DIMS.map(d => ({
       label: d.label,
