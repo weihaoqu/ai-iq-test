@@ -68,7 +68,7 @@
     <div style="text-align:center;padding-top:24px">
       <div class="iq-badge-big" style="font-size:.85rem;letter-spacing:2px">LEVEL 1</div>
       <h1 style="margin-top:10px">Quick Scan</h1>
-      <p class="subtitle" style="margin-top:8px">16 questions across 8 AI dimensions &middot; ~4 minutes</p>
+      <p class="subtitle" style="margin-top:8px">8 questions across 8 AI dimensions &middot; ~2 minutes</p>
     </div>
     <div class="card" style="display:flex;flex-direction:column;gap:20px">
       <div class="input-group">
@@ -221,7 +221,7 @@ let DIM_MAX = {};
 
 // Init after shared modules load (defer scripts execute before DOMContentLoaded)
 document.addEventListener('DOMContentLoaded', () => {
-  DIMS.forEach(d => { DIM_MAX[d.key] = 8; });
+  DIMS.forEach(d => { DIM_MAX[d.key] = 4; }); // 1 question per dim, max 4 pts
 
   // Load questions from JSON
   fetch('questions/level1.json')
@@ -241,13 +241,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ─── Select 2 random questions per dimension ─────────────────────────────
+// ─── Select 1 random question per dimension (8 total) ────────────────────
 function selectQuickQuestions() {
   const picked = [];
   DIMS.forEach(d => {
     const pool = questions.filter(q => q.dim === d.key);
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
-    picked.push(shuffled[0], shuffled[1]);
+    picked.push(shuffled[0]);
   });
   // Shuffle the final set
   for (let i = picked.length - 1; i > 0; i--) {
