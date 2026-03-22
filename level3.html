@@ -210,6 +210,7 @@ let quizStartTime = null;
 let testMode = 'adaptive';
 let session = {};
 let tapSelected = null;
+let currentPhaseId = '';
 
 let phaseScores = {
   planning: null,
@@ -311,11 +312,12 @@ function showFeedback(taskData, score, onContinue) {
 // ─── Generic Renderers (used for planning, execution, reflection) ────────
 function renderRankingInto(taskData, container) {
   const items = shuffle(taskData.items.map((item, i) => ({...item, origIdx: i})));
+  const listId = 'ranking-list-' + currentPhaseId;
 
   container.innerHTML = `
     <div class="card">
       <p class="question-text" style="margin-bottom:16px">${esc(taskData.prompt || taskData.q)}</p>
-      <div class="ranking-list" id="ranking-list">
+      <div class="ranking-list" id="${listId}">
         ${items.map((item, i) => `
           <div class="ranking-item" data-idx="${i}" draggable="true"
                style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
@@ -329,16 +331,19 @@ function renderRankingInto(taskData, container) {
     <div class="touch-hint">Tap an item, then tap where to move it</div>
   `;
 
-  initDragAndDrop();
-  initTapReorder();
+  initDragAndDrop(currentPhaseId);
+  initTapReorder(currentPhaseId);
 }
 
 function renderMultiselectInto(taskData, container) {
+  const listId = 'ms-list-' + currentPhaseId;
+  const counterId = 'ms-counter-' + currentPhaseId;
+
   container.innerHTML = `
     <div class="card">
       <p class="question-text" style="margin-bottom:16px">${esc(taskData.prompt || taskData.q)}</p>
       <p style="font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:8px">Select ALL that apply</p>
-      <div class="multiselect-list" id="ms-list">
+      <div class="multiselect-list" id="${listId}">
         ${taskData.options.map((opt, i) => `
           <div class="multiselect-item" data-idx="${i}"
                style="animation:slideInStagger .4s cubic-bezier(.16,1,.3,1) ${i*0.06}s both">
@@ -347,24 +352,24 @@ function renderMultiselectInto(taskData, container) {
           </div>
         `).join('')}
       </div>
-      <div class="select-counter" id="ms-counter">0 selected</div>
+      <div class="select-counter" id="${counterId}">0 selected</div>
     </div>
   `;
 
-  document.getElementById('ms-list').addEventListener('click', e => {
+  document.getElementById(listId).addEventListener('click', e => {
     const item = e.target.closest('.multiselect-item');
     if (!item) return;
     item.classList.toggle('checked');
     const cb = item.querySelector('.checkbox');
     cb.innerHTML = item.classList.contains('checked') ? '&#10003;' : '';
-    const count = document.querySelectorAll('.multiselect-item.checked').length;
-    document.getElementById('ms-counter').textContent = `${count} selected`;
+    const count = document.getElementById(listId).querySelectorAll('.multiselect-item.checked').length;
+    document.getElementById(counterId).textContent = `${count} selected`;
     if (navigator.vibrate) navigator.vibrate(10);
   });
 }
 
-function getCurrentRankingOrder() {
-  const list = document.getElementById('ranking-list');
+function getCurrentRankingOrder(phaseId) {
+  const list = document.getElementById('ranking-list-' + phaseId);
   if (!list) return [];
   const itemEls = [...list.querySelectorAll('.ranking-item')];
   return itemEls.map(el => {
@@ -376,16 +381,18 @@ function getCurrentRankingOrder() {
   }).filter(Boolean);
 }
 
-function getCurrentMultiselectAnswer() {
-  const items = document.querySelectorAll('.multiselect-item');
+function getCurrentMultiselectAnswer(phaseId) {
+  const list = document.getElementById('ms-list-' + phaseId);
+  if (!list) return [];
+  const items = list.querySelectorAll('.multiselect-item');
   const selected = [];
   items.forEach((item, i) => { if (item.classList.contains('checked')) selected.push(i); });
   return selected;
 }
 
 // ─── Drag and Drop / Tap Reorder ─────────────────────────────────────────
-function initDragAndDrop() {
-  const list = document.getElementById('ranking-list');
+function initDragAndDrop(phaseId) {
+  const list = document.getElementById('ranking-list-' + phaseId);
   if (!list) return;
   let draggedEl = null;
 
@@ -404,7 +411,7 @@ function initDragAndDrop() {
       draggedEl = null;
     }
     list.querySelectorAll('.ranking-item').forEach(el => el.classList.remove('drop-target'));
-    updateRankNumbers();
+    updateRankNumbers(phaseId);
   });
 
   list.addEventListener('dragover', e => {
@@ -428,8 +435,8 @@ function initDragAndDrop() {
   list.addEventListener('drop', e => { e.preventDefault(); });
 }
 
-function initTapReorder() {
-  const list = document.getElementById('ranking-list');
+function initTapReorder(phaseId) {
+  const list = document.getElementById('ranking-list-' + phaseId);
   if (!list) return;
 
   list.addEventListener('click', e => {
@@ -451,13 +458,13 @@ function initTapReorder() {
       if (fromIdx < toIdx) { item.after(tapSelected); }
       else { item.before(tapSelected); }
       tapSelected = null;
-      updateRankNumbers();
+      updateRankNumbers(phaseId);
     }
   });
 }
 
-function updateRankNumbers() {
-  const list = document.getElementById('ranking-list');
+function updateRankNumbers(phaseId) {
+  const list = document.getElementById('ranking-list-' + phaseId);
   if (!list) return;
   list.querySelectorAll('.rank-num').forEach((el, i) => { el.textContent = i + 1; });
 }
@@ -530,6 +537,7 @@ function toggleSummaryReflection() {
 // ─── Phase Navigation ────────────────────────────────────────────────────
 function goToPlanning() {
   quizStartTime = Date.now();
+  currentPhaseId = 'planning';
 
   const planning = activeScenario.planning;
   const container = document.getElementById('planning-content');
@@ -548,7 +556,7 @@ function submitPlanning() {
   let score = 1;
 
   if (planning.format === 'ranking') {
-    const list = document.getElementById('ranking-list');
+    const list = document.getElementById('ranking-list-planning');
     const itemEls = [...list.querySelectorAll('.ranking-item')];
     const userOrder = itemEls.map(el => {
       const text = el.querySelector('.ranking-text').textContent;
@@ -556,7 +564,7 @@ function submitPlanning() {
     }).filter(Boolean);
     score = scoreRanking(userOrder, planning.items);
   } else if (planning.format === 'multiselect') {
-    const selected = getCurrentMultiselectAnswer();
+    const selected = getCurrentMultiselectAnswer('planning');
     score = scoreMultiSelect(selected, planning.options);
   }
 
@@ -587,6 +595,7 @@ function renderExecDots() {
 }
 
 function renderExecTask() {
+  currentPhaseId = 'exec' + currentExecTask;
   const task = activeScenario.execution[currentExecTask];
   const content = document.getElementById('exec-content');
   const btn = document.getElementById('btn-submit-exec');
@@ -602,11 +611,12 @@ function renderExecTask() {
 }
 
 function submitExecution() {
+  const execPhaseId = 'exec' + currentExecTask;
   const task = activeScenario.execution[currentExecTask];
   let score = 1;
 
   if (task.format === 'ranking') {
-    const list = document.getElementById('ranking-list');
+    const list = document.getElementById('ranking-list-' + execPhaseId);
     const itemEls = [...list.querySelectorAll('.ranking-item')];
     const userOrder = itemEls.map(el => {
       const text = el.querySelector('.ranking-text').textContent;
@@ -614,7 +624,7 @@ function submitExecution() {
     }).filter(Boolean);
     score = scoreRanking(userOrder, task.items);
   } else if (task.format === 'multiselect') {
-    const selected = getCurrentMultiselectAnswer();
+    const selected = getCurrentMultiselectAnswer(execPhaseId);
     score = scoreMultiSelect(selected, task.options);
   }
 
@@ -634,6 +644,7 @@ function submitExecution() {
 
 // ─── Reflection Phase ────────────────────────────────────────────────────
 function goToReflection() {
+  currentPhaseId = 'reflection';
   const reflection = activeScenario.reflection;
   const container = document.getElementById('reflection-content');
 
@@ -651,7 +662,7 @@ function submitReflection() {
   let score = 1;
 
   if (reflection.format === 'ranking') {
-    const list = document.getElementById('ranking-list');
+    const list = document.getElementById('ranking-list-reflection');
     const itemEls = [...list.querySelectorAll('.ranking-item')];
     const userOrder = itemEls.map(el => {
       const text = el.querySelector('.ranking-text').textContent;
@@ -659,7 +670,7 @@ function submitReflection() {
     }).filter(Boolean);
     score = scoreRanking(userOrder, reflection.items);
   } else if (reflection.format === 'multiselect') {
-    const selected = getCurrentMultiselectAnswer();
+    const selected = getCurrentMultiselectAnswer('reflection');
     score = scoreMultiSelect(selected, reflection.options);
   }
 
