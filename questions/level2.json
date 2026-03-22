@@ -261,7 +261,7 @@
 
   {
     "id": "l2-hc01",
-    "dim": "humanCollab",
+    "dim": "humanCollaboration",
     "dimLabel": "Human Collaboration",
     "format": "ranking",
     "q": "Rank these tasks from most to least suitable for full AI automation (minimal human involvement):",
@@ -275,7 +275,7 @@
   },
   {
     "id": "l2-hc02",
-    "dim": "humanCollab",
+    "dim": "humanCollaboration",
     "dimLabel": "Human Collaboration",
     "format": "multiselect",
     "q": "In a human-in-the-loop AI workflow for medical diagnosis assistance, which design principles are important? Select all that apply.",
@@ -290,7 +290,7 @@
   },
   {
     "id": "l2-hc03",
-    "dim": "humanCollab",
+    "dim": "humanCollaboration",
     "dimLabel": "Human Collaboration",
     "format": "freetext",
     "q": "Your team of 5 is adopting AI coding assistants. One senior developer refuses to use them, saying 'it makes you a worse programmer.' Another junior developer uses AI for everything and barely reads the code it generates. How would you address both situations?",
