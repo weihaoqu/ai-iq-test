@@ -1055,3 +1055,56 @@ canvas#radarChart{max-width:340px;max-height:340px}
   display:flex;align-items:flex-start;gap:8px;line-height:1.5;
 }
 .guiding-bullets li::before{content:'\2022';color:var(--text-muted);flex-shrink:0;margin-top:0}
+
+/* ── Mobile Polish (375px and below) ────────────────────────────────────── */
+@media(max-width:450px){
+  .choice-btn{padding:14px 16px;font-size:.88rem;min-height:48px}
+  .choice-btn .choice-text{font-size:.85rem}
+  .iq-score-num{font-size:3.5rem}
+  canvas#radarChart{max-width:280px;max-height:280px}
+}
+@media(max-width:375px){
+  /* Buttons & touch targets */
+  .btn{padding:12px 20px;min-height:44px}
+  .btn-lg{padding:14px 24px}
+  .choice-btn{padding:12px 14px;font-size:.85rem;min-height:44px}
+  .choice-btn .choice-letter{width:28px;height:28px;font-size:.75rem;border-radius:7px}
+  h1{font-size:1.4rem}
+
+  /* Self-assessment overlay */
+  .sa-panel{padding:20px 16px 24px}
+  .sa-ratings{gap:6px}
+  .sa-rate-btn{min-width:50px;padding:10px 4px;font-size:.75rem}
+
+  /* Feedback modal */
+  .fb-modal{min-width:280px}
+  .feedback-wrap{padding:24px 16px}
+  .feedback-eyes{gap:20px}
+  .feedback-label{font-size:2rem;letter-spacing:0}
+
+  /* Ranking & multi-select */
+  .ranking-item{padding:12px 14px;gap:10px}
+  .rank-num{width:24px;height:24px;font-size:.75rem}
+  .multiselect-item{padding:12px 14px;gap:10px}
+
+  /* Freetext */
+  .freetext-area{padding:14px;font-size:.88rem}
+
+  /* Progress dots */
+  .progress-dots{gap:1px}
+  .progress-dots .dot{width:16px;height:16px}
+  .progress-dots .dot::after{width:5px;height:5px}
+
+  /* Rubric cards */
+  .rubric-card{padding:12px}
+
+  /* Results */
+  canvas#radarChart{max-width:260px;max-height:260px}
+  .dim-bar-name{font-size:.8rem}
+
+  /* App container */
+  .app{padding:14px}
+
+  /* Close button contrast */
+  .fb-modal-close{color:rgba(255,255,255,.7)}
+}
