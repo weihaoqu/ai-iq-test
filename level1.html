@@ -214,6 +214,7 @@ let shuffledChoices = [];
 let participantId = '';
 let participantName = '';
 let quizStartTime = null;
+let questionStartTime = Date.now();
 let testMode = 'adaptive'; // for feedback modal compatibility
 
 // DIM_MAX for quick mode: 2 questions per dim, max 4 pts each = 8
@@ -287,6 +288,7 @@ function beginQuiz() {
 
 // ─── Render Question ─────────────────────────────────────────────────────
 function renderQuestion() {
+  questionStartTime = Date.now();
   const q = activeQuestions[currentQ];
   const sc = shuffledChoices[currentQ];
   const total = activeQuestions.length;
@@ -351,7 +353,7 @@ function renderQuestion() {
 function selectChoice(idx) {
   const sc = shuffledChoices[currentQ];
   const chosen = sc[idx];
-  answers[currentQ] = {choiceIdx: idx, origLetter: chosen.letter, score: chosen.score};
+  answers[currentQ] = {choiceIdx: idx, origLetter: chosen.letter, score: chosen.score, timeMs: Date.now() - questionStartTime};
   document.querySelectorAll('.choice-btn').forEach((btn, i) => {
     btn.classList.toggle('selected', i === idx);
     btn.setAttribute('aria-checked', i === idx ? 'true' : 'false');
@@ -551,6 +553,7 @@ function buildResults() {
     result_level: level.label,
     duration_seconds: Math.round((Date.now() - quizStartTime) / 1000),
     ...Object.fromEntries(DIMS.map(d => [`dim_${d.key}`, dimScores[d.key]])),
+    ...Object.fromEntries(activeQuestions.map((q, i) => [`${q.id}_time`, Math.round((answers[i].timeMs || 0) / 1000)])),
   });
 
   // Save adaptive session with L1 results
@@ -566,7 +569,8 @@ function buildResults() {
       level: level.label,
       answers: activeQuestions.map((q, i) => ({
         qId: q.id, choiceIdx: answers[i].choiceIdx,
-        origLetter: answers[i].origLetter, score: answers[i].score
+        origLetter: answers[i].origLetter, score: answers[i].score,
+        timeMs: answers[i].timeMs || 0
       }))
     }
   });

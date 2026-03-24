@@ -180,6 +180,7 @@ let answers = [];          // { userAnswer: ..., score: 1-4 }
 let participantId = '';
 let participantName = '';
 let quizStartTime = null;
+let questionStartTime = Date.now();
 let testMode = 'adaptive';
 let session = {};
 let tapSelected = null;    // for mobile ranking reorder
@@ -280,6 +281,7 @@ function startLevel2() {
 
 // ─── Render Question ─────────────────────────────────────────────────────
 function renderQuestion() {
+  questionStartTime = Date.now();
   const q = activeQuestions[currentQ];
   const total = activeQuestions.length;
   const dim = DIMS.find(d => d.key === q.dim);
@@ -623,6 +625,11 @@ function goNext() {
 
   tapSelected = null;
 
+  // Record time spent on this question
+  if (answers[currentQ]) {
+    answers[currentQ].timeMs = Date.now() - questionStartTime;
+  }
+
   // Auto-score
   let score = 1;
   if (q.format === 'ranking') {
@@ -764,6 +771,7 @@ function buildResults() {
     result_level: level.label,
     duration_seconds: Math.round((Date.now() - quizStartTime) / 1000),
     ...Object.fromEntries(DIMS.map(d => [`dim_${d.key}`, dimScoresL2[d.key]])),
+    ...Object.fromEntries(activeQuestions.map((q, i) => [`${q.id}_time`, Math.round((answers[i]?.timeMs || 0) / 1000)])),
   });
 
   // Save to adaptive session
@@ -777,7 +785,8 @@ function buildResults() {
       answers: activeQuestions.map((q, i) => ({
         qId: q.id,
         format: q.format,
-        score: answers[i]?.score || 0
+        score: answers[i]?.score || 0,
+        timeMs: answers[i]?.timeMs || 0
       }))
     }
   });
