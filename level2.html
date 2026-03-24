@@ -648,6 +648,9 @@ function goNext() {
 function advanceAfterAssessment() {
   if (currentQ < activeQuestions.length - 1) {
     currentQ++;
+    // Progress micro-feedback
+    const progressToasts = { 3: 'Nice momentum! 🔥', 6: 'Halfway there! 🎯', 9: 'Home stretch! 💪', 12: 'Almost done! 🏁' };
+    if (progressToasts[currentQ]) showToast(progressToasts[currentQ]);
     renderQuestion();
     window.scrollTo({top:0, behavior:'smooth'});
   } else {

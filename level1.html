@@ -369,8 +369,13 @@ function goBack() {
 
 function goNext() {
   if (!answers[currentQ]) return;
-  if (currentQ < activeQuestions.length - 1) { currentQ++; renderQuestion(); }
-  else {
+  if (currentQ < activeQuestions.length - 1) {
+    currentQ++;
+    // Progress micro-feedback
+    const progressToasts = { 2: 'Great start! 💪', 4: 'Halfway there! 🎯', 6: 'Almost done! 🏁' };
+    if (progressToasts[currentQ]) showToast(progressToasts[currentQ]);
+    renderQuestion();
+  } else {
     // Check for unanswered questions
     const unanswered = answers.findIndex(a => a === null);
     if (unanswered !== -1) {
