@@ -1,0 +1,1124 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   STITCH DESIGN SYSTEM — Overrides styles.css with Stitch UI patterns
+   Load AFTER styles.css: <link rel="stylesheet" href="shared/stitch.css">
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts (loaded via <link> in HTML head) ── */
+/* Outfit, Space Mono, Plus Jakarta Sans, Material Symbols Outlined */
+
+/* ── CSS Custom Properties (extend/override styles.css vars) ── */
+:root {
+  --stitch-bg: #06080f;
+  --stitch-surface: #11131b;
+  --stitch-glass: rgba(12, 18, 40, 0.65);
+  --stitch-glass-light: rgba(255, 255, 255, 0.08);
+  --stitch-glass-border: rgba(255, 255, 255, 0.15);
+  --stitch-glass-border-dim: rgba(255, 255, 255, 0.10);
+  --stitch-cyan: #5de6ff;
+  --stitch-cyan-glow: #22d3ee;
+  --stitch-amber: #ffb95f;
+  --stitch-amber-accent: #f59e0b;
+  --stitch-pink: #db2777;
+  --stitch-purple: #9333ea;
+  --stitch-blue-container: #2563eb;
+  --stitch-text: #e1e2ed;
+  --stitch-text-dim: #c3c6d7;
+  --stitch-text-muted: rgba(255, 255, 255, 0.4);
+  --stitch-outline: #8d90a0;
+  --stitch-outline-variant: #434655;
+}
+
+/* ── Material Symbols base ── */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  font-family: 'Material Symbols Outlined';
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ANIMATED BACKGROUND — Replaces #shader-bg
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes stitch-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes stitch-float-drift {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  25% { transform: translateY(-40px) translateX(20px) rotate(90deg); }
+  50% { transform: translateY(0px) translateX(40px) rotate(180deg); }
+  75% { transform: translateY(40px) translateX(20px) rotate(270deg); }
+}
+
+@keyframes stitch-soft-glow {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.1)); opacity: 0.2; }
+  50% { filter: drop-shadow(0 0 15px rgba(255,255,255,0.4)); opacity: 0.5; }
+}
+
+@keyframes stitch-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+@keyframes stitch-float-parcel {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translate(var(--tx, 100px), var(--ty, -200px)) rotate(var(--tr, 360deg)); opacity: 0; }
+}
+
+@keyframes stitch-pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+}
+
+/* Hide shader-bg when stitch is loaded */
+#shader-bg { display: none !important; }
+
+/* Vibrant animated gradient background */
+.stitch-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(-45deg, #7c3aed, #db2777, #9333ea, #be185d);
+  background-size: 400% 400%;
+  animation: stitch-gradient 15s ease infinite;
+}
+
+/* Twinkling star particles */
+.stitch-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.stitch-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255,255,255,0.5), 0 0 30px rgba(192,38,211,0.3);
+  animation: stitch-twinkle 3s ease-in-out infinite;
+}
+
+/* Floating geometric parcels */
+.stitch-parcel {
+  position: absolute;
+  pointer-events: none;
+  animation: stitch-float-drift var(--drift, 20s) ease-in-out infinite,
+             stitch-soft-glow var(--glow, 8s) ease-in-out infinite alternate;
+}
+
+.stitch-parcel svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* Floating blur blobs */
+.stitch-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   HORIZON LINE PROGRESS BAR
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.stitch-horizon {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 60;
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+}
+
+.stitch-horizon-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22d3ee, #818cf8, #d946ef);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+  transition: width 0.5s cubic-bezier(.16,1,.3,1);
+  position: relative;
+}
+
+.stitch-horizon-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 10px #fff, 0 0 20px rgba(34,211,238,0.5);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TOP NAVIGATION BAR
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.stitch-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  height: 64px;
+  background: rgba(6, 8, 15, 0.60);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  font-family: 'Outfit', sans-serif;
+}
+
+.stitch-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stitch-topbar-level {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.stitch-topbar-qcount {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--stitch-cyan);
+  letter-spacing: 0.15em;
+}
+
+.stitch-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stitch-timer-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 999px;
+}
+
+.stitch-timer-pill .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--stitch-cyan);
+}
+
+.stitch-timer-pill span:last-child {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--stitch-cyan);
+}
+
+/* Override existing level-indicator */
+#level-indicator {
+  display: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GLASS PANEL — Core card component
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.stitch-glass,
+.card {
+  background: var(--stitch-glass) !important;
+  backdrop-filter: blur(32px) !important;
+  -webkit-backdrop-filter: blur(32px) !important;
+  border: 1px solid var(--stitch-glass-border) !important;
+  border-radius: 2rem !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative glow blobs inside cards */
+.stitch-glass-glow-tr {
+  position: absolute;
+  top: -96px;
+  right: -96px;
+  width: 256px;
+  height: 256px;
+  background: rgba(37, 99, 235, 0.15);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.stitch-glass-glow-bl {
+  position: absolute;
+  bottom: -96px;
+  left: -96px;
+  width: 256px;
+  height: 256px;
+  background: rgba(93, 230, 255, 0.10);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ══════════════════════════════════════════════════════════════════════════ */
+
+body {
+  font-family: 'Outfit', sans-serif !important;
+  color: var(--stitch-text);
+}
+
+h1 {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.03em !important;
+}
+
+h2 {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+}
+
+h3 {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+}
+
+/* Labels/tags: Space Mono */
+.stitch-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   APP CONTAINER — wider for results views
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.app {
+  max-width: 720px !important;
+  padding-top: 80px !important; /* Space for fixed topbar */
+}
+
+/* Results screens can be wider */
+#screen-results.active {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PROGRESS DOTS — Stitch style
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.progress-dots {
+  gap: 6px !important;
+  padding: 8px 0 !important;
+}
+
+.progress-dots .dot::after {
+  width: 10px !important;
+  height: 10px !important;
+  background: rgba(255,255,255,0.12) !important;
+  border: none !important;
+  transition: all 0.3s !important;
+}
+
+.progress-dots .dot.answered::after {
+  background: var(--stitch-cyan-glow) !important;
+  box-shadow: 0 0 8px #22d3ee !important;
+  border: none !important;
+}
+
+.progress-dots .dot.current::after {
+  background: white !important;
+  box-shadow: 0 0 15px #fff, 0 0 0 4px rgba(255,255,255,0.15) !important;
+  transform: scale(1.3) !important;
+  animation: stitch-pulse-ring 2s ease-in-out infinite !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PROGRESS BAR — Stitch horizon gradient
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.progress-track {
+  height: 4px !important;
+  background: rgba(255,255,255,0.08) !important;
+  border-radius: 999px !important;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #22d3ee, #818cf8, #d946ef) !important;
+  box-shadow: 0 0 15px rgba(34,211,238,0.5) !important;
+}
+
+.progress-fill::after {
+  width: 10px !important;
+  height: 10px !important;
+  background: white !important;
+  box-shadow: 0 0 10px #fff, 0 0 20px rgba(34,211,238,0.5) !important;
+}
+
+.progress-label {
+  font-family: 'Space Mono', monospace !important;
+  color: var(--stitch-text-dim) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CATEGORY/DIMENSION TAG
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.badge {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2em !important;
+  border-radius: 999px !important;
+  padding: 6px 16px !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  background: rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   QUESTION TEXT
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.question-text {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 1.5rem !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em !important;
+  color: white !important;
+}
+
+@media (min-width: 600px) {
+  .question-text {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MCQ CHOICE BUTTONS — Stitch style
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.choice-btn {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  gap: 20px !important;
+  transition: all 0.25s ease !important;
+  backdrop-filter: blur(28px) !important;
+}
+
+.choice-btn:hover {
+  border-color: rgba(93,230,255,0.40) !important;
+  background: rgba(255,255,255,0.10) !important;
+  box-shadow: none !important;
+}
+
+.choice-btn .choice-letter {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: rgba(255,255,255,0.10) !important;
+  font-family: 'Space Mono', monospace !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  color: white !important;
+  transition: all 0.25s !important;
+}
+
+.choice-btn:hover .choice-letter {
+  background: rgba(255,255,255,0.20) !important;
+}
+
+.choice-btn.selected {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: var(--stitch-amber) !important;
+  box-shadow: 0 0 15px rgba(245,158,11,0.15) !important;
+}
+
+.choice-btn.selected .choice-letter {
+  background: var(--stitch-amber) !important;
+  color: #1a0800 !important;
+  box-shadow: 0 0 15px rgba(245,158,11,0.4) !important;
+}
+
+.choice-btn .choice-text {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.choice-btn.selected .choice-text {
+  color: white !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   ACTION BUTTONS — Stitch style
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.btn-primary {
+  background: linear-gradient(135deg, #2563eb, #4f46e5) !important;
+  border-radius: 16px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 30px rgba(37,99,235,0.4) !important;
+  border: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 40px rgba(37,99,235,0.6) !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-primary:active {
+  transform: scale(0.97) !important;
+}
+
+.btn-outline {
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  border-radius: 16px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  color: white !important;
+  background: transparent !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.btn-outline:hover {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: rgba(255,255,255,0.30) !important;
+}
+
+.btn-lg {
+  padding: 20px 32px !important;
+  font-size: 1.1rem !important;
+  border-radius: 20px !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RANKING ITEMS — Stitch style
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.ranking-item {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.ranking-item:hover {
+  border-color: rgba(93,230,255,0.40) !important;
+  background: rgba(255,255,255,0.10) !important;
+}
+
+.ranking-item .rank-num {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: rgba(255,255,255,0.10) !important;
+  font-family: 'Space Mono', monospace !important;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+}
+
+.ranking-item .drag-handle::before {
+  font-family: 'Material Symbols Outlined' !important;
+  content: 'drag_handle' !important;
+  color: rgba(255,255,255,0.3) !important;
+}
+
+.ranking-item:hover .drag-handle::before {
+  color: var(--stitch-cyan) !important;
+}
+
+.ranking-item.dragging {
+  box-shadow: 0 0 20px rgba(93,230,255,0.2) !important;
+  border-color: var(--stitch-cyan) !important;
+}
+
+.ranking-item.tap-selected {
+  border-color: var(--stitch-amber) !important;
+  box-shadow: 0 0 15px rgba(245,158,11,0.15) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MULTI-SELECT ITEMS — Stitch style
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.multiselect-item {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.multiselect-item:hover {
+  border-color: rgba(93,230,255,0.40) !important;
+  background: rgba(255,255,255,0.10) !important;
+}
+
+.multiselect-item .checkbox {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 6px !important;
+  border: 2px solid rgba(255,255,255,0.30) !important;
+  background: transparent !important;
+}
+
+.multiselect-item.checked {
+  background: rgba(255,255,255,0.10) !important;
+  border-color: var(--stitch-amber) !important;
+  box-shadow: 0 0 15px rgba(245,158,11,0.15) !important;
+}
+
+.multiselect-item.checked .checkbox {
+  background: var(--stitch-amber) !important;
+  border-color: var(--stitch-amber) !important;
+  color: #1a0800 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FREE TEXT AREA — Stitch style
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.freetext-area,
+textarea {
+  background: rgba(0,0,0,0.40) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 20px !important;
+  padding: 32px !important;
+  color: var(--stitch-text) !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.6 !important;
+  transition: all 0.3s ease !important;
+  resize: none !important;
+}
+
+.freetext-area:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: rgba(34,211,238,0.40) !important;
+  box-shadow: 0 0 0 3px rgba(34,211,238,0.15) !important;
+}
+
+.char-hint {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: rgba(255,255,255,0.4) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SELF-ASSESSMENT OVERLAY — Stitch slide-up panel
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* The assessment overlay uses .assess-overlay in the JS */
+.assess-overlay,
+.fb-modal-overlay {
+  backdrop-filter: blur(4px) !important;
+}
+
+.assess-panel,
+.fb-modal {
+  background: var(--stitch-glass) !important;
+  backdrop-filter: blur(32px) !important;
+  -webkit-backdrop-filter: blur(32px) !important;
+  border: 1px solid var(--stitch-glass-border) !important;
+  border-radius: 2.5rem 2.5rem 1rem 1rem !important;
+}
+
+/* Rating scale buttons */
+.rate-btn {
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  background: rgba(255,255,255,0.05) !important;
+  transition: all 0.3s ease !important;
+}
+
+.rate-btn:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+.rate-btn.active {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.25) !important;
+  transform: scale(1.05) !important;
+}
+
+.rate-num {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  font-weight: 900 !important;
+  font-size: 1.2rem !important;
+}
+
+/* Rubric cards */
+.rubric-card {
+  background: rgba(25,27,35,0.40) !important;
+  border: 1px solid rgba(67,70,85,0.10) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.rubric-card:hover {
+  background: rgba(39,42,50,0.60) !important;
+}
+
+.rubric-card.selected {
+  border: 2px solid rgba(255,185,95,0.50) !important;
+  box-shadow: 0 0 20px rgba(245,158,11,0.1) !important;
+  background: rgba(39,42,50,0.80) !important;
+}
+
+.rubric-level-label {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   RESULTS — Score section
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.iq-score-wrap {
+  padding: 40px 0 20px !important;
+}
+
+.iq-score-num {
+  font-size: 6rem !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 900 !important;
+  background: linear-gradient(180deg, #ffffff 0%, #ffb4ab 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-shadow: none !important;
+}
+
+@media (min-width: 600px) {
+  .iq-score-num {
+    font-size: 8rem !important;
+  }
+}
+
+.iq-level {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2em !important;
+  border-radius: 999px !important;
+  padding: 8px 20px !important;
+}
+
+/* Dimension bars */
+.dim-bar-name {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+
+.dim-bar-score {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  color: var(--stitch-cyan) !important;
+}
+
+.dim-bar-track {
+  height: 6px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border-radius: 999px !important;
+}
+
+.dim-bar-fill {
+  border-radius: 999px !important;
+  box-shadow: 0 0 10px rgba(34,211,238,0.5) !important;
+}
+
+/* Radar */
+.radar-wrap {
+  padding: 16px 0 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GATE SECTION — Stitch unlock card
+   ══════════════════════════════════════════════════════════════════════════ */
+
+#gate-section {
+  border-radius: 2rem !important;
+}
+
+#gate-section h2 {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 900 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   L3 BOSS CHALLENGE — Phase indicators
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.phase-indicator {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+}
+
+.phase-dot .phase-circle {
+  font-size: 0.6rem !important;
+}
+
+.phase-dot.active {
+  color: var(--stitch-cyan) !important;
+}
+
+.phase-dot.completed {
+  color: var(--stitch-cyan) !important;
+}
+
+.phase-line {
+  background: rgba(255,255,255,0.10) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   L3 CONSTRAINTS BOX — Amber left border
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.constraints-box {
+  border-left: 4px solid rgba(255,185,95,0.80) !important;
+  background: var(--stitch-glass) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+}
+
+.constraints-box h4 {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.15em !important;
+  color: var(--stitch-amber) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   INPUT OVERRIDES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.input-group label {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3em !important;
+  color: rgba(255,255,255,0.50) !important;
+}
+
+.input-group input[type="text"] {
+  background: rgba(0,0,0,0.20) !important;
+  border: none !important;
+  border-bottom: 2px solid rgba(255,255,255,0.20) !important;
+  border-radius: 8px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.1rem !important;
+  color: white !important;
+  padding: 16px !important;
+}
+
+.input-group input[type="text"]:focus {
+  border-color: var(--stitch-cyan) !important;
+  box-shadow: none !important;
+}
+
+.input-group select {
+  background-color: rgba(0,0,0,0.20) !important;
+  border: none !important;
+  border-bottom: 2px solid rgba(255,255,255,0.20) !important;
+  border-radius: 8px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: 1.05rem !important;
+  color: white !important;
+  padding: 16px !important;
+}
+
+.input-group select:focus {
+  border-color: var(--stitch-cyan) !important;
+  box-shadow: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   IQ BADGE BIG — Welcome screen level badge
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.iq-badge-big {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  letter-spacing: 0.2em !important;
+  background: rgba(255,255,255,0.10) !important;
+  border: 1px solid rgba(255,255,255,0.20) !important;
+  color: rgba(255,255,255,0.85) !important;
+  animation: none !important;
+  box-shadow: none !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCENARIO IMAGE — Enhanced for Stitch
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.scenario-img-wrap {
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  overflow: hidden !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REVIEW SECTION
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.review-toggle {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  color: var(--stitch-cyan) !important;
+}
+
+.review-item {
+  border-radius: 16px !important;
+  background: rgba(255,255,255,0.03) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FEEDBACK MODAL — Stitch styling
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.fb-modal {
+  background: var(--stitch-glass) !important;
+  border-radius: 2rem !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.toast {
+  background: var(--stitch-glass) !important;
+  backdrop-filter: blur(32px) !important;
+  border: 1px solid var(--stitch-glass-border) !important;
+  border-radius: 16px !important;
+  font-family: 'Outfit', sans-serif !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   FORMAT PREVIEW CARDS (L2 intro)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.format-preview {
+  border-radius: 16px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.format-icon {
+  font-size: 1.5rem !important;
+}
+
+.format-name {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  color: white !important;
+}
+
+.format-desc {
+  font-size: 0.85rem !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+
+/* Focus tags */
+.focus-tag {
+  border-radius: 999px !important;
+  font-family: 'Space Mono', monospace !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SUB PHASE DOTS (L3 execution)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.sub-phase-dot {
+  background: rgba(255,255,255,0.12) !important;
+}
+
+.sub-phase-dot.active {
+  background: var(--stitch-cyan) !important;
+  box-shadow: 0 0 8px #22d3ee !important;
+}
+
+.sub-phase-dot.completed {
+  background: var(--stitch-cyan) !important;
+  box-shadow: 0 0 8px #22d3ee !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   L2 DUAL RADAR LEGEND
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.dual-radar-legend {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 9px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.2em !important;
+}
+
+.legend-dot {
+  box-shadow: 0 0 8px currentColor !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.10);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.20);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCENARIO SUMMARY (L3)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.scenario-summary-toggle {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  color: var(--stitch-text-dim) !important;
+}
+
+.scenario-summary-content {
+  font-size: 0.9rem !important;
+  line-height: 1.7 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   GUIDING BULLETS (L3)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.guiding-bullets li {
+  color: rgba(255,255,255,0.8) !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+}
+
+.guiding-bullets li::before {
+  color: var(--stitch-cyan) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE TWEAKS
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+  .stitch-topbar {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  .app {
+    padding-top: 64px !important;
+  }
+
+  .question-text {
+    font-size: 1.2rem !important;
+  }
+
+  .choice-btn {
+    padding: 14px !important;
+    gap: 12px !important;
+  }
+
+  .choice-btn .choice-letter {
+    width: 34px !important;
+    height: 34px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .stitch-topbar {
+    padding: 0 12px;
+    height: 52px;
+  }
+  .stitch-topbar-level {
+    font-size: 0.95rem !important;
+  }
+  .stitch-topbar-right {
+    gap: 8px;
+  }
+  .stitch-topbar-timer {
+    font-size: 0.8rem !important;
+    padding: 4px 10px !important;
+  }
+  .app {
+    padding-top: 60px !important;
+  }
+  .question-text {
+    font-size: 1.05rem !important;
+  }
+  .choice-btn .choice-letter {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+  /* Hide topbar divider on narrow screens */
+  .stitch-topbar-left > div[style*="width:1px"] {
+    display: none;
+  }
+}

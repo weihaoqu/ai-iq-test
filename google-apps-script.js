@@ -61,7 +61,12 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Get or create Responses sheet
+    // Route adaptive mode to its own sheet
+    if (data.test_mode === 'adaptive') {
+      return handleAdaptive(ss, data, date);
+    }
+
+    // Get or create Responses sheet (original full/quick mode)
     var sheet = ss.getSheetByName('Responses');
     if (!sheet) {
       sheet = ss.insertSheet('Responses');
@@ -139,6 +144,86 @@ function doPost(e) {
       .createTextOutput(JSON.stringify({ status: 'error', message: error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+// ─── Adaptive Mode handler ──────────────────────────────────────────────
+function handleAdaptive(ss, data, date) {
+  var sheet = ss.getSheetByName('Adaptive');
+  if (!sheet) {
+    sheet = ss.insertSheet('Adaptive');
+    var headers = [
+      'participant_id', 'participant_name', 'timestamp', 'date', 'ai_experience',
+      'test_mode', 'level', 'total_score', 'percentage', 'result_level',
+      'duration_seconds',
+      'dim_foundations', 'dim_problemFraming', 'dim_toolSelection',
+      'dim_promptEngineering', 'dim_criticalEvaluation', 'dim_ethicsSafety',
+      'dim_humanCollab', 'dim_vibeCoding',
+      // Boss challenge fields (L3 only)
+      'boss_scenario', 'boss_planning_rating', 'boss_execution_rating',
+      'boss_reflection_rating', 'boss_result',
+      // Flexible per-question data (JSON blob)
+      'question_data'
+    ];
+    sheet.appendRow(headers);
+    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+    sheet.setFrozenRows(1);
+  }
+
+  // Collect per-question data into a JSON blob instead of fixed columns
+  // (adaptive mode has variable questions per session)
+  var questionData = {};
+  var skipKeys = {
+    'participant_id':1, 'participant_name':1, 'timestamp':1, 'ai_experience':1,
+    'test_mode':1, 'level':1, 'total_score':1, 'percentage':1, 'result_level':1,
+    'duration_seconds':1, 'boss_scenario':1, 'boss_planning_rating':1,
+    'boss_execution_rating':1, 'boss_reflection_rating':1, 'boss_result':1
+  };
+  var dimKeys = {};
+  ['foundations','problemFraming','toolSelection','promptEngineering',
+   'criticalEvaluation','ethicsSafety','humanCollab','vibeCoding'].forEach(function(d) {
+    dimKeys['dim_' + d] = 1;
+  });
+  for (var key in data) {
+    if (!skipKeys[key] && !dimKeys[key] && key !== 'timestamp') {
+      questionData[key] = data[key];
+    }
+  }
+
+  var row = [
+    data.participant_id || '',
+    data.participant_name || '',
+    data.timestamp || '',
+    date,
+    data.ai_experience || '',
+    data.test_mode || 'adaptive',
+    data.level || '',
+    data.total_score || 0,
+    data.percentage || 0,
+    data.result_level || '',
+    data.duration_seconds || 0
+  ];
+
+  // Dimension scores
+  ['foundations','problemFraming','toolSelection','promptEngineering',
+   'criticalEvaluation','ethicsSafety','humanCollab','vibeCoding'].forEach(function(d) {
+    row.push(data['dim_' + d] || 0);
+  });
+
+  // Boss challenge fields
+  row.push(data.boss_scenario || '');
+  row.push(data.boss_planning_rating || '');
+  row.push(data.boss_execution_rating || '');
+  row.push(data.boss_reflection_rating || '');
+  row.push(data.boss_result || '');
+
+  // Per-question data as JSON blob
+  row.push(JSON.stringify(questionData));
+
+  sheet.appendRow(row);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ status: 'success', type: 'adaptive', level: data.level, id: data.participant_id }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ─── GET handler (health check + test) ──────────────────────────────────
