@@ -183,7 +183,7 @@
             </div>
           </div>
         </div>
-        <div class="ec-wrap ec-wrap--boss locked" id="boss-card">
+        <div class="ec-wrap ec-wrap--boss locked" id="boss-card" style="display:none">
           <div class="ec-card">
             <div class="ec-inner">
               <div class="ec-border"><div class="ec-main"></div></div>
@@ -1297,6 +1297,7 @@ document.addEventListener('keydown',function(e){
   var card = document.getElementById('boss-card');
   if (!card) return;
   if (session.level3Unlocked) {
+    card.style.display = ''; // Reveal boss card only when unlocked
     card.classList.remove('locked');
     card.classList.add('unlocked');
     card.onclick = function() { location.href = 'level3.html'; };

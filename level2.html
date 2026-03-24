@@ -892,21 +892,40 @@ function drawDualRadar(l1Scores, l2Scores) {
   });
 }
 
-// ─── Gate Logic ──────────────────────────────────────────────────────────
+// ─── Completion Section ─────────────────────────────────────────────────
 function renderGate(level, combinedPct) {
   const gate = document.getElementById('gate-section');
-  const isQualified = combinedPct >= 69; // Practitioner+ threshold
+  const isQualified = combinedPct >= 69; // Practitioner+ for boss unlock
+
+  // Always show completion message — L2 is the real ending
+  const levelLabel = level ? level.label : 'AI Apprentice';
+  const completionHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <h2 style="color:var(--cyan)">Assessment Complete!</h2>
+      <p class="subtitle" style="margin:12px 0">Your AI literacy profile: <strong style="color:var(--accent)">${esc(levelLabel)}</strong></p>
+    </div>
+
+    <!-- Share & Download actions -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px">
+      <button class="btn btn-primary" onclick="shareResults()" style="flex:1;min-width:140px">
+        Share Result
+      </button>
+      <button class="btn btn-outline" onclick="downloadResult()" style="flex:1;min-width:140px">
+        Download Certificate
+      </button>
+    </div>
+
+    <button class="btn btn-outline btn-full" onclick="location.href='index.html'" style="margin-top:8px">Return to Home</button>
+  `;
 
   if (isQualified) {
     saveAdaptiveSession({ level3Unlocked: true });
-    gate.innerHTML = `
-      <div class="gate-unlock">
-        <h2 style="color:var(--accent)">Boss Challenge Unlocked!</h2>
-        <p class="subtitle" style="margin:12px 0">You've proven deep AI understanding. Ready for the ultimate test?</p>
-        <button class="btn btn-primary btn-full btn-lg" onclick="location.href='level3.html'" style="margin-top:16px">Continue to Boss Challenge &rarr;</button>
-        <div style="margin-top:12px">
-          <a href="index.html" style="font-size:.8rem;color:var(--text-dim);text-decoration:none;opacity:.7">Return to Home</a>
-        </div>
+    gate.innerHTML = completionHTML + `
+      <div class="card" style="margin-top:20px;border:1.5px solid rgba(245,158,11,.3);background:rgba(245,158,11,.04);text-align:center">
+        <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px">Bonus Unlocked</p>
+        <h3 style="color:var(--text);margin-bottom:8px">Boss Challenge Available</h3>
+        <p class="subtitle" style="margin-bottom:16px">A multi-step case study to prove mastery. Optional — your assessment is already complete.</p>
+        <button class="btn btn-primary btn-full" onclick="location.href='level3.html'">Accept Boss Challenge &rarr;</button>
       </div>`;
   } else {
     // Find weakest dimensions for tips
@@ -920,17 +939,68 @@ function renderGate(level, combinedPct) {
       max: DIM_MAX[d.key] || 0
     })).filter(d => d.max > 0).sort((a, b) => (a.score / a.max) - (b.score / b.max)).slice(0, 3);
 
-    gate.innerHTML = `
-      <div style="text-align:center">
-        <h2 style="color:#fb7185">Keep building your skills</h2>
-        <p class="subtitle" style="margin:12px 0">Score 69%+ combined to unlock the Boss Challenge.</p>
-        <div style="text-align:left;margin:16px 0">
-          <p style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:8px">Focus on improving:</p>
-          ${weakest.map(d => `<p style="font-size:.82rem;color:var(--text-dim);padding:4px 0">&bull; ${d.label} (${d.score}/${d.max})</p>`).join('')}
-        </div>
-        <button class="btn btn-primary btn-full btn-lg" onclick="location.href='index.html'" style="margin-top:12px">Return to Home</button>
+    gate.innerHTML = completionHTML + `
+      <div class="card" style="margin-top:20px;text-align:left">
+        <p style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:8px">Areas to grow:</p>
+        ${weakest.map(d => `<p style="font-size:.82rem;color:var(--text-dim);padding:4px 0">&bull; ${d.label} (${d.score}/${d.max})</p>`).join('')}
+        <p class="subtitle" style="margin-top:12px;font-size:.8rem">Score 69%+ combined to unlock the optional Boss Challenge.</p>
       </div>`;
   }
+}
+
+// ─── Share & Download stubs ─────────────────────────────────────────────
+function shareResults() {
+  const session = getAdaptiveSession();
+  const l1Pct = session.level1 ? session.level1.percentage : 0;
+  const l2Pct = session.level2 ? session.level2.percentage : 0;
+  const combined = Math.round((l1Pct + l2Pct) / 2);
+  const name = session.participantName || 'Someone';
+  const text = `${name} scored ${combined}% on the AI IQ Test! Try it yourself:`;
+  const url = window.location.origin + '/index.html';
+
+  if (navigator.share) {
+    navigator.share({ title: 'AI IQ Test Result', text, url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(`${text} ${url}`).then(() => showToast('Link copied!'));
+  }
+}
+
+function downloadResult() {
+  const session = getAdaptiveSession();
+  const l1Pct = session.level1 ? session.level1.percentage : 0;
+  const l2Pct = session.level2 ? session.level2.percentage : 0;
+  const combined = Math.round((l1Pct + l2Pct) / 2);
+  const name = esc(session.participantName || 'Anonymous');
+  const level = session.level2 ? session.level2.level : 'AI Apprentice';
+  const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>AI IQ Certificate</title>
+  <style>
+    body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#06080f;font-family:'Outfit',sans-serif;color:#e2e8f0}
+    .cert{width:700px;padding:60px;text-align:center;border:2px solid rgba(245,158,11,.3);border-radius:24px;background:rgba(12,18,40,.8)}
+    h1{font-size:2.5rem;font-weight:900;margin:0 0 8px;background:linear-gradient(135deg,#f59e0b,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .name{font-size:1.8rem;font-weight:700;color:#fff;margin:24px 0 8px}
+    .level{display:inline-block;padding:8px 24px;border-radius:99px;font-weight:700;background:rgba(245,158,11,.15);color:#f59e0b;border:1px solid rgba(245,158,11,.3);margin:16px 0}
+    .score{font-size:3rem;font-weight:900;color:#22d3ee;margin:16px 0}
+    .date{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:24px}
+  </style></head><body>
+  <div class="cert">
+    <h1>AI IQ Test</h1>
+    <p style="color:rgba(255,255,255,.5)">Certificate of Completion</p>
+    <div class="name">${name}</div>
+    <div class="level">${esc(level)}</div>
+    <div class="score">${combined}%</div>
+    <p style="color:rgba(255,255,255,.6)">Adaptive Assessment — Level 1 + Level 2</p>
+    <div class="date">${date}</div>
+  </div></body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'ai-iq-certificate.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Certificate downloaded!');
 }
 
 // ─── Keyboard Navigation ─────────────────────────────────────────────────
