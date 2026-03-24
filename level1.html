@@ -214,6 +214,7 @@ let shuffledChoices = [];
 let participantId = '';
 let participantName = '';
 let quizStartTime = null;
+let questionStartTime = Date.now();
 let testMode = 'adaptive'; // for feedback modal compatibility
 
 // DIM_MAX for quick mode: 2 questions per dim, max 4 pts each = 8
@@ -287,6 +288,7 @@ function beginQuiz() {
 
 // ─── Render Question ─────────────────────────────────────────────────────
 function renderQuestion() {
+  questionStartTime = Date.now();
   const q = activeQuestions[currentQ];
   const sc = shuffledChoices[currentQ];
   const total = activeQuestions.length;
@@ -351,7 +353,7 @@ function renderQuestion() {
 function selectChoice(idx) {
   const sc = shuffledChoices[currentQ];
   const chosen = sc[idx];
-  answers[currentQ] = {choiceIdx: idx, origLetter: chosen.letter, score: chosen.score};
+  answers[currentQ] = {choiceIdx: idx, origLetter: chosen.letter, score: chosen.score, timeMs: Date.now() - questionStartTime};
   document.querySelectorAll('.choice-btn').forEach((btn, i) => {
     btn.classList.toggle('selected', i === idx);
     btn.setAttribute('aria-checked', i === idx ? 'true' : 'false');
@@ -367,8 +369,13 @@ function goBack() {
 
 function goNext() {
   if (!answers[currentQ]) return;
-  if (currentQ < activeQuestions.length - 1) { currentQ++; renderQuestion(); }
-  else {
+  if (currentQ < activeQuestions.length - 1) {
+    currentQ++;
+    // Progress micro-feedback
+    const progressToasts = { 2: 'Great start! 💪', 4: 'Halfway there! 🎯', 6: 'Almost done! 🏁' };
+    if (progressToasts[currentQ]) showToast(progressToasts[currentQ]);
+    renderQuestion();
+  } else {
     // Check for unanswered questions
     const unanswered = answers.findIndex(a => a === null);
     if (unanswered !== -1) {
@@ -463,6 +470,57 @@ function buildResults() {
   renderGate(level, pct);
 
   // Review section
+  const explanations = {
+    f02: "Temperature parameter controls randomness in token sampling, not bugs or databases.",
+    f04: "Backtested models almost always overfit; in-sample accuracy doesn't predict real performance.",
+    p01: "Once earlier messages leave the context window, the model can't see its own prior advice.",
+    p02: "Routine tasks can be automated, but sensitive ones need human judgment as a safety net.",
+    p04: "Long inputs degrade model attention — it silently misses or ignores sections.",
+    p05: "LLMs generate plausible-sounding citations by pattern, not by looking up real papers.",
+    t01: "AI outputs raster images, and commercial usage rights depend on your subscription tier.",
+    t02: "Understanding each change before applying prevents introducing new bugs from AI suggestions.",
+    t05: "Vibe-coding tools generate full deployable apps, ideal for non-coders who want control.",
+    e01: "Few-shot examples teach format by demonstration, which is more reliable than descriptions alone.",
+    e02: "An explicit template plus low temperature locks down output format most reliably.",
+    e03: "Framing something as a bug triggers sycophancy — the model finds problems that don't exist.",
+    e04: "Long conversations reinforce error patterns; a fresh chat resets the context.",
+    e05: "Step-by-step decomposition forces verifiable intermediate results, reducing compounding errors.",
+    c01: "AI fabricates citations as fluently as real text — asking it for sources proves nothing.",
+    c02: "Same model and training data produce similar outputs; only external sources can verify claims.",
+    c03: "Free-tier conversations may train the model, risking proprietary data leaking into future outputs.",
+    c04: "AI hallucinated package names risk typosquatting — malicious code under plausible-sounding names.",
+    c05: "LLMs share training biases and optimize for plausibility, not factual accuracy.",
+    s01: "Free-tier data may train the model, so customer PII could leak into future outputs.",
+    s02: "Disclaimers are trained response patterns with zero correlation to actual accuracy.",
+    s03: "Restructure the task around what AI can do — provide data yourself, let AI analyze it.",
+    s04: "LLMs hallucinate specific details with equal confidence; specificity doesn't indicate accuracy.",
+    s05: "Shared data stores without proper isolation cause cross-contamination between customer sessions.",
+    h01: "LLMs argue for whatever framing you provide — supply raw data without leading conclusions.",
+    h02: "Targeted gap analysis plus timed mock interviews builds real skill, not just memorization.",
+    h03: "LLMs pattern-match text that sounds like code review — they don't execute or verify logic.",
+    h04: "Strip PII before sending; use enterprise tiers with data agreements for sensitive data.",
+    h05: "Long conversations degrade coherence as context fills up; start fresh with a summary.",
+    v01: "A detailed spec with pages, sections, fonts, and references produces the best first output.",
+    v02: "AI training data skews desktop — always request mobile-first responsive design upfront.",
+    v03: "Client-side code exposes API keys publicly — anyone can find and abuse them.",
+    v04: "Profile the specific bottleneck first, then ask AI to fix that exact problem.",
+    v05: "AI code accumulates invisible tech debt — refactoring matters more than better prompts.",
+    x01: "RAG retrieves relevant docs before answering, keeping responses grounded in your actual data.",
+    x02: "Benchmark contamination means the model memorized answers rather than learning to reason.",
+    x03: "A schema with examples and JSON format is the most reliable structured extraction approach.",
+    x04: "Store history in a database and inject relevant past messages into each new prompt.",
+    x05: "AI writes happy-path code — it skips validation for nulls, Unicode, and edge cases.",
+    f06: "An AI agent plans multi-step actions and pursues goals autonomously, unlike a simple chatbot.",
+    f07: "Combining photos with voice narration captures both visual and contextual information together.",
+    f08: "Model weights don't change from chatting — the app just injects saved snippets into context.",
+    p06: "Break complex tasks into steps, test on a small batch, then scale up systematically.",
+    t06: "Self-hosting matters when regulations prevent patient data from leaving your infrastructure.",
+    t07: "Tool protocols like MCP expose scoped actions without sharing raw credentials.",
+    s06: "AI policies cover disclosure rules, data input limits, approved tools, and per-department variations.",
+    h06: "Work problems yourself first, then use AI to explain only where you got stuck.",
+    p07: "Monitoring employee communications raises ethical and legal issues — get HR and legal approval first."
+  };
+
   const revEl = document.getElementById('review-items');
   revEl.innerHTML = activeQuestions.map((q, i) => {
     const ans = answers[i];
@@ -470,10 +528,12 @@ function buildResults() {
     const yours = q.choices.find(c => c.letter === ans.origLetter);
     const dim = DIMS.find(d => d.key === q.dim);
     const pips = Array.from({length: 4}, (_, j) => `<span class="pip${j < ans.score ? ' filled' : ''}"></span>`).join('');
+    const explain = (ans.score < 4 && explanations[q.id]) ? `<div class="ri-explain">Why: ${explanations[q.id]}</div>` : '';
     return `<div class="review-item" data-dim="${q.dim}" style="border-left-color:${dim.color}">
       <div class="ri-q">Q${i + 1} (${dim.label}): ${q.q}</div>
       <div class="ri-your">Your answer: ${ans.origLetter}. ${yours.text} <span class="ri-score">${pips}</span></div>
       ${ans.score < 4 ? `<div class="ri-best">Best: ${best.letter}. ${best.text}</div>` : `<div class="ri-best">&#10003; Perfect!</div>`}
+      ${explain}
     </div>`;
   }).join('');
 
@@ -498,6 +558,7 @@ function buildResults() {
     result_level: level.label,
     duration_seconds: Math.round((Date.now() - quizStartTime) / 1000),
     ...Object.fromEntries(DIMS.map(d => [`dim_${d.key}`, dimScores[d.key]])),
+    ...Object.fromEntries(activeQuestions.map((q, i) => [`${q.id}_time`, Math.round((answers[i].timeMs || 0) / 1000)])),
   });
 
   // Save adaptive session with L1 results
@@ -513,7 +574,8 @@ function buildResults() {
       level: level.label,
       answers: activeQuestions.map((q, i) => ({
         qId: q.id, choiceIdx: answers[i].choiceIdx,
-        origLetter: answers[i].origLetter, score: answers[i].score
+        origLetter: answers[i].origLetter, score: answers[i].score,
+        timeMs: answers[i].timeMs || 0
       }))
     }
   });

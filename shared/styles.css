@@ -444,6 +444,7 @@ canvas#radarChart{max-width:340px;max-height:340px}
 .review-item .ri-score .pip{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.08)}
 .review-item .ri-score .pip.filled{background:#34d399;border-color:#34d399;box-shadow:0 0 4px rgba(52,211,153,.3)}
 .review-item .ri-best{font-size:.82rem;color:#34d399;font-weight:600;margin-top:4px}
+.review-item .ri-explain{font-size:.78rem;color:var(--text-muted);margin-top:4px;line-height:1.4;font-style:italic}
 
 /* ── Footer ── */
 /* ── Tutors Section ── */
